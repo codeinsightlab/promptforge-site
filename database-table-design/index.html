@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据库表设计 Prompt</title>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>数据库表设计 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>输入业务需求，生成表结构+索引设计</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>你是一个 Java 后端数据库设计专家，请根据业务需求生成表结构和索引设计：
+
+业务需求：
+{{业务需求}}
+
+查询场景：
+{{主要查询条件/排序/分页方式}}
+
+数据规模：
+{{预计数据量/增长速度}}
+
+请输出：
+1. 表设计
+2. 字段说明
+3. 主键与唯一约束
+4. 索引设计
+5. 设计注意事项</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>业务需求：
+用户可以领取优惠券，优惠券有未使用、已使用、已过期状态。
+
+查询场景：
+按 user_id 查询用户优惠券列表，按状态筛选，按领取时间倒序分页。
+
+数据规模：
+预计 1 年 3000 万条领取记录。</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>1. 表设计
+   - user_coupon
+
+2. 核心字段
+   - id bigint 主键
+   - user_id bigint 用户 ID
+   - coupon_id bigint 优惠券 ID
+   - status tinyint 状态
+   - receive_time datetime 领取时间
+   - use_time datetime 使用时间
+   - expire_time datetime 过期时间
+
+3. 索引设计
+   - uk_user_coupon(user_id, coupon_id)
+   - idx_user_status_receive(user_id, status, receive_time)
+   - idx_expire_status(expire_time, status)
+
+4. 注意事项
+   - 大数据量下按时间或用户维度评估分库分表
+   - 状态流转需要在事务内完成</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
+
+</body>
+</html>

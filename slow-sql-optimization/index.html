@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>慢SQL优化 Prompt</title>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>慢SQL优化 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>输入SQL + 执行情况，给出索引与优化建议</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>你是一个 MySQL 与 Java 后端性能优化专家，请根据 SQL 和执行情况给出优化建议：
+
+SQL：
+{{SQL}}
+
+表结构：
+{{表结构}}
+
+执行情况：
+{{执行耗时/扫描行数/执行计划}}
+
+请输出：
+1. 慢的主要原因
+2. 推荐索引
+3. SQL 改写建议
+4. 可能的业务侧优化
+5. 优化后的验证方式</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>SQL：
+select * from order_info
+where user_id = 10086
+and status = 1
+order by create_time desc
+limit 20;
+
+表结构：
+order_info(id, user_id, status, amount, create_time)
+现有索引：idx_user_id(user_id)
+
+执行情况：
+耗时 1800ms，扫描 120000 行，Using filesort</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>1. 慢的主要原因
+   - 只命中 user_id 索引，status 过滤和 create_time 排序未充分利用索引
+   - 出现 Using filesort
+
+2. 推荐索引
+   - idx_user_status_time(user_id, status, create_time)
+
+3. SQL 改写建议
+   - 避免 select *，只查询页面需要字段
+   - 保持 where 条件与 order by 顺序匹配组合索引
+
+4. 验证方式
+   - 执行 EXPLAIN 确认 key 命中新索引
+   - 观察扫描行数和 filesort 是否消失</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
+
+</body>
+</html>

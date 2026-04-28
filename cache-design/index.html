@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>缓存设计 Prompt</title>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>缓存设计 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>输入业务场景，输出缓存结构与失效策略</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>你是一个 Java 后端架构师，请根据业务场景设计缓存结构与失效策略：
+
+业务场景：
+{{业务场景}}
+
+数据特点：
+{{读写频率/一致性要求/数据量}}
+
+现有系统：
+{{数据库/Redis/服务架构}}
+
+请输出：
+1. 缓存对象与 Key 设计
+2. Value 结构
+3. 过期时间与失效策略
+4. 缓存更新策略
+5. 缓存穿透、击穿、雪崩防护</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>业务场景：
+商品详情页需要展示商品基础信息、价格和库存。
+
+数据特点：
+读多写少，商品基础信息一致性要求中等，价格和库存要求较高。
+
+现有系统：
+Java Spring Boot，MySQL，Redis，商品服务和库存服务独立部署。</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>1. 缓存对象与 Key
+   - 商品基础信息：product:detail:{productId}
+   - 商品价格：product:price:{productId}
+   - 商品库存：product:stock:{productId}
+
+2. 过期与失效
+   - 基础信息 TTL 30 分钟，更新商品时主动删除
+   - 价格 TTL 5 分钟，价格变更时主动删除
+   - 库存建议短 TTL 或走库存服务实时查询
+
+3. 防护策略
+   - 空值缓存防穿透
+   - 热点商品加互斥锁防击穿
+   - TTL 增加随机偏移防雪崩</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
+
+</body>
+</html>

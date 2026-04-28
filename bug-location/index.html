@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bug定位 Prompt</title>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Bug定位 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>输入代码片段 + 异常现象，定位最可能出错位置</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>你是一个资深 Java 后端排障专家，请根据代码片段和异常现象定位最可能的 Bug 位置：
+
+异常现象：
+{{异常现象}}
+
+代码片段：
+{{代码片段}}
+
+相关日志或堆栈：
+{{日志/堆栈}}
+
+请输出：
+1. 最可能出错的位置
+2. 出错原因
+3. 触发条件
+4. 修复建议
+5. 需要补充验证的点</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>异常现象：
+用户未登录时访问订单详情，偶发 NullPointerException。
+
+代码片段：
+public OrderDetail getDetail(Long orderId) {
+    User user = UserContext.getCurrentUser();
+    Order order = orderMapper.selectById(orderId);
+    if (!order.getUserId().equals(user.getId())) {
+        throw new BizException("无权限");
+    }
+    return buildDetail(order);
+}
+
+相关日志或堆栈：
+NullPointerException at OrderService.getDetail(OrderService.java:42)</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>1. 最可能出错的位置
+   - user.getId()
+
+2. 出错原因
+   - 未登录时 UserContext.getCurrentUser() 返回 null
+   - 代码没有先判断 user 是否为空
+
+3. 触发条件
+   - 请求未携带有效登录态
+   - 鉴权拦截器未提前拦截该接口
+
+4. 修复建议
+   - 在进入业务逻辑前统一鉴权
+   - 或在方法内增加 user == null 判断并返回未登录错误</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
+
+</body>
+</html>

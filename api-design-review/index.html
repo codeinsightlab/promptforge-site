@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>接口设计评审 Prompt</title>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>接口设计评审 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>输入接口定义，评估幂等性/安全性/扩展性</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>你是一个 Java 后端接口设计评审专家，请评估以下接口定义的幂等性、安全性和扩展性：
+
+接口定义：
+{{接口路径/请求方式/请求参数/响应结构}}
+
+业务规则：
+{{业务规则}}
+
+调用方与调用频率：
+{{调用方/QPS/是否外部接口}}
+
+请输出：
+1. 接口设计问题
+2. 幂等性评估
+3. 安全性评估
+4. 扩展性评估
+5. 修改建议</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>接口定义：
+POST /api/orders/pay
+请求参数：
+{
+  "orderId": 90001,
+  "payAmount": 19900
+}
+响应：
+{
+  "success": true
+}
+
+业务规则：
+用户支付订单，支付成功后订单状态变为已支付。
+
+调用方与调用频率：
+App 客户端调用，峰值 1000 QPS。</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>1. 接口设计问题
+   - 客户端传 payAmount 存在篡改风险
+   - 响应信息过少，不利于定位支付状态
+
+2. 幂等性评估
+   - 支付接口必须支持幂等
+   - 建议增加 requestId 或 paymentNo
+
+3. 安全性评估
+   - 支付金额应由服务端根据订单计算
+   - 需要校验订单归属和订单状态
+
+4. 扩展性建议
+   - 响应增加 orderId、paymentNo、payStatus
+   - 支持支付渠道字段，为后续多渠道扩展预留</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>分布式架构设计 Prompt</title>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>分布式架构设计 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>输入业务规模，输出系统拆分方案</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>你是一个 Java 分布式系统架构师，请根据业务规模输出系统拆分方案：
+
+业务背景：
+{{业务背景}}
+
+业务规模：
+{{用户量/QPS/数据量/峰值特征}}
+
+当前架构：
+{{当前系统结构}}
+
+请输出：
+1. 服务拆分方案
+2. 核心链路设计
+3. 数据存储设计
+4. 异步化与削峰方案
+5. 高可用与扩展性建议</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>业务背景：
+电商系统包含商品、订单、支付、库存和用户功能。
+
+业务规模：
+日活 50 万，订单峰值 3000 QPS，商品查询峰值 20000 QPS。
+
+当前架构：
+单体 Spring Boot 应用，MySQL 单库，Redis 缓存商品详情。</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>1. 服务拆分方案
+   - 商品服务、订单服务、库存服务、支付服务、用户服务
+
+2. 核心链路
+   - 下单链路：订单服务创建订单，库存服务扣减库存，支付服务创建支付单
+   - 商品查询链路：商品服务 + Redis 缓存承接高读流量
+
+3. 数据存储
+   - 各服务独立数据库
+   - 订单数据按用户或订单时间评估分库分表
+
+4. 异步化
+   - 下单成功后通过消息队列处理通知、积分、营销任务
+   - 秒杀场景使用队列削峰
+
+5. 高可用
+   - 服务多实例部署
+   - RPC 超时、重试、熔断和降级</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
+
+</body>
+</html>

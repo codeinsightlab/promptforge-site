@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>接口性能分析 Prompt</title>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>接口性能分析 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>输入接口耗时/调用链，定位性能瓶颈</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>你是一个 Java 后端性能优化专家，请根据接口耗时和调用链定位性能瓶颈：
+
+接口信息：
+{{接口路径/请求方式}}
+
+耗时数据：
+{{总耗时/P95/P99/各步骤耗时}}
+
+调用链：
+{{调用链路}}
+
+请输出：
+1. 性能瓶颈位置
+2. 判断依据
+3. 优化优先级
+4. 可落地优化建议
+5. 需要继续采集的指标</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>接口信息：
+GET /api/products/search
+
+耗时数据：
+平均耗时 850ms，P95 2300ms，P99 4100ms
+
+调用链：
+Controller 5ms
+参数校验 3ms
+商品查询 SQL 1800ms
+库存服务 RPC 120ms
+结果组装 30ms</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>1. 性能瓶颈位置
+   - 商品查询 SQL
+
+2. 判断依据
+   - SQL 耗时 1800ms，占总耗时主要部分
+   - P95/P99 明显偏高，说明慢请求集中在查询阶段
+
+3. 优化优先级
+   - 优先优化商品查询条件、索引和分页方式
+   - 其次评估库存 RPC 是否可批量或缓存
+
+4. 建议
+   - 查看 SQL 执行计划
+   - 为高频筛选字段建立组合索引
+   - 避免深分页或大结果集排序</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
+
+</body>
+</html>

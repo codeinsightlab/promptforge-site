@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>问题原因分析 Prompt</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 48px auto;
+      padding: 0 16px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #6b7280;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    section {
+      margin-top: 32px;
+    }
+
+    .block {
+      position: relative;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #f9fafb;
+      padding: 16px;
+    }
+
+    pre {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.6;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      white-space: pre-wrap;
+    }
+
+    code {
+      font-family: inherit;
+    }
+
+    .action-bar {
+      position: absolute;
+      right: 12px;
+      top: 10px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .block:hover .action-bar {
+      opacity: 1;
+    }
+
+    .copy-action {
+      font-size: 12px;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .copy-action:hover {
+      background: #f3f4f6;
+      color: #111827;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>问题原因分析 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>根据问题描述 + 日志，输出可能原因（按概率排序）</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar">
+        <span class="copy-action" onclick="copyPrompt(this)">复制</span>
+      </div>
+      <pre><code>你是一个经验丰富的 Java 后端技术专家，请根据以下信息分析问题原因：
+
+问题描述：
+{{问题描述}}
+
+相关日志：
+{{日志内容}}
+
+上下文信息：
+{{系统环境/接口名称/最近变更}}
+
+请输出：
+1. 可能原因（按概率排序）
+2. 每个原因的判断依据
+3. 建议优先排查的方向
+4. 需要补充确认的信息</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar">
+        <span class="copy-action" onclick="copyPrompt(this)">复制</span>
+      </div>
+      <pre><code>问题描述：
+订单提交接口偶发返回 500，重试后有时成功。
+
+相关日志：
+java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30000ms.
+com.example.order.OrderService.createOrder(OrderService.java:86)
+
+上下文信息：
+接口：POST /api/orders
+最近上线：新增订单优惠券校验逻辑</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar">
+        <span class="copy-action" onclick="copyPrompt(this)">复制</span>
+      </div>
+      <pre><code>1. 数据库连接池耗尽（最可能）
+   - 日志明确出现 Hikari 连接获取超时
+   - 500 与数据库连接不可用时间点一致
+
+2. 新增优惠券校验引入慢查询
+   - 最近变更与订单链路相关
+   - 慢查询可能长期占用连接
+
+3. 高峰期并发超过连接池容量
+   - 偶发失败、重试成功符合资源竞争特征
+
+建议优先排查：
+1. 查看 Hikari 活跃连接数、等待线程数
+2. 检查优惠券校验 SQL 耗时
+3. 对比上线前后接口 QPS 与数据库连接池指标</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+
+  el.innerText = "已复制";
+  setTimeout(() => {
+    el.innerText = "复制";
+  }, 1200);
+}
+</script>
+
+</body>
+</html>

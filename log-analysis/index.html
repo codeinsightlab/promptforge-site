@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日志分析 Prompt</title>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>日志分析 Prompt</h1>
+
+  <section>
+    <h2>场景</h2>
+    <p>输入日志，提取异常模式与关键错误点</p>
+  </section>
+
+  <section>
+    <h2>Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>你是一个 Java 后端日志分析专家，请分析以下日志并提取异常模式与关键错误点：
+
+日志内容：
+{{日志内容}}
+
+业务背景：
+{{业务背景}}
+
+请输出：
+1. 关键错误点
+2. 异常模式
+3. 影响范围判断
+4. 可能原因
+5. 建议排查顺序</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>日志内容：
+2026-04-28 10:12:01 ERROR OrderController - create order failed, userId=3821
+java.net.SocketTimeoutException: Read timed out
+at com.example.pay.PayClient.create(PayClient.java:57)
+2026-04-28 10:12:02 WARN RetryTemplate - retry payment create, times=1
+2026-04-28 10:12:05 ERROR OrderController - create order failed, userId=3822
+java.net.SocketTimeoutException: Read timed out
+
+业务背景：
+订单创建时会同步调用支付系统创建支付单。</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>示例输出</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>1. 关键错误点
+   - PayClient.create 调用支付系统读超时
+
+2. 异常模式
+   - 多个用户在相近时间出现相同 SocketTimeoutException
+   - 失败集中在订单创建链路
+
+3. 影响范围判断
+   - 影响依赖支付创建的订单提交请求
+
+4. 可能原因
+   - 支付系统响应慢
+   - 网络连接不稳定
+   - 本服务超时时间设置过短</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <p>替换内容直接使用</p>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
+
+</body>
+</html>
