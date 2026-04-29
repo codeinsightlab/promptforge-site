@@ -12,9 +12,13 @@
     h2 { font-size: 16px; font-weight: 600; margin: 0 0 12px; }
     p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
     section { margin-top: 32px; }
-    .block { border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
     pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
     code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
   </style>
 </head>
 
@@ -26,91 +30,287 @@
 
   <section>
     <h2>场景</h2>
-    <p>跨服务写入需要一致性保障时，比较本地消息表、TCC、Saga、事务消息等方案。</p>
+    <p>用于设计跨系统或跨资源的一致性方案，重点关注本地事务边界、外部系统调用、幂等、补偿、重试、对账和最终一致性。适用于支付回调、钱包流水、商户入驻调用第三方、MQ 异步处理、订单状态同步和跨库/跨服务一致性问题。</p>
   </section>
 
   <section>
     <h2>Prompt</h2>
     <div class="block">
-      <pre><code>你是一个经验丰富的 Java 后端技术专家，请针对「分布式事务方案」进行分析。
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code id="distributed-transaction-solution-prompt"># 角色
+你是一名资深后端架构师，擅长设计分布式事务、最终一致性、幂等、补偿和对账方案。
+你的任务不是介绍分布式事务理论，而是基于我的业务场景，给出一个最小可落地的一致性方案。
 
-【输入信息】
-问题描述：
-{{现象、影响范围、发生时间、错误率或耗时变化}}
+---
 
-运行环境：
-{{JDK / Spring Boot / MySQL / Redis / MQ / 网关 / 实例数 / 机器配置}}
+# 输入信息
 
-关键日志：
-{{异常日志、慢日志、GC 日志、调用链、监控指标}}
+## 1. 业务场景
+业务名称：
+{{例如：支付成功开通会员 / 提现导出后标记已处理 / 商户入驻提交第三方}}
 
-相关代码：
-{{核心代码、SQL、配置、线程池、事务边界或调用关系}}
+核心流程：
+```text
+1. {{步骤1}}
+2. {{步骤2}}
+3. {{步骤3}}
+```
 
-最近变更：
-{{上线内容、配置调整、数据量变化、依赖变更}}
+一致性目标：
+{{例如：支付成功后会员必须开通；导出成功后提现记录必须标记处理；外部入驻成功后本地状态必须更新}}
 
-【输出要求】
-1. 问题分析 / 原因
-2. 判断依据
-3. 优先排查顺序 / 优化建议
-4. 风险提示
+---
 
-【约束】
-- 按概率排序
-- 不要泛泛而谈
-- 信息不足要指出
-- 每条结论必须关联日志、指标、代码或变更依据</code></pre>
+## 2. 涉及资源
+本地数据库表：
+{{例如：bus_order、bus_wallet、bus_transaction}}
+
+外部系统：
+{{例如：微信支付 / 汇付 / MQ / Redis / 文件导出 / 无}}
+
+是否跨服务：
+{{是 / 否}}
+
+是否跨数据库：
+{{是 / 否}}
+
+---
+
+## 3. 当前流程
+当前处理方式：
+{{例如：本地更新后调用第三方；第三方回调后更新本地；先导出 Excel 再更新状态}}
+
+事务边界：
+{{例如：哪些 DB 操作在同一个 @Transactional 内}}
+
+外部调用位置：
+{{例如：事务内调用 / 事务外调用 / 回调触发}}
+
+失败处理：
+{{例如：失败直接抛异常 / 记录日志 / 暂无处理}}
+
+---
+
+## 4. 并发与异常
+可能异常：
+{{例如：外部调用超时、回调重复、DB 更新失败、用户重复提交}}
+
+是否允许重复执行：
+{{允许 / 不允许 / 幂等后允许}}
+
+是否允许最终一致：
+{{允许 / 不允许}}
+
+是否需要人工处理：
+{{是 / 否 / 极端情况允许}}
+
+---
+
+## 5. 幂等与对账
+已有唯一键：
+{{例如：orderNo 唯一、outTradeNo 唯一、requestNo 唯一}}
+
+已有状态字段：
+{{例如：INIT / PROCESSING / SUCCESS / FAILED}}
+
+是否有日志表：
+{{是 / 否，说明表名}}
+
+是否有对账入口：
+{{是 / 否}}
+
+---
+
+# 设计约束
+
+1. 不要讲 CAP、TCC、Saga 理论。
+2. 必须结合当前业务流程设计。
+3. 优先给最小可落地方案，不要默认引入 Seata 或复杂中间件。
+4. 必须明确本地事务边界。
+5. 必须明确外部调用失败怎么办。
+6. 必须明确重复调用如何幂等。
+7. 必须说明是否需要补偿、重试、对账。
+8. 如果信息不足，列出缺失信息，但仍给初步方案。
+
+---
+
+# 输出结构
+
+## 1. 一句话方案
+用一句话说明推荐采用哪种一致性方案。
+
+## 2. 是否需要分布式事务
+- 结论：需要 / 不需要强分布式事务 / 只需要最终一致性
+- 原因：
+- 不建议方案：
+
+## 3. 推荐流程
+按步骤输出。
+
+## 4. 本地事务边界
+- 事务内应该做：
+- 事务内不应该做：
+- 外部调用放在哪里：
+- 为什么：
+
+## 5. 幂等设计
+- 幂等键：
+- 唯一约束：
+- 重复请求处理：
+- 重复回调处理：
+
+## 6. 失败处理
+输出表格：
+| 失败点 | 影响 | 处理方式 | 是否需要人工介入 |
+|---|---|---|---|
+
+## 7. 补偿 / 重试 / 对账
+- 是否需要补偿：
+- 补偿触发条件：
+- 是否需要定时重试：
+- 是否需要对账：
+- 对账字段：
+
+## 8. 最小落地方案
+- 需要新增字段：
+- 需要新增表：
+- 需要调整代码位置：
+- 需要增加日志：
+- 风险等级：</code></pre>
     </div>
   </section>
 
   <section>
     <h2>示例输入</h2>
     <div class="block">
-      <pre><code>问题描述：
-下单需要同时扣库存、创建订单、冻结优惠券。
-运行环境：
-订单、库存、优惠券三个微服务，MySQL，RocketMQ。
-关键日志：
-库存扣减成功但订单创建失败时需要回滚。
-相关代码：
-当前为同步 RPC 串行调用，无补偿。
-最近变更：
-优惠券服务拆分为独立服务。</code></pre>
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>业务名称：
+支付成功开通 VIP 会员
+核心流程：
+1. 用户购买 VIP，创建会员订单
+2. 微信支付成功后发送回调
+3. 后端处理回调，更新订单为已支付
+4. 给用户开通或续期会员
+一致性目标：
+支付成功后，会员必须开通；重复回调不能重复续期。
+本地数据库表：
+vip_order、user_vip
+外部系统：
+微信支付
+是否跨服务：
+否
+是否跨数据库：
+否
+当前处理方式：
+微信回调后，直接在一个方法里更新订单状态并开通会员。
+事务边界：
+订单更新和会员开通在同一个 @Transactional 内。
+外部调用位置：
+回调触发，不在本地事务里主动调微信。
+失败处理：
+异常时返回失败，等待微信重试。
+可能异常：
+微信重复回调、DB 更新失败、会员已开通过、订单不存在、金额不一致。
+是否允许重复执行：
+不允许重复续期，但幂等后允许重复回调。
+是否允许最终一致：
+允许短时间最终一致。
+是否需要人工处理：
+极端情况允许。
+已有唯一键：
+outTradeNo 唯一
+已有状态字段：
+vip_order.status = INIT / PAID / FAILED
+是否有日志表：
+有，pay_callback_log
+是否有对账入口：
+暂无</code></pre>
     </div>
   </section>
 
   <section>
     <h2>示例输出</h2>
     <div class="block">
-      <pre><code>1. 问题分析 / 原因
-   - 本地消息表最终一致：概率最高，先验证关键日志与监控指标
-   - TCC 资源预留：结合最近变更和代码路径进一步确认
-   - Saga 补偿链路：作为次要方向排查资源与依赖状态
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <pre><code>## 1. 一句话方案
+推荐采用“回调幂等 + 本地事务 + 失败重试 + 人工对账”的最终一致性方案，不需要引入强分布式事务。
 
-2. 判断依据
-   - 现象与耗时、错误率或资源指标变化一致
-   - 关键日志中出现明确异常、慢调用或等待信息
-   - 最近变更与问题发生时间接近
+## 2. 是否需要分布式事务
+- 结论：不需要强分布式事务，只需要最终一致性
+- 原因：微信支付已经完成，系统只需要可靠处理回调并保证本地订单和会员状态一致。
+- 不建议方案：不建议引入 Seata；不建议把微信回调处理拆成复杂 TCC。
 
-3. 优先排查顺序 / 优化建议
-   - 先定位影响最大的链路和最慢的依赖
-   - 再验证配置、索引、连接池、线程池或限流策略
-   - 最后补充压测、回放或灰度验证
+## 3. 推荐流程
+1. 接收微信回调，先记录 pay_callback_log
+2. 根据 outTradeNo 查询 vip_order
+3. 校验订单存在、金额一致、支付状态有效
+4. 如果订单已 PAID，直接返回成功，避免重复续期
+5. 在本地事务内更新订单为 PAID，并开通或续期 user_vip
+6. 提交事务后返回微信成功
+7. 异常时记录失败原因，返回失败或进入待补偿
 
-4. 风险提示
-   - 不要在证据不足时直接扩大资源
-   - 涉及索引、缓存、事务、限流或降级的修改需评估回滚方案
-   - 信息不足时需要补充调用链、监控截图、完整日志和核心代码</code></pre>
+## 4. 本地事务边界
+- 事务内应该做：校验并更新 vip_order 状态；开通或续期 user_vip；更新回调日志处理结果
+- 事务内不应该做：调用外部接口、执行耗时通知、做复杂对账
+- 外部调用放在哪里：当前是微信主动回调，不需要在事务内主动调用微信
+- 为什么：本地订单和会员权益必须原子一致；外部通知已经发生，系统只需保证本地处理可靠。
+
+## 5. 幂等设计
+- 幂等键：outTradeNo
+- 唯一约束：vip_order.out_trade_no 唯一，pay_callback_log 可按 callback_event_id 或 out_trade_no 记录
+- 重复请求处理：如果订单已 PAID，直接返回成功
+- 重复回调处理：不能再次续期，只返回当前处理结果
+
+## 6. 失败处理
+| 失败点 | 影响 | 处理方式 | 是否需要人工介入 |
+|---|---|---|---|
+| 订单不存在 | 无法开通会员 | 记录异常回调，返回失败或人工处理 | 是 |
+| 金额不一致 | 资金风险 | 拒绝开通，记录高危日志 | 是 |
+| DB 更新失败 | 支付成功但会员未开通 | 返回失败等待微信重试 | 否 |
+| 会员续期失败 | 订单和会员不一致 | 整体事务回滚，等待重试 | 否 |
+| 重复回调 | 可能重复续期 | 订单已 PAID 直接返回成功 | 否 |
+
+## 7. 补偿 / 重试 / 对账
+- 是否需要补偿：需要
+- 补偿触发条件：支付成功但订单未 PAID，或订单 PAID 但会员未开通
+- 是否需要定时重试：建议增加，扫描失败回调或异常订单
+- 是否需要对账：需要
+- 对账字段：outTradeNo、支付金额、订单状态、会员有效期、回调处理状态
+
+## 8. 最小落地方案
+- 需要新增字段：vip_order.pay_time、vip_order.out_trade_no、vip_order.status
+- 需要新增表：已有 pay_callback_log 可复用
+- 需要调整代码位置：回调处理方法中增加幂等判断和本地事务边界
+- 需要增加日志：记录 outTradeNo、orderId、userId、amount、处理结果、失败原因
+- 风险等级：中</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>替换占位信息后直接使用，优先补充日志、监控、代码片段和最近变更，适合排查评审会议或上线前方案校验。</p>
+    <p>复制 Prompt 后，补齐业务流程、涉及资源、当前事务边界、外部调用位置、异常场景、幂等键和对账入口。重点让输出明确：哪些操作进本地事务，哪些操作不能放事务内，失败后如何重试和补偿。</p>
   </section>
 
 </div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = "复制"; }, 1200);
+}
+</script>
 
 </body>
 </html>

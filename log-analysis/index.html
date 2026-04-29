@@ -30,41 +30,126 @@
 
   <section>
     <h2>场景</h2>
-    <p>根据日志片段、时间范围、系统模块和用户操作，提取异常链路、关键错误点与排查方向。</p>
+    <p>用于根据线上错误日志快速判断异常原因，重点关注异常类型、触发接口、堆栈位置、请求参数、用户上下文、最近变更以及是否需要修复代码。适用于 Java 线上异常、Spring Boot 接口报错、定时任务异常、支付/回调/状态流转异常。</p>
   </section>
 
   <section>
     <h2>Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>你是一个 Java 后端日志分析专家，请根据以下信息分析日志：
+      <pre><code id="log-analysis-prompt"># 角色
+你是一名资深 Java 后端线上问题排查专家，擅长通过日志、堆栈、接口路径和业务上下文定位异常原因。
+你的任务不是复述日志，而是判断异常发生在哪一层、最可能的业务原因是什么，并给出下一步排查和修复建议。
 
-【输入信息】
-时间范围：
-{{日志发生时间段}}
+---
 
-系统模块：
-{{服务名 / 接口路径 / TraceId / 用户操作}}
+# 输入信息
 
-日志片段：
-{{完整日志片段，包含 ERROR/WARN/堆栈/TraceId}}
+## 1. 异常日志
+完整日志：
+```text
+{{粘贴完整错误日志，包含时间、线程、接口、异常堆栈}}
+```
 
-业务背景：
-{{Java 后端业务流程、依赖服务、最近变更}}
+异常出现时间：
+{{例如：2026-04-29 14:35:22}}
 
-【输出要求】
-1. 关键错误点
-2. 异常链路
-3. 可能根因
-4. 可能原因
-5. 需要优先关注的日志行
-6. 后续排查建议
+出现频率：
+{{例如：单次 / 多次 / 高频 / 每次请求必现}}
 
-【约束】
-- 按日志时间顺序还原链路
-- 每个根因必须给出日志依据
-- 区分直接错误和上游诱因
-- 信息不足时说明需要补充哪些 Trace、指标或配置</code></pre>
+---
+
+## 2. 接口与请求上下文
+请求地址：
+{{例如：POST /api/orderAssignments/completed}}
+
+请求方法：
+{{GET / POST / PUT / DELETE}}
+
+请求参数：
+{{如果有，粘贴请求参数；没有就写“不确定”}}
+
+当前用户 / 角色：
+{{例如：userId=123，角色=商家；没有就写“不确定”}}
+
+---
+
+## 3. 业务场景
+用户操作：
+{{例如：点击确认完成 / 提交审核 / 支付回调 / 定时任务自动处理}}
+
+相关业务状态：
+{{例如：订单状态=待完成，支付状态=已支付，审核状态=待审核}}
+
+最近是否有上线变更：
+{{例如：刚改过登录逻辑 / 刚加了状态校验 / 不确定}}
+
+---
+
+## 4. 相关代码
+报错位置代码：
+{{粘贴堆栈指向的核心方法代码}}
+
+相关 Mapper / SQL：
+{{如果涉及数据库，粘贴 Mapper 或 SQL}}
+
+---
+
+# 分析约束
+
+1. 不要只翻译异常。
+2. 必须指出异常发生位置。
+3. 必须结合堆栈和业务状态判断原因。
+4. 如果日志信息不足，必须列出还需要补充什么。
+5. 不要臆造不存在的代码逻辑。
+6. 优先给最小修复建议。
+7. 输出要能指导开发人员下一步操作。
+
+---
+
+# 输出结构
+
+## 1. 一句话结论
+用一句话说明最可能原因。
+
+## 2. 异常定位
+- 异常类型：
+- 请求接口：
+- 报错方法：
+- 具体代码行：
+- 所属层级：Controller / Service / Mapper / 外部接口 / 定时任务
+
+## 3. 关键证据
+列出日志中的关键证据：
+- 证据 1：
+- 证据 2：
+- 证据 3：
+
+## 4. 可能原因排序
+最多列 5 个，按可能性排序：
+1. 原因：
+   - 支持证据：
+   - 需要验证：
+
+## 5. 下一步排查
+- 查什么日志：
+- 查什么数据库记录：
+- 看什么代码：
+- 复现方式：
+
+## 6. 最小修复建议
+- 修复点：
+- 修改位置：
+- 建议代码逻辑：
+- 是否需要补数据：
+- 风险等级：
+
+## 7. 防复发建议
+- 是否需要参数校验：
+- 是否需要状态校验：
+- 是否需要幂等处理：
+- 是否需要增加日志：
+- 是否需要测试用例：</code></pre>
     </div>
   </section>
 
@@ -72,23 +157,43 @@
     <h2>示例输入</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>时间范围：
-2026-04-28 10:12:00 ~ 10:13:00
-
-系统模块：
-order-service，POST /api/orders，用户提交订单，traceId=8f21a
-
-日志片段：
-2026-04-28 10:12:01 INFO OrderController - create order request, userId=3821, traceId=8f21a
-2026-04-28 10:12:01 WARN PayClient - create payment timeout, orderId=90001, traceId=8f21a
-java.net.SocketTimeoutException: Read timed out
-at com.example.pay.PayClient.create(PayClient.java:57)
-2026-04-28 10:12:02 WARN RetryTemplate - retry payment create, times=1, traceId=8f21a
-2026-04-28 10:12:05 ERROR OrderController - create order failed, orderId=90001, traceId=8f21a
-com.example.common.RemoteCallException: pay-service timeout
-
-业务背景：
-订单创建时同步调用 pay-service 创建支付单，支付单创建失败时订单返回失败。</code></pre>
+      <pre><code>完整日志：
+14:54:29.352 [http-nio-8080-exec-6] ERROR c.r.f.w.e.GlobalExceptionHandler - [handleRuntimeException,141] - 请求地址'/api/orderAssignments/completed',发生未知异常.
+java.lang.RuntimeException:
+    at com.ruoyi.system.service.impl.OrderServiceImpl.completed(OrderServiceImpl.java:896)
+    at com.ruoyi.system.controller.OrderAssignmentController.completed(OrderAssignmentController.java:74)
+异常出现时间：
+2026-04-29 14:54:29
+出现频率：
+用户点击完成时偶发
+请求地址：
+POST /api/orderAssignments/completed
+请求方法：
+POST
+请求参数：
+{
+  "orderId": 88231
+}
+当前用户 / 角色：
+userId=10086，角色=手艺人
+用户操作：
+手艺人点击确认完成订单
+相关业务状态：
+订单状态=待完成，支付状态=已支付，接单状态=已接单
+最近是否有上线变更：
+刚调整过订单完成时的状态校验
+报错位置代码：
+public void completed(Long orderId) {
+    BusOrder order = orderMapper.selectById(orderId);
+    if (!Objects.equals(order.getAssignmentUserId(), SecurityUtils.getUserId())) {
+        throw new RuntimeException();
+    }
+    if (!Objects.equals(order.getStatus(), OrderStatus.WAIT_COMPLETE)) {
+        throw new RuntimeException();
+    }
+    order.setStatus(OrderStatus.COMPLETED);
+    orderMapper.updateById(order);
+}</code></pre>
     </div>
   </section>
 
@@ -96,33 +201,60 @@ com.example.common.RemoteCallException: pay-service timeout
     <h2>示例输出</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>1. 关键错误点
-   - PayClient.create 调用 pay-service 发生 Read timed out
-   - OrderController 最终抛出 RemoteCallException
+      <pre><code>## 1. 一句话结论
+最可能是订单完成接口的权限或状态校验失败，但代码直接抛空 RuntimeException，导致日志无法看出具体业务原因。
 
-2. 异常链路
-   - 用户提交订单 -> order-service 创建订单 -> PayClient 调用 pay-service -> 超时重试 -> 订单创建失败
+## 2. 异常定位
+- 异常类型：java.lang.RuntimeException
+- 请求接口：POST /api/orderAssignments/completed
+- 报错方法：OrderServiceImpl.completed
+- 具体代码行：OrderServiceImpl.java:896
+- 所属层级：Service
 
-3. 可能根因
-   - pay-service 响应慢或不可用
-   - order-service 读超时时间偏短
-   - 重试放大了下游压力
+## 3. 关键证据
+- 证据 1：日志指向 OrderServiceImpl.completed(OrderServiceImpl.java:896)
+- 证据 2：异常是空 RuntimeException，没有业务错误信息
+- 证据 3：最近调整过订单完成状态校验，且异常发生在点击完成订单时
 
-4. 需要优先关注的日志行
-   - PayClient timeout 行
-   - RetryTemplate retry 行
-   - OrderController create order failed 行
+## 4. 可能原因排序
+1. 原因：当前用户不是该订单的接单手艺人
+   - 支持证据：代码中校验 assignmentUserId 与当前 userId，不一致会抛异常
+   - 需要验证：查询 orderId=88231 的 assignment_user_id 是否等于 10086
+2. 原因：订单状态不是 WAIT_COMPLETE
+   - 支持证据：代码中状态不等于 WAIT_COMPLETE 会抛异常
+   - 需要验证：查询订单当前 status
+3. 原因：orderMapper.selectById 返回 null
+   - 支持证据：代码没有判空
+   - 需要验证：确认 orderId=88231 是否存在
 
-5. 后续排查建议
-   - 按 traceId 查询 pay-service 同时间日志
-   - 查看 pay-service P95/P99、错误率和线程池指标
-   - 核对 PayClient 超时、重试次数和熔断配置</code></pre>
+## 5. 下一步排查
+- 查什么日志：同一 orderId 前后的状态变更日志
+- 查什么数据库记录：bus_order 中 id=88231 的 status、assignment_user_id
+- 看什么代码：OrderServiceImpl.completed 第 896 行具体是哪一个 throw
+- 复现方式：使用非接单用户或错误状态订单调用完成接口
+
+## 6. 最小修复建议
+- 修复点：不要抛空 RuntimeException，改为明确业务异常
+- 修改位置：OrderServiceImpl.completed
+- 建议代码逻辑：
+  1. order 为空时抛“订单不存在”
+  2. assignmentUserId 不匹配时抛“无权完成该订单”
+  3. status 不正确时抛“当前订单状态不允许完成”
+- 是否需要补数据：暂不确定，需要先查订单状态
+- 风险等级：低
+
+## 7. 防复发建议
+- 是否需要参数校验：需要，orderId 不能为空
+- 是否需要状态校验：需要，且错误信息必须明确
+- 是否需要幂等处理：可以考虑已完成订单重复点击时直接返回成功或明确提示
+- 是否需要增加日志：需要记录 orderId、currentUserId、assignmentUserId、status
+- 是否需要测试用例：需要覆盖非接单用户、错误状态、订单不存在、重复完成</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>粘贴同一时间窗口内的完整日志和 TraceId，优先用于接口失败、远程调用异常和线上告警分析。</p>
+    <p>复制 Prompt 后，粘贴完整错误日志和堆栈，再补充接口、请求参数、用户角色、业务状态和堆栈指向代码。日志越完整，输出越能直接定位到 Controller、Service、Mapper 或外部接口层。</p>
   </section>
 
 </div>

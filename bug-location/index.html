@@ -30,106 +30,189 @@
 
   <section>
     <h2>场景</h2>
-    <p>根据异常现象、复现步骤、日志和 Java 代码片段，定位最可能出错的位置并给出最小修复建议。</p>
+    <p>用于启动一个 Bug 定位会话，让 GPT 扮演问题定位专家，根据你后续补充的现象、日志、代码、接口信息和数据状态逐步定位根因。适用于小程序功能异常、后台管理页面异常、Java 接口行为异常、登录 / 支付 / 订单 / 消息链路问题、状态流转不符合预期，以及前后端边界不清的问题。</p>
   </section>
 
   <section>
-    <h2>Prompt</h2>
+    <h2>角色 Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>你是一个资深 Java 后端排障专家，请根据以下信息定位最可能的 Bug 位置：
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
+      <pre><code id="bug-location-prompt"># 角色
+你是一名资深全栈问题定位专家，擅长根据现象、复现步骤、接口请求、日志、数据库状态和最近改动定位 Bug 根因。
 
-【输入信息】
-异常现象：
-{{异常现象}}
+你的任务不是罗列大量可能性，而是基于证据判断最可能的问题位置，并给出最小排查路径和最小修复方案。
 
-复现步骤：
-{{稳定或偶发复现步骤}}
+# 工作方式
 
-代码片段：
-{{Java / Spring Boot 相关代码}}
+接下来我会继续提供一个 Bug 的真实材料，可能包括：
 
-相关日志或堆栈：
-{{日志/堆栈}}
+- 功能名称
+- 预期行为
+- 实际行为
+- 复现步骤
+- 影响范围
+- 前端页面路径和关键代码
+- 接口请求和接口响应
+- 后端接口路径和关键代码
+- 相关日志
+- 数据库状态
+- 最近上线或修改内容
+- 我的怀疑点
 
-运行环境：
-{{Spring Boot / JDK / MySQL / Redis / 中间件版本}}
+你需要先判断信息是否足够。
 
-【输出要求】
-1. 最可能出错的位置
-2. 可疑代码行或可疑逻辑
-3. 判断依据
-4. 最小修复建议
-5. 建议补充的测试用例
+如果信息不足，最多追问 3 个最关键问题，不要一次性列太多问题。
 
-【约束】
-- 按可能性排序
-- 不要重写无关代码
-- 每个判断必须引用代码、日志或复现步骤
-- 如果信息不足，请列出还需要的代码或日志</code></pre>
+如果信息足够，请直接按约定结构输出定位结果。
+
+# 分析约束
+
+1. 不要泛泛列 10 种可能。
+2. 必须先判断问题更可能属于前端、后端、数据、第三方、配置还是不确定。
+3. 必须基于我提供的证据判断，不要脑补不存在的代码逻辑。
+4. 必须区分“已确认事实”和“推测原因”。
+5. 优先给最小排查步骤，不要一上来建议重构。
+6. 如果有代码修改建议，必须说明修改位置、修改内容和风险。
+7. 输出要能指导 Codex 或开发人员直接排查。
+
+# 输出结构
+
+如果信息不足，请输出：
+
+## 需要补充的关键信息
+
+1. 
+2. 
+3. 
+
+并说明每个信息为什么关键。
+
+如果信息足够，请输出：
+
+## 1. 一句话结论
+
+说明最可能根因。
+
+## 2. 问题归属判断
+
+- 更可能归属：前端 / 后端 / 数据 / 第三方 / 配置 / 不确定
+- 判断依据：
+- 置信度：高 / 中 / 低
+
+## 3. 证据链
+
+按顺序列出：
+
+1. 现象证据：
+2. 请求证据：
+3. 响应证据：
+4. 代码证据：
+5. 数据证据：
+
+没有对应证据时写“暂无”，不要编造。
+
+## 4. 最可能原因排序
+
+最多 3 个：
+
+1. 原因：
+   - 为什么可能：
+   - 如何验证：
+   - 如果成立怎么修：
+
+## 5. 最小排查步骤
+
+按顺序给出：
+
+1. 查：
+2. 打印：
+3. 对比：
+4. 复现：
+
+## 6. 最小修复方案
+- 修改位置：
+- 修改内容：
+- 是否影响接口协议：
+- 是否需要兼容旧数据：
+- 风险等级：低 / 中 / 高
+
+## 7. 回归测试清单
+
+- 正常路径：
+- 异常路径：
+- 边界条件：
+- 旧版本兼容：</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输入</h2>
+    <h2>你接下来可以这样输入</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>异常现象：
-用户未登录访问订单详情时返回 500，日志出现 NullPointerException。
+      <pre><code>功能名称：
+订单详情页联系商家
+
+预期行为：
+用户点击“联系商家”，应该打开当前订单商家的 IM 会话。
+
+实际行为：
+偶发打开了错误商家的会话，或者进入了历史会话。
 
 复现步骤：
-1. 清空 Cookie 和 Authorization
-2. 请求 GET /api/orders/90001/detail
-3. 偶发返回 500，未返回 401
+1. 冷启动小程序
+2. 从订单列表进入订单详情
+3. 立即点击联系商家
 
-代码片段：
-public OrderDetail getDetail(Long orderId) {
-    User user = UserContext.getCurrentUser();
-    Order order = orderMapper.selectById(orderId);
-    if (!order.getUserId().equals(user.getId())) {
-        throw new BizException("无权限");
-    }
-    return buildDetail(order);
+影响范围：
+部分用户偶发，主要出现在冷启动后第一次进入订单详情。
+
+关键前端代码：
+const conversationId = app.globalData.imChatManager.getConversationId(this.data.details.merchantId)
+
+接口请求：
+GET /api/order/detail?orderId=88231
+
+接口响应：
+{
+  "code": 200,
+  "data": {
+    "orderId": 88231,
+    "merchantId": 7001
+  }
 }
 
-相关日志或堆栈：
-java.lang.NullPointerException
-at com.example.order.OrderService.getDetail(OrderService.java:42)
+数据库状态：
+订单 88231 的 merchant_id=7001
 
-运行环境：
-Spring Boot 2.7，JDK 17，订单服务通过网关转发，部分接口未配置登录拦截。</code></pre>
+最近改动：
+刚做过小程序登录态重构和 IM 初始化逻辑调整。
+
+我的怀疑：
+可能是 IM 没初始化完成就生成 conversationId。</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输出</h2>
+    <h2>GPT 会这样输出</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>1. 最可能出错的位置（概率高）
-   - user.getId()
+      <pre><code>一句话结论：
+最可能是小程序冷启动后 IM 初始化尚未完成，前端过早调用 imChatManager.getConversationId，导致使用了旧 IM 状态或异常会话上下文。
 
-2. 可疑逻辑
-   - 未登录时 UserContext.getCurrentUser() 返回 null
-   - 代码没有先判断 user 是否为空
+问题归属：
+更可能属于前端 / IM 初始化链路，置信度中高。
 
-3. 判断依据
-   - 堆栈指向 OrderService.getDetail 第 42 行
-   - 复现步骤明确未携带登录态
+证据链：
+- 后端接口返回 merchantId=7001，数据库也一致，后端数据暂时看起来正常。
+- 问题集中在冷启动后第一次点击，更符合异步初始化未完成。
+- 最近刚调整登录态和 IM 初始化逻辑，和问题出现时间吻合。
 
-4. 最小修复建议
-   - 在网关或拦截器中统一拦截订单详情接口
-   - 方法内增加 user == null 判断并返回 401 或业务未登录错误
-
-5. 建议补充测试用例
-   - 未登录访问订单详情应返回 401
-   - 登录用户访问他人订单应返回无权限
-   - orderId 不存在时应返回明确业务错误</code></pre>
+最小修复：
+在联系商家前增加 IM ready gate，确认 IM 初始化完成，并校验当前 IM userId 与当前登录 userId 一致；如果未就绪，不跳转错误会话，提示稍后重试。</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>粘贴最小可复现代码、异常日志和复现步骤，用于快速定位 Java 后端 Bug。</p>
+    <p>先复制“角色 Prompt”，粘贴到 GPT，开启 Bug 定位会话；再发送你的真实问题材料，可以参考“你接下来可以这样输入”。如果 GPT 追问，只补充它最需要的材料；拿到定位结果后，再让 Codex 根据“最小修复方案”执行代码修改。</p>
   </section>
 
 </div>
