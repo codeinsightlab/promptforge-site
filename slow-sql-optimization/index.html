@@ -30,30 +30,43 @@
 
   <section>
     <h2>场景</h2>
-    <p>输入SQL + 执行情况，给出索引与优化建议</p>
+    <p>根据 SQL、表结构、索引、数据量和执行计划，输出可验证的 MySQL 慢 SQL 优化建议。</p>
   </section>
 
   <section>
     <h2>Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>你是一个 MySQL 与 Java 后端性能优化专家，请根据 SQL 和执行情况给出优化建议：
+      <pre><code>你是一个 MySQL 与 Java 后端性能优化专家，请根据以下信息优化慢 SQL：
 
+【输入信息】
 SQL：
 {{SQL}}
 
 表结构：
-{{表结构}}
+{{表字段、主键、字段类型、现有索引}}
+
+数据规模：
+{{表数据量、过滤条件选择性、增长速度}}
 
 执行情况：
-{{执行耗时/扫描行数/执行计划}}
+{{执行耗时、扫描行数、返回行数、EXPLAIN、慢日志}}
 
-请输出：
+业务约束：
+{{是否允许改 SQL / 是否允许加索引 / 是否分页 / 一致性要求}}
+
+【输出要求】
 1. 慢的主要原因
-2. 推荐索引
+2. 索引优化建议
 3. SQL 改写建议
-4. 可能的业务侧优化
-5. 优化后的验证方式</code></pre>
+4. 风险提醒
+5. 验证方式
+
+【约束】
+- 不要只给结论，必须说明判断依据
+- 索引建议必须写出字段顺序
+- 说明可能影响写入、锁表或存储成本的风险
+- 如果执行计划不足，请指出需要补充的信息</code></pre>
     </div>
   </section>
 
@@ -69,11 +82,19 @@ order by create_time desc
 limit 20;
 
 表结构：
-order_info(id, user_id, status, amount, create_time)
-现有索引：idx_user_id(user_id)
+order_info(id bigint PK, user_id bigint, status tinyint, amount decimal, create_time datetime, pay_time datetime)
+现有索引：
+idx_user_id(user_id)
+
+数据规模：
+order_info 约 8000 万行，单个高活跃用户最多 12 万订单。
 
 执行情况：
-耗时 1800ms，扫描 120000 行，Using filesort</code></pre>
+耗时 1800ms，扫描 120000 行，返回 20 行。
+EXPLAIN: key=idx_user_id, Extra=Using where; Using filesort
+
+业务约束：
+允许新增索引，接口只需要 id、amount、create_time、status 字段。</code></pre>
     </div>
   </section>
 
@@ -83,24 +104,31 @@ order_info(id, user_id, status, amount, create_time)
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
       <pre><code>1. 慢的主要原因
    - 只命中 user_id 索引，status 过滤和 create_time 排序未充分利用索引
-   - 出现 Using filesort
+   - 扫描 120000 行但只返回 20 行，过滤和排序成本高
+   - 执行计划出现 Using filesort
 
-2. 推荐索引
-   - idx_user_status_time(user_id, status, create_time)
+2. 索引优化建议
+   - 新增 idx_user_status_create_time(user_id, status, create_time desc)
+   - 如果 MySQL 版本不支持 desc 索引，也可使用同字段顺序索引验证排序效果
 
 3. SQL 改写建议
-   - 避免 select *，只查询页面需要字段
+   - 避免 select *，改为 select id, amount, create_time, status
    - 保持 where 条件与 order by 顺序匹配组合索引
 
-4. 验证方式
+4. 风险提醒
+   - 新索引会增加订单写入成本和存储空间
+   - 大表建索引需要评估线上 DDL 方式和执行窗口
+
+5. 验证方式
    - 执行 EXPLAIN 确认 key 命中新索引
-   - 观察扫描行数和 filesort 是否消失</code></pre>
+   - 观察 rows、filesort、接口 P95 是否下降
+   - 用线上相似数据量回放查询验证</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>替换内容直接使用</p>
+    <p>粘贴 SQL、表结构、索引和 EXPLAIN，适合接口慢查询、列表分页和后台查询优化。</p>
   </section>
 
 </div>

@@ -30,30 +30,43 @@
 
   <section>
     <h2>场景</h2>
-    <p>输入代码片段 + 异常现象，定位最可能出错位置</p>
+    <p>根据异常现象、复现步骤、日志和 Java 代码片段，定位最可能出错的位置并给出最小修复建议。</p>
   </section>
 
   <section>
     <h2>Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>你是一个资深 Java 后端排障专家，请根据代码片段和异常现象定位最可能的 Bug 位置：
+      <pre><code>你是一个资深 Java 后端排障专家，请根据以下信息定位最可能的 Bug 位置：
 
+【输入信息】
 异常现象：
 {{异常现象}}
 
+复现步骤：
+{{稳定或偶发复现步骤}}
+
 代码片段：
-{{代码片段}}
+{{Java / Spring Boot 相关代码}}
 
 相关日志或堆栈：
 {{日志/堆栈}}
 
-请输出：
+运行环境：
+{{Spring Boot / JDK / MySQL / Redis / 中间件版本}}
+
+【输出要求】
 1. 最可能出错的位置
-2. 出错原因
-3. 触发条件
-4. 修复建议
-5. 需要补充验证的点</code></pre>
+2. 可疑代码行或可疑逻辑
+3. 判断依据
+4. 最小修复建议
+5. 建议补充的测试用例
+
+【约束】
+- 按可能性排序
+- 不要重写无关代码
+- 每个判断必须引用代码、日志或复现步骤
+- 如果信息不足，请列出还需要的代码或日志</code></pre>
     </div>
   </section>
 
@@ -62,7 +75,12 @@
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
       <pre><code>异常现象：
-用户未登录时访问订单详情，偶发 NullPointerException。
+用户未登录访问订单详情时返回 500，日志出现 NullPointerException。
+
+复现步骤：
+1. 清空 Cookie 和 Authorization
+2. 请求 GET /api/orders/90001/detail
+3. 偶发返回 500，未返回 401
 
 代码片段：
 public OrderDetail getDetail(Long orderId) {
@@ -75,7 +93,11 @@ public OrderDetail getDetail(Long orderId) {
 }
 
 相关日志或堆栈：
-NullPointerException at OrderService.getDetail(OrderService.java:42)</code></pre>
+java.lang.NullPointerException
+at com.example.order.OrderService.getDetail(OrderService.java:42)
+
+运行环境：
+Spring Boot 2.7，JDK 17，订单服务通过网关转发，部分接口未配置登录拦截。</code></pre>
     </div>
   </section>
 
@@ -83,26 +105,31 @@ NullPointerException at OrderService.getDetail(OrderService.java:42)</code></pre
     <h2>示例输出</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>1. 最可能出错的位置
+      <pre><code>1. 最可能出错的位置（概率高）
    - user.getId()
 
-2. 出错原因
+2. 可疑逻辑
    - 未登录时 UserContext.getCurrentUser() 返回 null
    - 代码没有先判断 user 是否为空
 
-3. 触发条件
-   - 请求未携带有效登录态
-   - 鉴权拦截器未提前拦截该接口
+3. 判断依据
+   - 堆栈指向 OrderService.getDetail 第 42 行
+   - 复现步骤明确未携带登录态
 
-4. 修复建议
-   - 在进入业务逻辑前统一鉴权
-   - 或在方法内增加 user == null 判断并返回未登录错误</code></pre>
+4. 最小修复建议
+   - 在网关或拦截器中统一拦截订单详情接口
+   - 方法内增加 user == null 判断并返回 401 或业务未登录错误
+
+5. 建议补充测试用例
+   - 未登录访问订单详情应返回 401
+   - 登录用户访问他人订单应返回无权限
+   - orderId 不存在时应返回明确业务错误</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>替换内容直接使用</p>
+    <p>粘贴最小可复现代码、异常日志和复现步骤，用于快速定位 Java 后端 Bug。</p>
   </section>
 
 </div>

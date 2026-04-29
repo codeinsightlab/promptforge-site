@@ -97,7 +97,7 @@
 
   <section>
     <h2>场景</h2>
-    <p>根据问题描述 + 日志，输出可能原因（按概率排序）</p>
+    <p>根据问题描述、日志、运行环境和最近变更，按概率分析 Java 后端问题原因与排查顺序。</p>
   </section>
 
   <section>
@@ -106,22 +106,36 @@
       <div class="action-bar">
         <span class="copy-action" onclick="copyPrompt(this)">复制</span>
       </div>
-      <pre><code>你是一个经验丰富的 Java 后端技术专家，请根据以下信息分析问题原因：
+      <pre><code>你是一个经验丰富的 Java 后端技术专家，请根据以下信息完成问题原因分析：
 
+【输入信息】
 问题描述：
 {{问题描述}}
 
-相关日志：
-{{日志内容}}
+运行环境：
+{{Spring Boot 版本 / MySQL / Redis / JVM / Linux / 中间件}}
 
-上下文信息：
-{{系统环境/接口名称/最近变更}}
+关键日志或现象：
+{{错误日志、监控指标、异常现象}}
 
-请输出：
-1. 可能原因（按概率排序）
+相关代码或配置：
+{{核心代码片段、配置项、SQL、接口路径}}
+
+最近变更：
+{{最近上线、配置变更、依赖变更、数据量变化}}
+
+【输出要求】
+1. 可能原因（按概率从高到低排序）
 2. 每个原因的判断依据
-3. 建议优先排查的方向
-4. 需要补充确认的信息</code></pre>
+3. 推荐排查顺序
+4. 每一步建议查看的日志、指标或代码位置
+5. 需要补充的信息
+
+【约束】
+- 不要泛泛而谈
+- 每个结论必须绑定输入中的现象或日志
+- 如果信息不足，请明确说明缺口
+- 优先给出最小排查路径，不要直接假设需要大改架构</code></pre>
     </div>
   </section>
 
@@ -132,15 +146,22 @@
         <span class="copy-action" onclick="copyPrompt(this)">复制</span>
       </div>
       <pre><code>问题描述：
-订单提交接口偶发返回 500，重试后有时成功。
+生产环境订单提交接口偶发返回 500，用户重试后有时成功，高峰期更明显。
 
-相关日志：
+运行环境：
+Spring Boot 2.7，MySQL 8.0，Redis 6，HikariCP，Linux，订单服务 4 个实例。
+
+关键日志或现象：
 java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30000ms.
-com.example.order.OrderService.createOrder(OrderService.java:86)
+at com.example.order.OrderService.createOrder(OrderService.java:86)
+接口 POST /api/orders 平均耗时从 180ms 升至 1200ms。
 
-上下文信息：
-接口：POST /api/orders
-最近上线：新增订单优惠券校验逻辑</code></pre>
+相关代码或配置：
+spring.datasource.hikari.maximum-pool-size=20
+新增 CouponService.checkAvailable(userId, couponId)，内部查询 user_coupon 表。
+
+最近变更：
+上午 10:00 上线优惠券校验逻辑，user_coupon 表数据约 6000 万。</code></pre>
     </div>
   </section>
 
@@ -150,27 +171,34 @@ com.example.order.OrderService.createOrder(OrderService.java:86)
       <div class="action-bar">
         <span class="copy-action" onclick="copyPrompt(this)">复制</span>
       </div>
-      <pre><code>1. 数据库连接池耗尽（最可能）
+      <pre><code>1. 数据库连接池耗尽（概率高）
    - 日志明确出现 Hikari 连接获取超时
-   - 500 与数据库连接不可用时间点一致
+   - 接口耗时上升与高峰期失败相符
 
-2. 新增优惠券校验引入慢查询
+2. 新增优惠券校验 SQL 变慢（概率高）
    - 最近变更与订单链路相关
-   - 慢查询可能长期占用连接
+   - user_coupon 数据量大，慢查询会长期占用连接
 
-3. 高峰期并发超过连接池容量
+3. 高峰期并发超过连接池承载能力（概率中）
    - 偶发失败、重试成功符合资源竞争特征
+   - 连接池最大 20，订单服务实例数有限
 
 建议优先排查：
-1. 查看 Hikari 活跃连接数、等待线程数
-2. 检查优惠券校验 SQL 耗时
-3. 对比上线前后接口 QPS 与数据库连接池指标</code></pre>
+1. 查看 Hikari active、pending、timeout 指标
+2. 抓取 CouponService.checkAvailable 的 SQL 与 EXPLAIN
+3. 对比上线前后慢 SQL、QPS、数据库 CPU
+4. 临时灰度关闭优惠券校验验证影响范围
+
+需要补充：
+- 失败时间段的慢 SQL 明细
+- user_coupon 表索引
+- 订单接口调用链耗时拆分</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>替换内容直接使用</p>
+    <p>把问题现象、日志、环境和最近变更替换到 Prompt 中，优先用于线上故障初步归因。</p>
   </section>
 
 </div>

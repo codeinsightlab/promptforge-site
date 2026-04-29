@@ -30,27 +30,41 @@
 
   <section>
     <h2>场景</h2>
-    <p>输入日志，提取异常模式与关键错误点</p>
+    <p>根据日志片段、时间范围、系统模块和用户操作，提取异常链路、关键错误点与排查方向。</p>
   </section>
 
   <section>
     <h2>Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>你是一个 Java 后端日志分析专家，请分析以下日志并提取异常模式与关键错误点：
+      <pre><code>你是一个 Java 后端日志分析专家，请根据以下信息分析日志：
 
-日志内容：
-{{日志内容}}
+【输入信息】
+时间范围：
+{{日志发生时间段}}
+
+系统模块：
+{{服务名 / 接口路径 / TraceId / 用户操作}}
+
+日志片段：
+{{完整日志片段，包含 ERROR/WARN/堆栈/TraceId}}
 
 业务背景：
-{{业务背景}}
+{{Java 后端业务流程、依赖服务、最近变更}}
 
-请输出：
+【输出要求】
 1. 关键错误点
-2. 异常模式
-3. 影响范围判断
+2. 异常链路
+3. 可能根因
 4. 可能原因
-5. 建议排查顺序</code></pre>
+5. 需要优先关注的日志行
+6. 后续排查建议
+
+【约束】
+- 按日志时间顺序还原链路
+- 每个根因必须给出日志依据
+- 区分直接错误和上游诱因
+- 信息不足时说明需要补充哪些 Trace、指标或配置</code></pre>
     </div>
   </section>
 
@@ -58,16 +72,23 @@
     <h2>示例输入</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>日志内容：
-2026-04-28 10:12:01 ERROR OrderController - create order failed, userId=3821
+      <pre><code>时间范围：
+2026-04-28 10:12:00 ~ 10:13:00
+
+系统模块：
+order-service，POST /api/orders，用户提交订单，traceId=8f21a
+
+日志片段：
+2026-04-28 10:12:01 INFO OrderController - create order request, userId=3821, traceId=8f21a
+2026-04-28 10:12:01 WARN PayClient - create payment timeout, orderId=90001, traceId=8f21a
 java.net.SocketTimeoutException: Read timed out
 at com.example.pay.PayClient.create(PayClient.java:57)
-2026-04-28 10:12:02 WARN RetryTemplate - retry payment create, times=1
-2026-04-28 10:12:05 ERROR OrderController - create order failed, userId=3822
-java.net.SocketTimeoutException: Read timed out
+2026-04-28 10:12:02 WARN RetryTemplate - retry payment create, times=1, traceId=8f21a
+2026-04-28 10:12:05 ERROR OrderController - create order failed, orderId=90001, traceId=8f21a
+com.example.common.RemoteCallException: pay-service timeout
 
 业务背景：
-订单创建时会同步调用支付系统创建支付单。</code></pre>
+订单创建时同步调用 pay-service 创建支付单，支付单创建失败时订单返回失败。</code></pre>
     </div>
   </section>
 
@@ -76,25 +97,32 @@ java.net.SocketTimeoutException: Read timed out
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
       <pre><code>1. 关键错误点
-   - PayClient.create 调用支付系统读超时
+   - PayClient.create 调用 pay-service 发生 Read timed out
+   - OrderController 最终抛出 RemoteCallException
 
-2. 异常模式
-   - 多个用户在相近时间出现相同 SocketTimeoutException
-   - 失败集中在订单创建链路
+2. 异常链路
+   - 用户提交订单 -> order-service 创建订单 -> PayClient 调用 pay-service -> 超时重试 -> 订单创建失败
 
-3. 影响范围判断
-   - 影响依赖支付创建的订单提交请求
+3. 可能根因
+   - pay-service 响应慢或不可用
+   - order-service 读超时时间偏短
+   - 重试放大了下游压力
 
-4. 可能原因
-   - 支付系统响应慢
-   - 网络连接不稳定
-   - 本服务超时时间设置过短</code></pre>
+4. 需要优先关注的日志行
+   - PayClient timeout 行
+   - RetryTemplate retry 行
+   - OrderController create order failed 行
+
+5. 后续排查建议
+   - 按 traceId 查询 pay-service 同时间日志
+   - 查看 pay-service P95/P99、错误率和线程池指标
+   - 核对 PayClient 超时、重试次数和熔断配置</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>替换内容直接使用</p>
+    <p>粘贴同一时间窗口内的完整日志和 TraceId，优先用于接口失败、远程调用异常和线上告警分析。</p>
   </section>
 
 </div>

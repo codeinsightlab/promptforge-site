@@ -30,30 +30,43 @@
 
   <section>
     <h2>场景</h2>
-    <p>输入接口耗时/调用链，定位性能瓶颈</p>
+    <p>根据接口耗时、P95/P99、调用链、SQL 与外部依赖耗时，定位 Java 后端接口性能瓶颈。</p>
   </section>
 
   <section>
     <h2>Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>你是一个 Java 后端性能优化专家，请根据接口耗时和调用链定位性能瓶颈：
+      <pre><code>你是一个 Java 后端性能优化专家，请根据以下信息定位接口性能瓶颈：
 
+【输入信息】
 接口信息：
-{{接口路径/请求方式}}
+{{接口路径 / 请求方式 / 业务场景 / 调用方}}
 
 耗时数据：
-{{总耗时/P95/P99/各步骤耗时}}
+{{平均耗时 / P95 / P99 / 超时率 / 错误率}}
 
 调用链：
-{{调用链路}}
+{{Controller / Service / SQL / Redis / RPC / MQ 等耗时}}
 
-请输出：
-1. 性能瓶颈位置
+关键 SQL 或外部接口：
+{{SQL 耗时、执行计划、外部服务耗时}}
+
+运行环境：
+{{Spring Boot / JVM / MySQL / Redis / 服务实例数 / 机器配置}}
+
+【输出要求】
+1. 性能瓶颈排序
 2. 判断依据
-3. 优化优先级
+3. 优先优化点
 4. 可落地优化建议
-5. 需要继续采集的指标</code></pre>
+5. 需要补充的监控指标
+
+【约束】
+- 按收益和风险排序
+- 每个建议必须说明依据
+- 不要只写“加缓存”或“加索引”
+- 区分短期止血和长期优化</code></pre>
     </div>
   </section>
 
@@ -62,17 +75,25 @@
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
       <pre><code>接口信息：
-GET /api/products/search
+GET /api/products/search，App 商品搜索页，峰值 2500 QPS
 
 耗时数据：
-平均耗时 850ms，P95 2300ms，P99 4100ms
+平均耗时 850ms，P95 2300ms，P99 4100ms，超时率 1.8%
 
 调用链：
 Controller 5ms
 参数校验 3ms
-商品查询 SQL 1800ms
+商品查询 SQL 1800ms，扫描约 15 万行
+Redis 查询类目配置 8ms
 库存服务 RPC 120ms
-结果组装 30ms</code></pre>
+结果组装 30ms
+
+关键 SQL 或外部接口：
+select * from product where category_id = ? and status = 1 order by sales desc limit 20 offset 2000;
+EXPLAIN 显示 Using where; Using filesort
+
+运行环境：
+Spring Boot 2.7，MySQL 8.0，Redis 6，商品服务 6 个实例。</code></pre>
     </div>
   </section>
 
@@ -80,27 +101,31 @@ Controller 5ms
     <h2>示例输出</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>1. 性能瓶颈位置
-   - 商品查询 SQL
+      <pre><code>1. 性能瓶颈排序
+   - 商品查询 SQL：影响最大
+   - 深分页与排序：放大扫描行数
+   - 库存服务 RPC：次要瓶颈
 
 2. 判断依据
    - SQL 耗时 1800ms，占总耗时主要部分
-   - P95/P99 明显偏高，说明慢请求集中在查询阶段
+   - P95/P99 明显偏高，说明慢请求集中在查询与排序阶段
+   - 执行计划出现 filesort
 
-3. 优化优先级
-   - 优先优化商品查询条件、索引和分页方式
-   - 其次评估库存 RPC 是否可批量或缓存
+3. 优先优化点
+   - 为 category_id、status、sales 设计组合索引
+   - 避免 offset 深分页，改为游标分页或搜索引擎承接
+   - 库存 RPC 改为批量查询
 
-4. 建议
-   - 查看 SQL 执行计划
-   - 为高频筛选字段建立组合索引
-   - 避免深分页或大结果集排序</code></pre>
+4. 需要补充的监控指标
+   - SQL 扫描行数、返回行数、临时表与排序次数
+   - JVM GC、线程池队列、数据库 CPU
+   - 库存服务 P95/P99 与超时率</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>替换内容直接使用</p>
+    <p>填入接口指标、调用链和慢 SQL 信息，用于确定优先优化点与验证指标。</p>
   </section>
 
 </div>
