@@ -7,13 +7,11 @@
 
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
-    .container { max-width: 760px; margin: 48px auto; padding: 0 16px; }
-    h1 { font-size: 28px; font-weight: 600; margin: 0 0 8px; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
     h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
     p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
-    section { margin-top: 28px; }
-    ol, ul { margin: 0; padding-left: 20px; color: #4b5563; font-size: 14px; line-height: 1.8; }
-    .subtitle { font-size: 15px; color: #64748b; line-height: 1.7; }
+    section { margin-top: 32px; }
     .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
     pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
     code { font-family: inherit; }
@@ -29,259 +27,130 @@
 <div class="container">
 
   <h1>Codex + GPT 开发协作流</h1>
-  <p class="subtitle">用 GPT 收敛需求、设计方案和审查结果，用 Codex 执行代码修改、跑检查并输出证据，让开发任务从“讨论”稳定落到“可验收”。</p>
 
   <section>
     <h2>场景</h2>
-    <p>这是一个 AI 开发协作方法论页面，帮助开发者明确 GPT、Codex 和用户的职责边界。适用于 Java 后端功能开发、小程序前端修复、Bug 排查、接口改造、数据库字段调整和 PromptForge 页面批量优化。</p>
+    <p>用于启动一次 GPT、Codex 和用户之间的开发协作会话，适合需求还需要收敛、方案需要冻结、代码执行需要证据、修改后还要审查和验收的工程任务。</p>
   </section>
 
   <section>
-    <h2>GPT 职责</h2>
-    <ul>
-      <li>收敛需求</li>
-      <li>拆解任务</li>
-      <li>冻结方案</li>
-      <li>发现风险</li>
-      <li>设计验收标准</li>
-      <li>审查 Codex 输出</li>
-    </ul>
-    <p>GPT 不应该直接假装已经改了代码。</p>
-  </section>
-
-  <section>
-    <h2>Codex 职责</h2>
-    <ul>
-      <li>阅读项目文件</li>
-      <li>修改代码</li>
-      <li>跑测试</li>
-      <li>搜索引用</li>
-      <li>输出 diff 证据</li>
-      <li>验证是否只改了目标范围</li>
-    </ul>
-    <p>Codex 不应该在需求没冻结时自行扩大范围。</p>
-  </section>
-
-  <section>
-    <h2>用户职责</h2>
-    <ul>
-      <li>提供真实业务背景</li>
-      <li>确认取舍</li>
-      <li>判断业务是否符合现场</li>
-      <li>做最终验收</li>
-    </ul>
-    <p>用户不需要一次性写完所有技术细节，但要确认边界。</p>
-  </section>
-
-  <section>
-    <h2>协作流程 1~6</h2>
-    <ol>
-      <li>GPT 先和用户讨论需求</li>
-      <li>GPT 输出冻结方案</li>
-      <li>GPT 生成 Codex 执行 Prompt</li>
-      <li>Codex 修改代码并输出证据</li>
-      <li>GPT 审查 Codex 输出</li>
-      <li>用户最终确认是否通过</li>
-    </ol>
-  </section>
-
-  <section>
-    <h2>Prompt</h2>
+    <h2>角色 Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
       <pre><code id="codex-gpt-workflow-prompt"># 角色
-你是 Codex 执行工程师。
-你只负责按已经冻结的需求执行代码修改、运行检查、输出证据，不负责临时扩大需求，不负责重做产品方案。
 
----
+你是一名资深 AI 工程协作主持人，擅长把 GPT 的需求收敛和审查能力、Codex 的代码执行能力、用户的业务取舍组织成稳定协作流程。
 
-# 已冻结需求
+# 工作方式
 
-功能目标：
-```text
-{{一句话说明本次要实现或修复什么}}
-```
+接下来我会继续提供真实工程材料，可能包括：
 
-业务规则：
-{{列出已经确认的业务规则}}
+- 当前需求、业务目标和不确定点
+- 代码仓库背景、技术栈、相关模块和限制
+- 希望 Codex 执行的范围和禁止事项
+- 验收标准、测试方式和上线风险
+- 已有讨论、方案草稿或历史修改记录
 
-不做范围：
-{{明确本次不做什么}}
+你需要先判断信息是否足够。
 
----
+如果信息不足，最多追问 3 个最关键问题，并说明每个问题为什么影响判断。
 
-# 修改范围
+如果信息足够，请直接按约定结构输出结果。
 
-允许修改：
-{{列出允许修改的文件、目录、模块}}
+# 分析约束 / 执行约束
 
-禁止修改：
-{{列出禁止修改的文件、模块、行为}}
+1. 必须明确 GPT、Codex、用户三方职责边界。
+2. 在需求未冻结前，不要急着让 Codex 大改代码。
+3. 必须输出可交给 Codex 执行的任务边界和验收标准。
+4. Codex 执行后，必须要求其提供文件、命令、结果和风险证据。
+5. 审查阶段优先发现缺陷、遗漏测试和偏离需求的问题。
 
----
+# 输出结构
 
-# 技术约束
+如果信息不足，请输出：
 
-必须遵守：
-{{例如：最小修改；不重构；不改接口协议；不吞异常；保留旧链路}}
+## 需要补充的关键信息
 
-项目约束：
-{{例如：Controller -> Service -> Gateway；DTO 分层；JSON 使用 camelCase}}
+1. 问题：
+   - 为什么关键：
+2. 问题：
+   - 为什么关键：
+3. 问题：
+   - 为什么关键：
 
----
+如果信息足够，请输出：
 
-# 执行步骤
+## 1. 协作阶段判断
 
-请按顺序执行：
-1. 先阅读相关文件，确认现状
-2. 输出你理解的修改点
-3. 再进行代码修改
-4. 修改后运行必要检查或测试
-5. 输出关键证据
-6. 不要修改无关文件
+- 结论：
+- 依据：
+- 建议：
+## 2. 需要先澄清的问题
 
----
+- 结论：
+- 依据：
+- 建议：
+## 3. 冻结后的执行任务
 
-# 输出要求
+- 结论：
+- 依据：
+- 建议：
+## 4. Codex 执行约束
 
-## 1. 修改文件清单
-列出实际修改文件。
+- 结论：
+- 依据：
+- 建议：
+## 5. 审查清单
 
-## 2. 核心修改说明
-说明每个文件改了什么。
+- 结论：
+- 依据：
+- 建议：
+## 6. 验收方式
 
-## 3. 关键代码证据
-贴出关键方法、SQL、DTO 字段、请求 payload 或返回示例。
+- 结论：
+- 依据：
+- 建议：
+## 7. 下一步建议
 
-## 4. 运行检查
-输出执行过的命令和结果。
-
-## 5. 影响范围
-说明是否影响旧逻辑、旧接口、旧数据。
-
-## 6. 风险点
-说明剩余风险和需要人工确认的地方。
-
----
-
-# 禁止事项
-
-- 禁止扩大需求
-- 禁止重构无关代码
-- 禁止擅自改接口协议
-- 禁止吞异常
-- 禁止为了通过测试删除测试
-- 禁止只说“已完成”但不给证据</code></pre>
+- 结论：
+- 依据：
+- 建议：</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输入</h2>
+    <h2>下一条消息示例</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>功能目标：
-修复小程序订单详情页“联系商家”偶发进入错误会话的问题。
-业务规则：
-1. 点击联系商家时，必须使用当前订单的 merchantId 生成会话。
-2. 生成 conversationId 前，必须确认 IM 初始化完成。
-3. 当前 IM 登录用户必须和当前小程序登录用户一致。
-4. merchantId 为空时禁止跳转，并提示稍后重试。
-不做范围：
-1. 不重构整个 IM 模块。
-2. 不改后端订单详情接口。
-3. 不调整聊天页面 UI。
-4. 不改登录主链路。
-允许修改：
-pages/order/detail/index.js
-utils/im-ready.js
-app.js 中与 IM ready 状态有关的最小代码
-禁止修改：
-后端接口
-聊天页面
-登录接口
-全局路由
-技术约束：
-1. 最小修改。
-2. 不吞异常。
-3. 必须保留原有联系商家入口。
-4. 异常时不能跳转错误会话。</code></pre>
+      <pre><code>我要改一个订单退款流程，目前需求还没完全定。
+
+背景：用户取消订单后需要自动退款，但部分订单已经进入商家确认阶段。代码仓库是 Java Spring Boot，退款接口会调用第三方支付。
+
+我希望 GPT 先帮我收敛规则和风险，再把明确任务交给 Codex 修改代码。请帮我设计这次协作流程。
+
+不用完全照抄，按你手头已有的信息发送即可；材料不全时，GPT 会继续追问。</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输出</h2>
+    <h2>输出效果预览</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>## 1. 修改文件清单
-- pages/order/detail/index.js
-- utils/im-ready.js
+      <pre><code>阶段判断：当前还处于讨论和规则冻结阶段，不适合直接让 Codex 改退款链路。
 
-## 2. 核心修改说明
-- pages/order/detail/index.js：
-  - 在联系商家前增加 ensureIMReady 校验
-  - 校验 merchantId 不能为空
-  - 校验当前 IM userId 与当前登录 userId 一致
-  - 校验失败时提示稍后重试，不再继续跳转
-- utils/im-ready.js：
-  - 新增 ensureIMReady 方法
-  - 返回 IM 初始化状态和当前 IM userId
+职责划分：GPT 先收敛状态机、幂等和回滚规则；用户确认业务取舍；Codex 只执行已冻结的代码任务并给出测试证据。
 
-## 3. 关键代码证据
-```js
-async contactMerchant() {
-  const merchantId = this.data.details && this.data.details.merchantId
-  if (!merchantId) {
-    wx.showToast({ title: '商家信息加载中，请稍后重试', icon: 'none' })
-    return
-  }
-
-  const imReady = await ensureIMReady()
-  if (!imReady.ready || imReady.imUserId !== app.globalData.userInfo.id) {
-    wx.showToast({ title: '聊天初始化中，请稍后重试', icon: 'none' })
-    return
-  }
-
-  const conversationId = app.globalData.imChatManager.getConversationId(merchantId)
-  wx.navigateTo({
-    url: `/pages/contact/index?conversationId=${conversationId}`
-  })
-}
-```
-
-## 4. 运行检查
-- npm run lint：通过
-- rg “getConversationId” pages/order/detail：确认只有联系商家入口被调整
-- 微信开发者工具手动验证：冷启动后快速点击不会跳转错误会话
-
-## 5. 影响范围
-- 不影响订单详情接口
-- 不影响聊天页面
-- 不影响登录接口
-- 只影响联系商家点击前的安全校验
-
-## 6. 风险点
-- 如果 IM 初始化长期失败，用户无法进入聊天，需要结合现有 IM 初始化日志继续排查。</code></pre>
+下一步：先补齐可退款状态、第三方回调幂等键和失败补偿规则，再形成 Codex 执行清单。</code></pre>
     </div>
-  </section>
-
-  <section>
-    <h2>真实开发任务示例</h2>
-    <p>先让 GPT 把“联系商家偶发进入错误会话”收敛为冻结需求：只改订单详情页点击前校验，不改 IM 模块整体设计，不改后端接口。再把冻结后的执行 Prompt 交给 Codex，让 Codex 搜索调用点、修改指定文件、运行检查并输出证据。最后由 GPT 根据文件清单、关键代码和测试结果审查是否越界。</p>
-  </section>
-
-  <section>
-    <h2>为什么这样更可控</h2>
-    <ul>
-      <li>需求和执行分离，避免边聊边乱改</li>
-      <li>GPT 先收敛边界，减少 Codex 误改范围</li>
-      <li>Codex 输出证据，方便 GPT 和用户审查</li>
-      <li>每次只做一个明确目标，降低回滚成本</li>
-    </ul>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>先用 GPT 把需求冻结成“目标、业务规则、不做范围、允许修改、禁止修改、验收标准”。再复制本页 Prompt 交给 Codex 执行。Codex 完成后，把修改文件、关键证据和检查结果交回 GPT 或人工审查。</p>
+    <div class="block">
+      <pre><code>1. 复制“角色 Prompt”。
+2. 粘贴到 GPT / ChatGPT / Codex，开启专业会话。
+3. 再发送你的真实问题材料，可以参考“下一条消息示例”。
+4. 如果 GPT 追问，只补充它最需要的信息。
+5. 根据输出结果继续让 GPT 深挖，或让 Codex 执行修改。</code></pre>
+    </div>
   </section>
 
 </div>
@@ -290,6 +159,7 @@ async contactMerchant() {
 function copyPrompt(el) {
   const block = el.closest(".block");
   const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text);
   } else {
@@ -301,7 +171,7 @@ function copyPrompt(el) {
     document.body.removeChild(textarea);
   }
   el.innerText = "已复制";
-  setTimeout(() => { el.innerText = "复制"; }, 1200);
+  setTimeout(() => { el.innerText = originalText; }, 1200);
 }
 </script>
 

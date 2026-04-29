@@ -8,13 +8,17 @@
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
     .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
-    h1 { font-size: 28px; font-weight: 600; margin: 0 0 8px; }
-    h2 { font-size: 16px; font-weight: 600; margin: 0 0 12px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
     p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
     section { margin-top: 32px; }
-    .block { border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
     pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
     code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
   </style>
 </head>
 
@@ -26,91 +30,147 @@
 
   <section>
     <h2>场景</h2>
-    <p>面向 API 网关设计按用户、接口、租户或 IP 的限流策略和降级响应。</p>
+    <p>用于启动网关限流、降级、保护核心接口相关的专业工程会话，适合在已有业务背景和部分工程材料时，让 GPT 先追问关键缺口，再输出可落地的判断、方案或排查路径。</p>
   </section>
 
   <section>
-    <h2>Prompt</h2>
+    <h2>角色 Prompt</h2>
     <div class="block">
-      <pre><code>你是一个经验丰富的 Java 后端技术专家，请针对「网关限流设计」进行分析。
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
+      <pre><code id="gateway-rate-limit-design-prompt"># 角色
 
-【输入信息】
-问题描述：
-{{现象、影响范围、发生时间、错误率或耗时变化}}
+你是一名资深网关限流与流量治理专家，擅长设计网关限流、熔断、降级和核心接口保护策略。
 
-运行环境：
-{{JDK / Spring Boot / MySQL / Redis / MQ / 网关 / 实例数 / 机器配置}}
+# 工作方式
 
-关键日志：
-{{异常日志、慢日志、GC 日志、调用链、监控指标}}
+接下来我会继续提供真实工程材料，可能包括：
 
-相关代码：
-{{核心代码、SQL、配置、线程池、事务边界或调用关系}}
+- 接口分组、调用方、QPS 峰值和突发流量
+- 限流维度，如 IP、用户、租户、应用、接口或令牌
+- 核心链路、非核心链路和降级响应
+- 网关能力、服务端能力、熔断和重试配置
+- 监控指标、告警阈值、压测结果和误伤容忍度
 
-最近变更：
-{{上线内容、配置调整、数据量变化、依赖变更}}
+你需要先判断信息是否足够。
 
-【输出要求】
-1. 问题分析 / 原因
-2. 判断依据
-3. 优先排查顺序 / 优化建议
-4. 风险提示
+如果信息不足，最多追问 3 个最关键问题，并说明每个问题为什么影响判断。
 
-【约束】
-- 按概率排序
-- 不要泛泛而谈
-- 信息不足要指出
-- 每条结论必须关联日志、指标、代码或变更依据</code></pre>
+如果信息足够，请直接按约定结构输出结果。
+
+# 分析约束 / 执行约束
+
+1. 必须先区分保护系统、保护下游和防刷三类目标。
+2. 限流策略必须说明维度、阈值、算法和返回方式。
+3. 必须考虑误伤、白名单、突发流量和降级体验。
+4. 信息不足时最多追问 3 个关键问题。
+
+# 输出结构
+
+如果信息不足，请输出：
+
+## 需要补充的关键信息
+
+1. 问题：
+   - 为什么关键：
+2. 问题：
+   - 为什么关键：
+3. 问题：
+   - 为什么关键：
+
+如果信息足够，请输出：
+
+## 1. 限流目标
+
+- 结论：
+- 依据：
+- 建议：
+## 2. 规则设计
+
+- 结论：
+- 依据：
+- 建议：
+## 3. 降级策略
+
+- 结论：
+- 依据：
+- 建议：
+## 4. 误伤控制
+
+- 结论：
+- 依据：
+- 建议：
+## 5. 监控告警
+
+- 结论：
+- 依据：
+- 建议：
+## 6. 压测验证
+
+- 结论：
+- 依据：
+- 建议：
+## 7. 上线步骤
+
+- 结论：
+- 依据：
+- 建议：</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输入</h2>
+    <h2>下一条消息示例</h2>
     <div class="block">
-      <pre><code>问题描述：
-秒杀开始后网关 QPS 从 1 万升到 12 万，部分核心接口受影响。
-运行环境：
-Spring Cloud Gateway，Redis Cluster，后端服务 20 实例。
-关键日志：
-网关 CPU 90%，后端大量 429 和超时。
-相关代码：
-当前只按 IP 简单限流。
-最近变更：
-新增秒杀活动入口。</code></pre>
+      <pre><code>接口：POST /api/order/submit，大促期间峰值预计 8000 QPS，下游库存服务最多承受 3000 QPS。
+
+已有网关支持令牌桶、按用户和接口限流，服务端支持降级返回排队提示。
+
+请帮我设计限流方案。
+
+不用完全照抄，按你手头已有的信息发送即可；材料不全时，GPT 会继续追问。</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输出</h2>
+    <h2>输出效果预览</h2>
     <div class="block">
-      <pre><code>1. 问题分析 / 原因
-   - 热点接口限流：概率最高，先验证关键日志与监控指标
-   - 租户维度配额：结合最近变更和代码路径进一步确认
-   - 突发流量保护：作为次要方向排查资源与依赖状态
+      <pre><code>目标：核心是保护库存服务，其次是抑制单用户重复提交。
 
-2. 判断依据
-   - 现象与耗时、错误率或资源指标变化一致
-   - 关键日志中出现明确异常、慢调用或等待信息
-   - 最近变更与问题发生时间接近
-
-3. 优先排查顺序 / 优化建议
-   - 先定位影响最大的链路和最慢的依赖
-   - 再验证配置、索引、连接池、线程池或限流策略
-   - 最后补充压测、回放或灰度验证
-
-4. 风险提示
-   - 不要在证据不足时直接扩大资源
-   - 涉及索引、缓存、事务、限流或降级的修改需评估回滚方案
-   - 信息不足时需要补充调用链、监控截图、完整日志和核心代码</code></pre>
+方案：接口级总令牌桶限制到库存承载范围内，叠加用户维度短窗口限流；超限返回排队或稍后重试，不触发下游重试风暴。</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>替换占位信息后直接使用，优先补充日志、监控、代码片段和最近变更，适合排查评审会议或上线前方案校验。</p>
+    <div class="block">
+      <pre><code>1. 复制“角色 Prompt”。
+2. 粘贴到 GPT / ChatGPT / Codex，开启专业会话。
+3. 再发送你的真实问题材料，可以参考“下一条消息示例”。
+4. 如果 GPT 追问，只补充它最需要的信息。
+5. 根据输出结果继续让 GPT 深挖，或让 Codex 执行修改。</code></pre>
+    </div>
   </section>
 
 </div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
 
 </body>
 </html>

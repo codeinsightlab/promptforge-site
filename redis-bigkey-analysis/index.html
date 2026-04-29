@@ -8,13 +8,17 @@
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
     .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
-    h1 { font-size: 28px; font-weight: 600; margin: 0 0 8px; }
-    h2 { font-size: 16px; font-weight: 600; margin: 0 0 12px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
     p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
     section { margin-top: 32px; }
-    .block { border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
     pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
     code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
   </style>
 </head>
 
@@ -26,91 +30,145 @@
 
   <section>
     <h2>场景</h2>
-    <p>Redis 延迟抖动、内存异常或删除阻塞时，定位大 Key 类型、影响范围和治理方案。</p>
+    <p>用于启动Redis big key 识别、风险、拆分方案相关的专业工程会话，适合在已有业务背景和部分工程材料时，让 GPT 先追问关键缺口，再输出可落地的判断、方案或排查路径。</p>
   </section>
 
   <section>
-    <h2>Prompt</h2>
+    <h2>角色 Prompt</h2>
     <div class="block">
-      <pre><code>你是一个经验丰富的 Java 后端技术专家，请针对「Redis大Key问题分析」进行分析。
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
+      <pre><code id="redis-bigkey-analysis-prompt"># 角色
 
-【输入信息】
-问题描述：
-{{现象、影响范围、发生时间、错误率或耗时变化}}
+你是一名资深 Redis 大 Key 分析专家，擅长识别 Redis 大 Key 类型、内存和阻塞风险，并给出拆分、清理和迁移方案。
 
-运行环境：
-{{JDK / Spring Boot / MySQL / Redis / MQ / 网关 / 实例数 / 机器配置}}
+# 工作方式
 
-关键日志：
-{{异常日志、慢日志、GC 日志、调用链、监控指标}}
+接下来我会继续提供真实工程材料，可能包括：
 
-相关代码：
-{{核心代码、SQL、配置、线程池、事务边界或调用关系}}
+- big key 名称、类型、元素数量、value 大小和 TTL
+- 访问 QPS、命令类型、慢日志和网络流量
+- 业务用途、写入来源、增长速度和过期策略
+- Redis 内存、CPU、带宽、主从延迟和阻塞情况
+- 可接受的数据拆分、兼容迁移和回滚方式
 
-最近变更：
-{{上线内容、配置调整、数据量变化、依赖变更}}
+你需要先判断信息是否足够。
 
-【输出要求】
-1. 问题分析 / 原因
-2. 判断依据
-3. 优先排查顺序 / 优化建议
-4. 风险提示
+如果信息不足，最多追问 3 个最关键问题，并说明每个问题为什么影响判断。
 
-【约束】
-- 按概率排序
-- 不要泛泛而谈
-- 信息不足要指出
-- 每条结论必须关联日志、指标、代码或变更依据</code></pre>
+如果信息足够，请直接按约定结构输出结果。
+
+# 分析约束 / 执行约束
+
+1. 必须区分大 value、大集合和热点大 key。
+2. 必须说明风险：阻塞、网络、迁移、删除、主从同步。
+3. 拆分方案必须考虑兼容读写和渐进迁移。
+4. 信息不足时最多追问 3 个关键问题。
+
+# 输出结构
+
+如果信息不足，请输出：
+
+## 需要补充的关键信息
+
+1. 问题：
+   - 为什么关键：
+2. 问题：
+   - 为什么关键：
+3. 问题：
+   - 为什么关键：
+
+如果信息足够，请输出：
+
+## 1. 大 Key 判断
+
+- 结论：
+- 依据：
+- 建议：
+## 2. 风险等级
+
+- 结论：
+- 依据：
+- 建议：
+## 3. 证据
+
+- 结论：
+- 依据：
+- 建议：
+## 4. 止血方案
+
+- 结论：
+- 依据：
+- 建议：
+## 5. 拆分方案
+
+- 结论：
+- 依据：
+- 建议：
+## 6. 迁移步骤
+
+- 结论：
+- 依据：
+- 建议：
+## 7. 监控指标
+
+- 结论：
+- 依据：
+- 建议：</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输入</h2>
+    <h2>下一条消息示例</h2>
     <div class="block">
-      <pre><code>问题描述：
-Redis 偶发延迟从 2ms 升到 500ms。
-运行环境：
-Redis Cluster 6，单分片 32GB。
-关键日志：
-slowlog 出现 HGETALL user:coupon:10086，单 Key 约 80MB。
-相关代码：
-用户优惠券全部存入一个 Hash。
-最近变更：
-优惠券活动导入 3000 万张券。</code></pre>
+      <pre><code>Redis 里有 key user:followers:10086，类型 zset，元素约 180 万，业务用于粉丝分页列表。慢日志里 ZRANGE 偶发超过 200ms，删除用户时 DEL 也会卡顿。
+
+请帮我分析风险和拆分方案。
+
+不用完全照抄，按你手头已有的信息发送即可；材料不全时，GPT 会继续追问。</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输出</h2>
+    <h2>输出效果预览</h2>
     <div class="block">
-      <pre><code>1. 问题分析 / 原因
-   - Hash/List/Set 元素过多：概率最高，先验证关键日志与监控指标
-   - Value 体积过大：结合最近变更和代码路径进一步确认
-   - 删除或迁移阻塞主线程：作为次要方向排查资源与依赖状态
+      <pre><code>风险等级：高。该 zset 同时是大集合和潜在热点 key，分页读取、删除和迁移都可能阻塞。
 
-2. 判断依据
-   - 现象与耗时、错误率或资源指标变化一致
-   - 关键日志中出现明确异常、慢调用或等待信息
-   - 最近变更与问题发生时间接近
-
-3. 优先排查顺序 / 优化建议
-   - 先定位影响最大的链路和最慢的依赖
-   - 再验证配置、索引、连接池、线程池或限流策略
-   - 最后补充压测、回放或灰度验证
-
-4. 风险提示
-   - 不要在证据不足时直接扩大资源
-   - 涉及索引、缓存、事务、限流或降级的修改需评估回滚方案
-   - 信息不足时需要补充调用链、监控截图、完整日志和核心代码</code></pre>
+建议：按用户和时间或分片序号拆 key，删除改为 UNLINK 或分批清理，迁移期做双读校验。</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>替换占位信息后直接使用，优先补充日志、监控、代码片段和最近变更，适合排查评审会议或上线前方案校验。</p>
+    <div class="block">
+      <pre><code>1. 复制“角色 Prompt”。
+2. 粘贴到 GPT / ChatGPT / Codex，开启专业会话。
+3. 再发送你的真实问题材料，可以参考“下一条消息示例”。
+4. 如果 GPT 追问，只补充它最需要的信息。
+5. 根据输出结果继续让 GPT 深挖，或让 Codex 执行修改。</code></pre>
+    </div>
   </section>
 
 </div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
 
 </body>
 </html>

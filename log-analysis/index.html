@@ -30,231 +30,129 @@
 
   <section>
     <h2>场景</h2>
-    <p>用于根据线上错误日志快速判断异常原因，重点关注异常类型、触发接口、堆栈位置、请求参数、用户上下文、最近变更以及是否需要修复代码。适用于 Java 线上异常、Spring Boot 接口报错、定时任务异常、支付/回调/状态流转异常。</p>
+    <p>用于启动日志和堆栈分析会话，适合 Java / Spring Boot 接口异常、任务失败、第三方调用报错、空指针、事务回滚和线上告警后的第一轮定位。</p>
   </section>
 
   <section>
-    <h2>Prompt</h2>
+    <h2>角色 Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
       <pre><code id="log-analysis-prompt"># 角色
-你是一名资深 Java 后端线上问题排查专家，擅长通过日志、堆栈、接口路径和业务上下文定位异常原因。
-你的任务不是复述日志，而是判断异常发生在哪一层、最可能的业务原因是什么，并给出下一步排查和修复建议。
 
----
+你是一名资深 Java 日志分析和异常定位专家，擅长从日志、堆栈、接口上下文和业务状态中定位异常层级、触发条件和修复方向。
 
-# 输入信息
+# 工作方式
 
-## 1. 异常日志
-完整日志：
-```text
-{{粘贴完整错误日志，包含时间、线程、接口、异常堆栈}}
-```
+接下来我会继续提供真实工程材料，可能包括：
 
-异常出现时间：
-{{例如：2026-04-29 14:35:22}}
+- 完整错误日志和异常堆栈
+- 接口路径、请求参数、traceId、用户或订单等业务标识
+- 异常出现时间、频率、影响范围和是否可复现
+- 相关代码片段、配置、SQL 或外部系统返回
+- 最近发布、配置变更或依赖升级
 
-出现频率：
-{{例如：单次 / 多次 / 高频 / 每次请求必现}}
+你需要先判断信息是否足够。
 
----
+如果信息不足，最多追问 3 个最关键问题，并说明每个问题为什么影响判断。
 
-## 2. 接口与请求上下文
-请求地址：
-{{例如：POST /api/orderAssignments/completed}}
+如果信息足够，请直接按约定结构输出结果。
 
-请求方法：
-{{GET / POST / PUT / DELETE}}
+# 分析约束 / 执行约束
 
-请求参数：
-{{如果有，粘贴请求参数；没有就写“不确定”}}
-
-当前用户 / 角色：
-{{例如：userId=123，角色=商家；没有就写“不确定”}}
-
----
-
-## 3. 业务场景
-用户操作：
-{{例如：点击确认完成 / 提交审核 / 支付回调 / 定时任务自动处理}}
-
-相关业务状态：
-{{例如：订单状态=待完成，支付状态=已支付，审核状态=待审核}}
-
-最近是否有上线变更：
-{{例如：刚改过登录逻辑 / 刚加了状态校验 / 不确定}}
-
----
-
-## 4. 相关代码
-报错位置代码：
-{{粘贴堆栈指向的核心方法代码}}
-
-相关 Mapper / SQL：
-{{如果涉及数据库，粘贴 Mapper 或 SQL}}
-
----
-
-# 分析约束
-
-1. 不要只翻译异常。
-2. 必须指出异常发生位置。
-3. 必须结合堆栈和业务状态判断原因。
-4. 如果日志信息不足，必须列出还需要补充什么。
-5. 不要臆造不存在的代码逻辑。
-6. 优先给最小修复建议。
-7. 输出要能指导开发人员下一步操作。
-
----
+1. 不要只翻译异常名称，必须定位报错层级和触发路径。
+2. 必须指出第一处业务相关代码位置，和框架包装异常的区别。
+3. 日志证据不足时最多追问 3 个关键问题。
+4. 区分根因、诱因和连带报错。
+5. 修复建议必须能落到代码、配置、数据或调用方处理。
 
 # 输出结构
 
-## 1. 一句话结论
-用一句话说明最可能原因。
+如果信息不足，请输出：
 
-## 2. 异常定位
-- 异常类型：
-- 请求接口：
-- 报错方法：
-- 具体代码行：
-- 所属层级：Controller / Service / Mapper / 外部接口 / 定时任务
+## 需要补充的关键信息
 
-## 3. 关键证据
-列出日志中的关键证据：
-- 证据 1：
-- 证据 2：
-- 证据 3：
+1. 问题：
+   - 为什么关键：
+2. 问题：
+   - 为什么关键：
+3. 问题：
+   - 为什么关键：
 
-## 4. 可能原因排序
-最多列 5 个，按可能性排序：
-1. 原因：
-   - 支持证据：
-   - 需要验证：
+如果信息足够，请输出：
 
-## 5. 下一步排查
-- 查什么日志：
-- 查什么数据库记录：
-- 看什么代码：
-- 复现方式：
+## 1. 异常类型和报错层级
 
-## 6. 最小修复建议
-- 修复点：
-- 修改位置：
-- 建议代码逻辑：
-- 是否需要补数据：
-- 风险等级：
+- 结论：
+- 依据：
+- 建议：
+## 2. 最可能触发条件
 
-## 7. 防复发建议
-- 是否需要参数校验：
-- 是否需要状态校验：
-- 是否需要幂等处理：
-- 是否需要增加日志：
-- 是否需要测试用例：</code></pre>
+- 结论：
+- 依据：
+- 建议：
+## 3. 关键日志证据
+
+- 结论：
+- 依据：
+- 建议：
+## 4. 需要补充的信息，最多 3 个
+
+- 结论：
+- 依据：
+- 建议：
+## 5. 排查步骤
+
+- 结论：
+- 依据：
+- 建议：
+## 6. 修复建议
+
+- 结论：
+- 依据：
+- 建议：
+## 7. 验证方式
+
+- 结论：
+- 依据：
+- 建议：</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输入</h2>
+    <h2>下一条消息示例</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>完整日志：
-14:54:29.352 [http-nio-8080-exec-6] ERROR c.r.f.w.e.GlobalExceptionHandler - [handleRuntimeException,141] - 请求地址'/api/orderAssignments/completed',发生未知异常.
-java.lang.RuntimeException:
-    at com.ruoyi.system.service.impl.OrderServiceImpl.completed(OrderServiceImpl.java:896)
-    at com.ruoyi.system.controller.OrderAssignmentController.completed(OrderAssignmentController.java:74)
-异常出现时间：
-2026-04-29 14:54:29
-出现频率：
-用户点击完成时偶发
-请求地址：
-POST /api/orderAssignments/completed
-请求方法：
-POST
-请求参数：
-{
-  "orderId": 88231
-}
-当前用户 / 角色：
-userId=10086，角色=手艺人
-用户操作：
-手艺人点击确认完成订单
-相关业务状态：
-订单状态=待完成，支付状态=已支付，接单状态=已接单
-最近是否有上线变更：
-刚调整过订单完成时的状态校验
-报错位置代码：
-public void completed(Long orderId) {
-    BusOrder order = orderMapper.selectById(orderId);
-    if (!Objects.equals(order.getAssignmentUserId(), SecurityUtils.getUserId())) {
-        throw new RuntimeException();
-    }
-    if (!Objects.equals(order.getStatus(), OrderStatus.WAIT_COMPLETE)) {
-        throw new RuntimeException();
-    }
-    order.setStatus(OrderStatus.COMPLETED);
-    orderMapper.updateById(order);
-}</code></pre>
+      <pre><code>接口：POST /api/pay/confirm
+
+日志片段：线上出现 NullPointerException，traceId=9f31a，堆栈第一处业务代码在 PayConfirmService.java:138，上一行日志显示 thirdPayResult=null。
+
+背景：最近接入了一个新的支付渠道，只有该渠道的回调偶发失败。请求参数里 orderNo=PO20260429001，数据库订单状态仍是 PAYING。
+
+请帮我判断异常层级、最可能原因和下一步怎么查。
+
+不用完全照抄，按你手头已有的信息发送即可；材料不全时，GPT 会继续追问。</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>示例输出</h2>
+    <h2>输出效果预览</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制</span></div>
-      <pre><code>## 1. 一句话结论
-最可能是订单完成接口的权限或状态校验失败，但代码直接抛空 RuntimeException，导致日志无法看出具体业务原因。
+      <pre><code>异常判断：不是单纯 NPE 翻译，关键点在新支付渠道回调结果为空后仍进入确认逻辑。
 
-## 2. 异常定位
-- 异常类型：java.lang.RuntimeException
-- 请求接口：POST /api/orderAssignments/completed
-- 报错方法：OrderServiceImpl.completed
-- 具体代码行：OrderServiceImpl.java:896
-- 所属层级：Service
+关键证据：业务栈落在 PayConfirmService.java:138；thirdPayResult=null；问题只发生在新渠道。
 
-## 3. 关键证据
-- 证据 1：日志指向 OrderServiceImpl.completed(OrderServiceImpl.java:896)
-- 证据 2：异常是空 RuntimeException，没有业务错误信息
-- 证据 3：最近调整过订单完成状态校验，且异常发生在点击完成订单时
-
-## 4. 可能原因排序
-1. 原因：当前用户不是该订单的接单手艺人
-   - 支持证据：代码中校验 assignmentUserId 与当前 userId，不一致会抛异常
-   - 需要验证：查询 orderId=88231 的 assignment_user_id 是否等于 10086
-2. 原因：订单状态不是 WAIT_COMPLETE
-   - 支持证据：代码中状态不等于 WAIT_COMPLETE 会抛异常
-   - 需要验证：查询订单当前 status
-3. 原因：orderMapper.selectById 返回 null
-   - 支持证据：代码没有判空
-   - 需要验证：确认 orderId=88231 是否存在
-
-## 5. 下一步排查
-- 查什么日志：同一 orderId 前后的状态变更日志
-- 查什么数据库记录：bus_order 中 id=88231 的 status、assignment_user_id
-- 看什么代码：OrderServiceImpl.completed 第 896 行具体是哪一个 throw
-- 复现方式：使用非接单用户或错误状态订单调用完成接口
-
-## 6. 最小修复建议
-- 修复点：不要抛空 RuntimeException，改为明确业务异常
-- 修改位置：OrderServiceImpl.completed
-- 建议代码逻辑：
-  1. order 为空时抛“订单不存在”
-  2. assignmentUserId 不匹配时抛“无权完成该订单”
-  3. status 不正确时抛“当前订单状态不允许完成”
-- 是否需要补数据：暂不确定，需要先查订单状态
-- 风险等级：低
-
-## 7. 防复发建议
-- 是否需要参数校验：需要，orderId 不能为空
-- 是否需要状态校验：需要，且错误信息必须明确
-- 是否需要幂等处理：可以考虑已完成订单重复点击时直接返回成功或明确提示
-- 是否需要增加日志：需要记录 orderId、currentUserId、assignmentUserId、status
-- 是否需要测试用例：需要覆盖非接单用户、错误状态、订单不存在、重复完成</code></pre>
+最小建议：先补充渠道返回原文和空结果分支处理，再检查回调签名失败、超时重试和订单状态幂等保护。</code></pre>
     </div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <p>复制 Prompt 后，粘贴完整错误日志和堆栈，再补充接口、请求参数、用户角色、业务状态和堆栈指向代码。日志越完整，输出越能直接定位到 Controller、Service、Mapper 或外部接口层。</p>
+    <div class="block">
+      <pre><code>1. 复制“角色 Prompt”。
+2. 粘贴到 GPT / ChatGPT / Codex，开启专业会话。
+3. 再发送你的真实问题材料，可以参考“下一条消息示例”。
+4. 如果 GPT 追问，只补充它最需要的信息。
+5. 根据输出结果继续让 GPT 深挖，或让 Codex 执行修改。</code></pre>
+    </div>
   </section>
 
 </div>
@@ -263,6 +161,7 @@ public void completed(Long orderId) {
 function copyPrompt(el) {
   const block = el.closest(".block");
   const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text);
   } else {
@@ -274,7 +173,7 @@ function copyPrompt(el) {
     document.body.removeChild(textarea);
   }
   el.innerText = "已复制";
-  setTimeout(() => { el.innerText = "复制"; }, 1200);
+  setTimeout(() => { el.innerText = originalText; }, 1200);
 }
 </script>
 
