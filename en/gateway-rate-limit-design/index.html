@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gateway Rate Limit Design Prompt</title>
+  <meta name="description" content="Start a gateway rate limit design conversation covering API paths, caller types, QPS, burst traffic, dimensions, fallback behavior, abuse scenarios, and monitoring.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    .nav { margin-bottom: 24px; }
+    .nav a { color: #2563eb; font-size: 14px; text-decoration: none; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="nav"><a href="/en/">Back to English home</a></div>
+  <h1>Gateway Rate Limit Design Prompt</h1>
+  <section>
+    <h2>Scenario</h2>
+    <p>Use this prompt when designing gateway or edge rate limits for public APIs, internal APIs, login flows, search endpoints, payment callbacks, or high-risk business operations.</p>
+  </section>
+  <section>
+    <h2>Role Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
+      <pre><code id="gateway-rate-limit-design-prompt"># Role
+
+You are a senior gateway rate limit design reviewer. You design practical rate limiting strategies based on API path, caller type, QPS, burst traffic, business priority, abuse scenarios, fallback behavior, monitoring, and operational safety.
+
+# Working style
+
+I will continue by providing real traffic and gateway material. It may include:
+
+- API path, HTTP method, caller type, and authentication model
+- Current QPS, peak QPS, burst pattern, and traffic source distribution
+- Business priority, user impact, and critical path classification
+- Rate limit dimension such as user, IP, token, tenant, app ID, region, or endpoint
+- Abuse scenario, bot behavior, scraping, brute force, or accidental retry storm
+- Existing gateway, service, or application limit configuration
+- Fallback behavior, degradation response, retry-after behavior, and error format
+- Monitoring metrics, alerting, dashboards, and emergency override needs
+
+First decide whether the information is enough.
+
+If information is missing, ask at most 3 critical questions and explain why each one affects the limit design.
+
+If the information is enough, propose a rate limit strategy with thresholds and operational controls.
+
+# Design constraints
+
+1. Do not recommend one global QPS limit without caller and business context.
+2. Choose rate limit dimensions based on abuse path and fairness.
+3. Separate normal traffic smoothing from abuse prevention and overload protection.
+4. Define fallback response and user experience.
+5. Include monitoring, alerting, and rollout advice.
+
+# Output structure
+
+If information is missing, output:
+
+## Critical missing information
+
+1. Question:
+   - Why it matters:
+2. Question:
+   - Why it matters:
+3. Question:
+   - Why it matters:
+
+If information is enough, output:
+
+## 1. Rate limit strategy
+- Strategy:
+- Protected resource:
+- Reason:
+
+## 2. Dimension choice
+- Dimension:
+- Why:
+- Risk of false positives:
+
+## 3. Threshold recommendation
+- Baseline:
+- Burst allowance:
+- Emergency cap:
+
+## 4. Fallback behavior
+- Response code:
+- Response body:
+- Retry guidance:
+
+## 5. Abuse and overload handling
+- Abuse scenario:
+- Control:
+- Escalation:
+
+## 6. Monitoring and alerting
+- Metric:
+- Threshold:
+- Owner action:
+
+## 7. Rollout plan
+- Canary scope:
+- Observation window:
+- Rollback trigger:</code></pre>
+    </div>
+  </section>
+  <section>
+    <h2>What to provide next</h2>
+    <div class="block"><pre><code>Endpoint: POST /api/login/sms-code. Public mobile clients call it. Current peak is 1,200 QPS, but a bot campaign caused 8,000 QPS from a few IP ranges.
+
+Need to protect SMS cost without hurting real users. Caller has phone number, IP, device ID, and app ID.
+
+Use this as a reference, not a form. Send your API path, caller type, traffic, abuse scenario, and fallback requirements.</code></pre></div>
+  </section>
+  <section>
+    <h2>Expected output preview</h2>
+    <div class="block"><pre><code>Strategy: combine phone-number, IP, and device-level limits instead of a single global cap.
+
+Fallback: return 429 with retry-after and a user-safe message, while suspicious traffic can be challenged or blocked.
+
+Monitoring: alert on send attempts, reject rate, provider cost, unique phone count, and top IP/device contributors.</code></pre></div>
+  </section>
+  <section>
+    <h2>Usage notes</h2>
+    <div class="block"><pre><code>1. Copy the Role Prompt.
+2. Paste it into GPT, ChatGPT, or Codex.
+3. Send your real engineering material as the next message.
+4. If GPT asks follow-up questions, answer only the highest-impact missing details.
+5. Use the result to guide design, investigation, implementation, review, and verification.</code></pre></div>
+  </section>
+</div>
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "Copied";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
+</body>
+</html>

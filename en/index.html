@@ -303,9 +303,13 @@
         <a href="#performance-jvm">Performance and JVM</a>
         <a href="#database-prompts">Database</a>
         <a href="#api-review-prompts">API and Review</a>
+        <a href="#security-permissions">Security and Permissions</a>
         <a href="#cache-redis-prompts">Cache and Redis</a>
         <a href="#architecture-consistency">Architecture and Consistency</a>
         <a href="#messaging-prompts">Messaging</a>
+        <a href="#gateway-traffic">Gateway and Traffic</a>
+        <a href="#operations-release">Operations and Release</a>
+        <a href="#logging-observability">Logging and Observability</a>
       </nav>
     </section>
 
@@ -326,108 +330,75 @@
 
       <section id="debugging-troubleshooting" class="category">
         <h2>Debugging and Troubleshooting</h2>
-        <p class="section-desc">Analyze failures from symptoms, logs, traces, timeouts, dependencies, and recent changes.</p>
+        <p class="section-desc">Analyze failures from symptoms, logs, traces, timeouts, concurrency, dependencies, and recent changes.</p>
         <div class="prompt-grid">
-          <a class="prompt-card" href="/en/bug-location/">
-            <strong>Bug Investigation Prompt</strong>
-            <span>Diagnose product bugs from symptoms, reproduction steps, API responses, logs, data state, and recent changes.</span>
-            <em>Diagnose bug</em>
-          </a>
-          <a class="prompt-card" href="/en/log-analysis/">
-            <strong>Log Analysis Prompt for Developers</strong>
-            <span>Analyze error logs, stack traces, trace IDs, request timelines, service context, and recent deployments.</span>
-            <em>Analyze logs</em>
-          </a>
-          <a class="prompt-card" href="/en/api-timeout-analysis/">
-            <strong>API Timeout Analysis Prompt</strong>
-            <span>Diagnose endpoint timeouts across gateway, backend, database, cache, third-party services, pools, and network boundaries.</span>
-            <em>Diagnose timeout</em>
-          </a>
+          <a class="prompt-card" href="/en/problem-cause-analysis/"><strong>Problem Cause Analysis Prompt</strong><span>Structure unclear incidents into facts, hypotheses, missing evidence, likely causes, and next investigation steps.</span><em>Analyze cause</em></a>
+          <a class="prompt-card" href="/en/bug-location/"><strong>Bug Investigation Prompt</strong><span>Diagnose product bugs from symptoms, reproduction steps, API responses, logs, data state, and recent changes.</span><em>Diagnose bug</em></a>
+          <a class="prompt-card" href="/en/log-analysis/"><strong>Log Analysis Prompt for Developers</strong><span>Analyze error logs, stack traces, trace IDs, request timelines, service context, and recent deployments.</span><em>Analyze logs</em></a>
+          <a class="prompt-card" href="/en/api-timeout-analysis/"><strong>API Timeout Analysis Prompt</strong><span>Diagnose endpoint timeouts across gateway, backend, database, cache, third-party services, pools, and network boundaries.</span><em>Diagnose timeout</em></a>
+          <a class="prompt-card" href="/en/concurrency-problem-analysis/"><strong>Concurrency Problem Analysis Prompt</strong><span>Analyze race windows, duplicate submissions, idempotency gaps, locks, transactions, and shared-state risks.</span><em>Analyze concurrency</em></a>
+          <a class="prompt-card" href="/en/deadlock-troubleshooting/"><strong>Deadlock Troubleshooting Prompt</strong><span>Reconstruct lock order, conflicting SQL, transaction boundaries, index impact, and safe fixes.</span><em>Troubleshoot deadlock</em></a>
+          <a class="prompt-card" href="/en/service-avalanche-analysis/"><strong>Service Avalanche Analysis Prompt</strong><span>Analyze cascading failures from dependency latency, retry storms, pool exhaustion, and missing circuit breakers.</span><em>Analyze avalanche</em></a>
+          <a class="prompt-card" href="/en/system-bottleneck-analysis/"><strong>System Bottleneck Analysis Prompt</strong><span>Locate limiting resources across application, database, Redis, MQ, JVM, pools, queues, and infrastructure.</span><em>Find bottleneck</em></a>
         </div>
       </section>
 
       <section id="performance-jvm" class="category">
         <h2>Performance and JVM</h2>
-        <p class="section-desc">Review JVM behavior with GC evidence, resource limits, latency goals, and production safety in mind.</p>
+        <p class="section-desc">Review performance with traces, resource metrics, JVM evidence, pool behavior, and production safety in mind.</p>
         <div class="prompt-grid">
-          <a class="prompt-card" href="/en/gc-problem-analysis/">
-            <strong>GC Problem Analysis Prompt</strong>
-            <span>Analyze frequent GC, Full GC, long pauses, memory growth, allocation pressure, and OOM risk.</span>
-            <em>Analyze GC problem</em>
-          </a>
-          <a class="prompt-card" href="/en/jvm-parameter-tuning/">
-            <strong>JVM Parameter Tuning Prompt</strong>
-            <span>Review JVM parameters from GC logs, heap metrics, CPU usage, container limits, latency goals, and rollback plans.</span>
-            <em>Review JVM tuning</em>
-          </a>
+          <a class="prompt-card" href="/en/api-performance-analysis/"><strong>API Performance Analysis Prompt</strong><span>Break API latency into application, SQL, cache, downstream, serialization, and resource bottlenecks.</span><em>Analyze API performance</em></a>
+          <a class="prompt-card" href="/en/gc-problem-analysis/"><strong>GC Problem Analysis Prompt</strong><span>Analyze frequent GC, Full GC, long pauses, memory growth, allocation pressure, and OOM risk.</span><em>Analyze GC problem</em></a>
+          <a class="prompt-card" href="/en/jvm-parameter-tuning/"><strong>JVM Parameter Tuning Prompt</strong><span>Review JVM parameters from GC logs, heap metrics, CPU usage, container limits, latency goals, and rollback plans.</span><em>Review JVM tuning</em></a>
+          <a class="prompt-card" href="/en/thread-pool-configuration-optimization/"><strong>Thread Pool Configuration Optimization Prompt</strong><span>Review task type, pool size, queue strategy, rejection policy, downstream capacity, and rollout safety.</span><em>Optimize thread pool</em></a>
         </div>
       </section>
 
       <section id="database-prompts" class="category">
         <h2>Database</h2>
-        <p class="section-desc">Analyze SQL performance, query plans, index behavior, optimizer choices, and data access constraints.</p>
+        <p class="section-desc">Analyze schema design, SQL performance, query plans, index behavior, optimizer choices, and data access constraints.</p>
         <div class="prompt-grid">
-          <a class="prompt-card" href="/en/slow-sql-optimization/">
-            <strong>Slow SQL Optimization Prompt</strong>
-            <span>Analyze SQL, EXPLAIN plans, indexes, table schema, data volume, and business constraints before changing queries.</span>
-            <em>Analyze slow SQL</em>
-          </a>
-          <a class="prompt-card" href="/en/index-failure-analysis/">
-            <strong>Index Failure Analysis Prompt</strong>
-            <span>Analyze optimizer choices, predicate matching, leftmost prefix behavior, sorting risk, and safer SQL or index changes.</span>
-            <em>Analyze index failure</em>
-          </a>
+          <a class="prompt-card" href="/en/database-table-design/"><strong>Database Table Design Prompt</strong><span>Review entities, fields, indexes, constraints, query patterns, data growth, audit fields, and migration risk.</span><em>Design table</em></a>
+          <a class="prompt-card" href="/en/slow-sql-optimization/"><strong>Slow SQL Optimization Prompt</strong><span>Analyze SQL, EXPLAIN plans, indexes, table schema, data volume, and business constraints before changing queries.</span><em>Analyze slow SQL</em></a>
+          <a class="prompt-card" href="/en/index-failure-analysis/"><strong>Index Failure Analysis Prompt</strong><span>Analyze optimizer choices, predicate matching, leftmost prefix behavior, sorting risk, and safer SQL or index changes.</span><em>Analyze index failure</em></a>
         </div>
       </section>
 
       <section id="api-review-prompts" class="category">
         <h2>API and Review</h2>
-        <p class="section-desc">Review API behavior, operational readiness, monitoring design, and production risk.</p>
+        <p class="section-desc">Review API behavior, safety, operational readiness, and production risk.</p>
         <div class="prompt-grid">
-          <a class="prompt-card" href="/en/api-design-review/">
-            <strong>API Design Review Prompt</strong>
-            <span>Review API behavior, safety, idempotency, permissions, error handling, compatibility, and release readiness.</span>
-            <em>Review API design</em>
-          </a>
-          <a class="prompt-card" href="/en/monitoring-alert-design/">
-            <strong>Monitoring and Alert Design Prompt</strong>
-            <span>Design monitoring targets, alert thresholds, escalation paths, dashboards, and release validation checks.</span>
-            <em>Design monitoring</em>
-          </a>
+          <a class="prompt-card" href="/en/api-design-review/"><strong>API Design Review Prompt</strong><span>Review API behavior, safety, idempotency, permissions, error handling, compatibility, and release readiness.</span><em>Review API design</em></a>
+          <a class="prompt-card" href="/en/api-security-design/"><strong>API Security Design Prompt</strong><span>Review caller identity, authentication, authorization, sensitive data, replay risk, signatures, rate limits, and audit logs.</span><em>Review API security</em></a>
+        </div>
+      </section>
+
+      <section id="security-permissions" class="category">
+        <h2>Security and Permissions</h2>
+        <p class="section-desc">Design access controls around roles, resources, actions, data scopes, ownership, admin boundaries, and audits.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/permission-model-design/"><strong>Permission Model Design Prompt</strong><span>Design roles, resources, actions, data scopes, ownership rules, admin boundaries, inheritance, and audit checks.</span><em>Design permissions</em></a>
         </div>
       </section>
 
       <section id="cache-redis-prompts" class="category">
         <h2>Cache and Redis</h2>
-        <p class="section-desc">Analyze cache reliability and Redis usage risks from TTL, key design, traffic, consistency, and database pressure.</p>
+        <p class="section-desc">Analyze cache and Redis design risks from keys, TTL, consistency, traffic, memory, and database pressure.</p>
         <div class="prompt-grid">
-          <a class="prompt-card" href="/en/redis-usage-review/">
-            <strong>Redis Usage Review Prompt</strong>
-            <span>Review Redis data structures, key patterns, TTL, consistency, hot key risks, big keys, and failure behavior.</span>
-            <em>Review Redis usage</em>
-          </a>
-          <a class="prompt-card" href="/en/cache-breakdown-avalanche-analysis/">
-            <strong>Cache Breakdown and Avalanche Analysis Prompt</strong>
-            <span>Analyze penetration, breakdown, avalanche, hot keys, big keys, TTL concentration, mitigation, monitoring, and verification.</span>
-            <em>Analyze cache risk</em>
-          </a>
+          <a class="prompt-card" href="/en/cache-design/"><strong>Cache Design Prompt</strong><span>Design cache keys, TTL, invalidation, consistency, warm-up, fallback, and monitoring.</span><em>Design cache</em></a>
+          <a class="prompt-card" href="/en/redis-usage-review/"><strong>Redis Usage Review Prompt</strong><span>Review Redis data structures, key patterns, TTL, consistency, hot key risks, big keys, and failure behavior.</span><em>Review Redis usage</em></a>
+          <a class="prompt-card" href="/en/cache-breakdown-avalanche-analysis/"><strong>Cache Breakdown and Avalanche Analysis Prompt</strong><span>Analyze penetration, breakdown, avalanche, hot keys, big keys, TTL concentration, mitigation, monitoring, and verification.</span><em>Analyze cache risk</em></a>
+          <a class="prompt-card" href="/en/redis-bigkey-analysis/"><strong>Redis Big Key Analysis Prompt</strong><span>Analyze oversized keys, memory skew, command latency, bandwidth risk, split strategy, migration, and safe deletion.</span><em>Analyze big key</em></a>
         </div>
       </section>
 
       <section id="architecture-consistency" class="category">
         <h2>Architecture and Consistency</h2>
-        <p class="section-desc">Review business boundaries, source of truth, consistency models, compensation, reconciliation, and rollback risk.</p>
+        <p class="section-desc">Review service boundaries, data ownership, consistency models, compensation, reconciliation, and rollback risk.</p>
         <div class="prompt-grid">
-          <a class="prompt-card" href="/en/distributed-transaction-solution/">
-            <strong>Distributed Transaction Solution Prompt</strong>
-            <span>Review whether distributed transactions are needed and design minimal consistency, compensation, idempotency, and rollback paths.</span>
-            <em>Review transaction design</em>
-          </a>
-          <a class="prompt-card" href="/en/data-consistency-design/">
-            <strong>Data Consistency Design Prompt</strong>
-            <span>Design source of truth, write order, cache consistency, MQ consistency, retries, reconciliation, and user-visible behavior.</span>
-            <em>Design consistency</em>
-          </a>
+          <a class="prompt-card" href="/en/distributed-architecture-design/"><strong>Distributed Architecture Design Prompt</strong><span>Design service boundaries, data ownership, communication, consistency, failure handling, scalability, and observability.</span><em>Design architecture</em></a>
+          <a class="prompt-card" href="/en/distributed-transaction-solution/"><strong>Distributed Transaction Solution Prompt</strong><span>Review whether distributed transactions are needed and design minimal consistency, compensation, idempotency, and rollback paths.</span><em>Review transaction design</em></a>
+          <a class="prompt-card" href="/en/data-consistency-design/"><strong>Data Consistency Design Prompt</strong><span>Design source of truth, write order, cache consistency, MQ consistency, retries, reconciliation, and user-visible behavior.</span><em>Design consistency</em></a>
         </div>
       </section>
 
@@ -435,16 +406,33 @@
         <h2>Messaging</h2>
         <p class="section-desc">Diagnose message delivery problems and review retry-safe consumer behavior.</p>
         <div class="prompt-grid">
-          <a class="prompt-card" href="/en/mq-message-loss-troubleshooting/">
-            <strong>MQ Message Loss Troubleshooting Prompt</strong>
-            <span>Diagnose message loss across producer, broker, consumer, retries, dead letters, and business processing evidence.</span>
-            <em>Diagnose message loss</em>
-          </a>
-          <a class="prompt-card" href="/en/mq-duplicate-consumption-handling/">
-            <strong>MQ Duplicate Consumption Handling Prompt</strong>
-            <span>Review idempotency keys, storage timing, transaction boundaries, retries, external side effects, and duplicate-safe processing.</span>
-            <em>Review duplicate handling</em>
-          </a>
+          <a class="prompt-card" href="/en/mq-message-loss-troubleshooting/"><strong>MQ Message Loss Troubleshooting Prompt</strong><span>Diagnose message loss across producer, broker, consumer, retries, dead letters, and business processing evidence.</span><em>Diagnose message loss</em></a>
+          <a class="prompt-card" href="/en/mq-duplicate-consumption-handling/"><strong>MQ Duplicate Consumption Handling Prompt</strong><span>Review idempotency keys, storage timing, transaction boundaries, retries, external side effects, and duplicate-safe processing.</span><em>Review duplicate handling</em></a>
+        </div>
+      </section>
+
+      <section id="gateway-traffic" class="category">
+        <h2>Gateway and Traffic</h2>
+        <p class="section-desc">Control traffic, abuse, bursts, and overload at gateway and edge boundaries.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/gateway-rate-limit-design/"><strong>Gateway Rate Limit Design Prompt</strong><span>Design rate limits by path, caller, QPS, burst pattern, dimension, fallback behavior, abuse scenario, and monitoring.</span><em>Design rate limit</em></a>
+        </div>
+      </section>
+
+      <section id="operations-release" class="category">
+        <h2>Operations and Release</h2>
+        <p class="section-desc">Plan staged rollout, monitoring, rollback, compatibility, and release safety.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/gray-release-plan/"><strong>Gray Release Plan Prompt</strong><span>Plan release scope, rollout percentage, observation windows, monitoring metrics, pause conditions, rollback triggers, and compatibility checks.</span><em>Plan release</em></a>
+        </div>
+      </section>
+
+      <section id="logging-observability" class="category">
+        <h2>Logging and Observability</h2>
+        <p class="section-desc">Design logs, monitoring, alerts, traceability, masking, and operational visibility.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/monitoring-alert-design/"><strong>Monitoring and Alert Design Prompt</strong><span>Design monitoring targets, alert thresholds, escalation paths, dashboards, and release validation checks.</span><em>Design monitoring</em></a>
+          <a class="prompt-card" href="/en/logging-standard-design/"><strong>Logging Standard Design Prompt</strong><span>Design trace IDs, business IDs, error codes, operation logs, log levels, masking, audit logs, and troubleshooting fields.</span><em>Design logging</em></a>
         </div>
       </section>
     </section>
