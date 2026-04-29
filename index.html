@@ -42,6 +42,7 @@
 
     .hero .description,
     .hero .principle,
+    .section-desc,
     .note p {
       font-size: 15px;
       color: #64748b;
@@ -64,6 +65,36 @@
       font-size: 20px;
       font-weight: 700;
       margin: 0 0 16px;
+    }
+
+    .section-desc {
+      margin: -6px 0 18px;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .role-card {
+      padding: 18px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .role-card strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .role-card span {
+      display: block;
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.7;
     }
 
     .featured {
@@ -111,9 +142,21 @@
     .path-card a {
       display: block;
       color: #2563eb;
-      font-size: 14px;
-      line-height: 1.8;
       text-decoration: none;
+    }
+
+    .path-card a span {
+      display: block;
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 6px 0 10px;
+    }
+
+    .path-card a em {
+      display: inline-block;
+      font-size: 13px;
+      font-style: normal;
     }
 
     .path-card a:hover {
@@ -202,6 +245,10 @@
         grid-template-columns: 1fr;
       }
 
+      .role-grid {
+        grid-template-columns: 1fr;
+      }
+
       .path-grid {
         grid-template-columns: 1fr;
       }
@@ -212,50 +259,76 @@
 <body>
   <div class="container">
     <div class="hero">
-      <h1>开发者 AI 会话启动器</h1>
-      <p class="subtitle">不是泛泛的 Prompt 大全，而是面向真实开发工作的 Prompt 工具库。</p>
+      <h1>PromptForge</h1>
+      <p class="subtitle">开发者 AI 会话启动器</p>
+      <p class="description">不是泛泛的 Prompt 大全，而是面向真实开发工作的 Prompt 工具库。</p>
       <p class="description">用于 Bug 定位、日志分析、慢 SQL 优化、接口评审、架构设计、上线发布，以及 GPT + Codex 协作开发。</p>
       <p class="principle">让 GPT 负责分析和审查，让 Codex 负责执行，让开发者控制边界。</p>
     </div>
 
     <section>
-      <h2>核心入口</h2>
-      <a class="featured" href="/codex-gpt-workflow/">
-        <strong>Codex + GPT 开发协作流</strong>
-        <span>用 GPT 收敛方案，用 Codex 执行代码修改，适合真实项目开发协作。</span>
-      </a>
+      <h2>它不是让 AI 替你开发，而是帮你控制 AI 开发流程</h2>
+      <div class="role-grid">
+        <div class="role-card">
+          <strong>GPT</strong>
+          <span>负责分析问题、收敛方案、审查结果，帮助你判断方向是否正确。</span>
+        </div>
+        <div class="role-card">
+          <strong>Codex</strong>
+          <span>负责根据明确任务修改代码、执行检查、输出变更证据。</span>
+        </div>
+        <div class="role-card">
+          <strong>开发者</strong>
+          <span>负责定义边界、确认方案、决定是否进入下一步。</span>
+        </div>
+      </div>
     </section>
 
     <section>
       <h2>你现在遇到的问题</h2>
+      <p class="section-desc">从当前开发问题出发，选择最接近的场景，直接启动一次可执行的 AI 会话。</p>
       <div class="path-grid">
         <div class="path-card">
           <strong>线上出问题了</strong>
-          <a href="/bug-location/">Bug定位 Prompt</a>
-          <a href="/log-analysis/">日志分析 Prompt</a>
-          <a href="/api-timeout-analysis/">接口超时问题排查 Prompt</a>
+          <a href="/bug-location/">
+            <span>从现象、日志、接口响应和最近改动中定位最可能根因，可配合 /log-analysis/ 使用。</span>
+            <em>Bug定位 Prompt</em>
+          </a>
         </div>
         <div class="path-card">
           <strong>性能变差了</strong>
-          <a href="/slow-sql-optimization/">慢SQL优化 Prompt</a>
-          <a href="/system-bottleneck-analysis/">系统瓶颈定位 Prompt</a>
-          <a href="/redis-bigkey-analysis/">Redis大Key问题分析 Prompt</a>
+          <a href="/slow-sql-optimization/">
+            <span>优先排查慢 SQL、GC、缓存和接口超时问题。</span>
+            <em>慢SQL优化 Prompt</em>
+          </a>
         </div>
         <div class="path-card">
-          <strong>新功能要上线</strong>
-          <a href="/api-design-review/">接口设计评审 Prompt</a>
-          <a href="/gray-release-plan/">灰度发布方案 Prompt</a>
-          <a href="/monitoring-alert-design/">监控报警设计 Prompt</a>
+          <strong>新接口要上线</strong>
+          <a href="/api-design-review/">
+            <span>上线前评估接口的幂等性、安全性、扩展性和异常处理。</span>
+            <em>接口设计评审 Prompt</em>
+          </a>
+        </div>
+        <div class="path-card">
+          <strong>缓存方案不确定</strong>
+          <a href="/redis-usage-review/">
+            <span>检查 Redis 使用中的一致性、穿透、击穿、雪崩和过期策略风险。</span>
+            <em>Redis使用评审 Prompt</em>
+          </a>
         </div>
         <div class="path-card">
           <strong>想用 AI 改代码</strong>
-          <a href="/codex-gpt-workflow/">Codex + GPT 开发协作流</a>
+          <a href="/codex-gpt-workflow/">
+            <span>先让 GPT 收敛任务，再让 Codex 执行修改，最后由 GPT 审查结果。</span>
+            <em>Codex + GPT 开发协作流</em>
+          </a>
         </div>
       </div>
     </section>
 
     <section>
       <h2>核心工具</h2>
+      <p class="section-desc">优先推荐适合开发者高频使用的 Prompt，用于排查、评审、优化和协作。</p>
       <div class="prompt-grid">
         <a class="prompt-card" href="/codex-gpt-workflow/">
           <strong>Codex + GPT 开发协作流</strong>
@@ -263,7 +336,7 @@
           <em>访问工具</em>
         </a>
         <a class="prompt-card" href="/bug-location/">
-          <strong>Bug定位 Prompt</strong>
+          <strong>Bug 定位与排查</strong>
           <span>启动 Bug 定位会话，围绕现象、日志、代码和数据状态收敛根因。</span>
           <em>访问工具</em>
         </a>
@@ -286,8 +359,9 @@
     </section>
 
     <section>
-      <h2>分类导航</h2>
-      <nav class="category-nav" aria-label="Prompt 分类导航">
+      <h2>快速定位</h2>
+      <p class="section-desc">按技术方向快速跳转到对应 Prompt 分类。</p>
+      <nav class="category-nav" aria-label="快速定位 Prompt 分类">
         <a href="#troubleshooting">问题排查</a>
         <a href="#performance">性能优化</a>
         <a href="#database">数据库</a>
@@ -296,6 +370,11 @@
         <a href="#gateway-security">网关 / 安全</a>
         <a href="#ops-release">运维 / 发布</a>
       </nav>
+    </section>
+
+    <section>
+      <h2>全部 Prompt 分类</h2>
+      <p class="section-desc">如果你已经知道要处理的技术方向，可以按分类查找对应 Prompt。</p>
     </section>
 
     <section id="troubleshooting" class="category">
