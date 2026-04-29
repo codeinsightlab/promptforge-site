@@ -509,6 +509,23 @@ Codex 完成任务后，必须输出：
 | 数据库表设计 Prompt | /database-table-design/ | 方案类 | 已改造 | 表结构、字段、索引、约束、扩展性设计 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
 | 分布式架构设计 Prompt | /distributed-architecture-design/ | 方案类 | 已改造 | 单体拆分、服务边界、调用链路、数据归属、一致性和高可用治理 | 是 | 已按角色 Prompt / 你接下来可以这样输入 / GPT 会这样输出 / 使用说明结构优化；全站审查未发现页面内旧式 {{}} 占位符 |
 | 问题原因分析 Prompt | /problem-cause-analysis/ | 排查类 | 已改造 | 通用问题原因分析和排查路径 | 是 | 已改造为通用兜底排查会话启动器，并提示必要时切换到具体领域页 |
+| PromptForge English Home | /en/ | 首页 | 已改造 | 英文用户理解 PromptForge、GPT / Codex / Developer 协作模型与英文 MVP 导航 | 是 | 英文 MVP 首页，静态 HTML；未纳入 sitemap，留给后续任务 |
+| Codex + GPT Coding Workflow Prompt | /en/codex-gpt-workflow/ | 协作流 | 已改造 | 英文版 GPT 澄清和审查、Codex 执行代码、开发者控制合并决策 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Bug Investigation Prompt | /en/bug-location/ | 排查类 | 已改造 | 英文版生产 Bug 根因定位、复现、接口、日志、数据和最近改动分析 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Slow SQL Optimization Prompt | /en/slow-sql-optimization/ | 优化类 | 已改造 | 英文版慢 SQL、EXPLAIN、索引、表结构、数据量和回滚计划分析 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| API Design Review Prompt | /en/api-design-review/ | 评审类 | 已改造 | 英文版 API 幂等性、安全性、扩展性、失败场景和上线阻断项评审 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Redis Usage Review Prompt | /en/redis-usage-review/ | 评审类 | 已改造 | 英文版 Redis key、TTL、数据结构、一致性、热 key 和缓存风险评审 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Monitoring and Alert Design Prompt | /en/monitoring-alert-design/ | 方案类 | 已改造 | 英文版监控目标、关键指标、告警阈值、升级路径、降噪和发布验证设计 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Log Analysis Prompt for Developers | /en/log-analysis/ | 排查类 | 已改造 | 英文版日志、异常堆栈、请求时间线、trace ID、服务链路和最近变更分析 | 是 | 英文版 Prompt 页面，对应中文 /log-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| API Timeout Analysis Prompt | /en/api-timeout-analysis/ | 排查类 | 已改造 | 英文版接口超时、响应慢、调用链阻塞、下游依赖、数据库、缓存和资源池分析 | 是 | 英文版 Prompt 页面，对应中文 /api-timeout-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| GC Problem Analysis Prompt | /en/gc-problem-analysis/ | 排查类 | 已改造 | 英文版 JVM GC 频繁、Full GC、STW、内存增长、OOM 风险和吞吐下降分析 | 是 | 英文版 Prompt 页面，对应中文 /gc-problem-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| JVM Parameter Tuning Prompt | /en/jvm-parameter-tuning/ | 优化类 | 已改造 | 英文版 JVM 参数、GC 日志、服务负载、容器限制、延迟目标和回滚方案评审 | 是 | 英文版 Prompt 页面，对应中文 /jvm-parameter-tuning/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Index Failure Analysis Prompt | /en/index-failure-analysis/ | 优化类 | 已改造 | 英文版 MySQL 索引失效、优化器选错索引、谓词匹配、最左前缀和执行计划分析 | 是 | 英文版 Prompt 页面，对应中文 /index-failure-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Distributed Transaction Solution Prompt | /en/distributed-transaction-solution/ | 方案类 | 已改造 | 英文版分布式事务方案评审、业务边界、一致性模型、补偿、幂等、消息可靠性和回滚风险 | 是 | 英文版 Prompt 页面，对应中文 /distributed-transaction-solution/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Data Consistency Design Prompt | /en/data-consistency-design/ | 方案类 | 已改造 | 英文版跨服务、跨表、缓存、MQ、异步任务和外部回调一致性设计 | 是 | 英文版 Prompt 页面，对应中文 /data-consistency-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| MQ Message Loss Troubleshooting Prompt | /en/mq-message-loss-troubleshooting/ | 排查类 | 已改造 | 英文版 MQ 消息丢失、未投递、未消费、重试失败、死信堆积和业务未生效排查 | 是 | 英文版 Prompt 页面，对应中文 /mq-message-loss-troubleshooting/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| MQ Duplicate Consumption Handling Prompt | /en/mq-duplicate-consumption-handling/ | 排查类 | 已改造 | 英文版 MQ 重复消费处理、业务幂等、去重键、事务边界、重试和副作用控制 | 是 | 英文版 Prompt 页面，对应中文 /mq-duplicate-consumption-handling/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| Cache Breakdown and Avalanche Analysis Prompt | /en/cache-breakdown-avalanche-analysis/ | 排查类 | 已改造 | 英文版缓存穿透、击穿、雪崩、热点 key、大 key、TTL 集中失效和数据库压力分析 | 是 | 英文版 Prompt 页面，对应中文 /cache-breakdown-avalanche-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
 
 ---
 

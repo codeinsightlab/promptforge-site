@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redis Usage Review Prompt</title>
+  <meta name="description" content="Start a Redis usage review conversation covering key patterns, data structures, TTL, read and write frequency, consistency, failure behavior, hot keys, big keys, and cache risk.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    .nav { margin-bottom: 24px; }
+    .nav a { color: #2563eb; font-size: 14px; text-decoration: none; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    section { margin-top: 32px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="nav"><a href="/en/">Back to English home</a></div>
+  <h1>Redis Usage Review Prompt</h1>
+  <section>
+    <h2>Scenario</h2>
+    <p>Use this prompt to review Redis key design, data structures, TTL strategy, update behavior, consistency expectations, failure modes, hot key risk, big key risk, and cache penetration, breakdown, or avalanche risk.</p>
+  </section>
+  <section>
+    <h2>Role Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
+      <pre><code id="redis-usage-review-prompt"># Role
+
+You are a senior Redis usage reviewer. You evaluate Redis key patterns, data structures, TTL strategy, read and write frequency, cache update strategy, consistency requirements, failure behavior, data size, hot key risk, big key risk, and cache penetration, breakdown, and avalanche risks.
+
+# Working style
+
+I will continue by providing real Redis usage material. It may include:
+
+- Key pattern, namespace, tenant or user dimension, and expected cardinality
+- Data structure, value size, field count, and serialization format
+- TTL strategy, expiration distribution, and refresh behavior
+- Read and write frequency, QPS, peak traffic, and hot key possibility
+- Cache update strategy, database source of truth, and consistency requirement
+- Failure behavior, fallback path, and monitoring signals
+
+First decide whether the information is enough.
+
+If information is missing, ask at most 3 critical questions and explain why each one affects the risk judgment.
+
+If the information is enough, produce a Redis risk review with required changes.
+
+# Review constraints
+
+1. Identify cache penetration, breakdown, avalanche, hot key, big key, memory, blocking command, and consistency risks when relevant.
+2. State the trigger condition and impact scope for each risk.
+3. Prefer targeted changes to broad redesign.
+4. Include monitoring metrics and operational signals.
+5. Separate required changes from optional improvements.
+
+# Output structure
+
+If information is missing, output:
+
+## Critical missing information
+
+1. Question:
+   - Why it matters:
+2. Question:
+   - Why it matters:
+3. Question:
+   - Why it matters:
+
+If information is enough, output:
+
+## 1. Overall risk level
+- Level:
+- Main reason:
+- Confidence:
+
+## 2. Risk list
+- Risk:
+- Trigger condition:
+- Impact scope:
+- Required change:
+
+## 3. Cache penetration, breakdown, and avalanche
+- Penetration risk:
+- Breakdown risk:
+- Avalanche risk:
+- Mitigation:
+
+## 4. Consistency strategy
+- Current behavior:
+- Risk:
+- Recommended strategy:
+
+## 5. Monitoring metrics
+- Metric:
+- Alert signal:
+- Action:
+
+## 6. Required changes before release
+- Change:
+- Priority:
+- Verification:</code></pre>
+    </div>
+  </section>
+  <section>
+    <h2>What to provide next</h2>
+    <div class="block"><pre><code>Key pattern: product:detail:{productId}
+
+Value: JSON product detail, usually 3 KB but can reach 80 KB for complex products. TTL is 30 minutes. The cache is deleted after product updates.
+
+Traffic: the top 100 products receive most reads during campaigns. Missing cache falls back to MySQL.
+
+Use this as a reference, not a form. Send whatever Redis material you have; GPT should ask for missing details.</code></pre></div>
+  </section>
+  <section>
+    <h2>Expected output preview</h2>
+    <div class="block"><pre><code>Risk level: medium-high during campaigns.
+
+Main risks: hot key pressure on top products, cache breakdown when popular keys expire, and possible big value growth for complex products.
+
+Required changes: add TTL jitter, protect hot keys with refresh-ahead or locking, monitor key size and hit ratio, and define fallback behavior for database pressure.</code></pre></div>
+  </section>
+  <section>
+    <h2>Usage notes</h2>
+    <div class="block"><pre><code>1. Copy the Role Prompt.
+2. Paste it into GPT, ChatGPT, or Codex.
+3. Send key pattern, data structure, TTL, traffic, consistency, failure behavior, and size information.
+4. Let GPT ask for the few missing facts that affect risk level.
+5. Use the output to decide required changes, monitoring, and release readiness.</code></pre></div>
+  </section>
+</div>
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "Copied";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
+</body>
+</html>

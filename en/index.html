@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptForge - AI Conversation Starters for Developers</title>
+  <meta name="description" content="PromptForge provides AI conversation starters for developers to guide GPT analysis, Codex code changes, and developer decisions across debugging, SQL optimization, API review, monitoring, and coding workflows.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 56px auto;
+      padding: 0 20px;
+    }
+
+    .top-link {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+    }
+
+    .top-link a {
+      color: #2563eb;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .hero {
+      margin-bottom: 40px;
+    }
+
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+
+    .hero .subtitle {
+      font-size: 18px;
+      color: #334155;
+      margin: 0 0 10px;
+      line-height: 1.7;
+    }
+
+    .hero .description,
+    .hero .principle,
+    .section-desc,
+    .note p {
+      font-size: 15px;
+      color: #64748b;
+      margin: 0;
+      line-height: 1.8;
+      max-width: 780px;
+    }
+
+    .hero .principle {
+      color: #0f172a;
+      font-weight: 600;
+      margin-top: 14px;
+    }
+
+    section {
+      margin-top: 40px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 16px;
+    }
+
+    .section-desc {
+      margin: -6px 0 18px;
+    }
+
+    .role-grid,
+    .path-grid,
+    .prompt-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .role-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .path-grid,
+    .prompt-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .role-card,
+    .path-card,
+    .prompt-card {
+      padding: 18px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .role-card strong,
+    .path-card strong,
+    .prompt-card strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .role-card span,
+    .path-card span,
+    .prompt-card span {
+      display: block;
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .featured {
+      display: block;
+      padding: 24px;
+      border: 1px solid #bfdbfe;
+      border-radius: 14px;
+      background: #eff6ff;
+      text-decoration: none;
+      color: #0f172a;
+    }
+
+    .featured strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .featured span {
+      display: block;
+      font-size: 15px;
+      color: #475569;
+      line-height: 1.7;
+    }
+
+    .featured em,
+    .path-card em,
+    .prompt-card em {
+      display: inline-block;
+      font-size: 13px;
+      font-style: normal;
+      color: #2563eb;
+    }
+
+    .path-card a,
+    .prompt-card {
+      color: #0f172a;
+      text-decoration: none;
+    }
+
+    .path-card a:hover,
+    .prompt-card:hover,
+    .featured:hover,
+    .top-link a:hover {
+      text-decoration: underline;
+    }
+
+    .category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .category-nav a {
+      display: inline-block;
+      padding: 9px 13px;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      background: #f9fafb;
+      color: #334155;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .category {
+      padding-top: 8px;
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        margin: 36px auto;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .role-grid,
+      .path-grid,
+      .prompt-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="top-link">
+      <a href="/">Chinese</a>
+    </div>
+
+    <div class="hero">
+      <h1>PromptForge</h1>
+      <p class="subtitle">AI Conversation Starters for Developers</p>
+      <p class="description">Use structured prompts to guide GPT for analysis and review, Codex for code changes, and developers for final decisions.</p>
+      <p class="description">PromptForge helps developers start focused AI conversations for debugging, log analysis, slow SQL optimization, API review, architecture design, release planning, and GPT + Codex coding workflows.</p>
+      <p class="principle">Let GPT analyze and review, let Codex execute, and keep the developer in control of scope and merge decisions.</p>
+    </div>
+
+    <section id="collaboration-model">
+      <h2>Collaboration Model</h2>
+      <div class="role-grid">
+        <div class="role-card">
+          <strong>GPT</strong>
+          <span>Analyzes problems, reviews plans, identifies risks, and helps turn rough engineering context into focused decisions.</span>
+        </div>
+        <div class="role-card">
+          <strong>Codex</strong>
+          <span>Executes code changes, runs checks, inspects files, and reports concrete evidence from the workspace.</span>
+        </div>
+        <div class="role-card">
+          <strong>Developer</strong>
+          <span>Defines boundaries, provides real context, reviews results, and decides what should be merged or rejected.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai-coding-workflow">
+      <h2>AI Coding Workflow</h2>
+      <p class="section-desc">Want to use AI to change code without losing control? Let GPT clarify the task and boundaries, let Codex modify the code and report evidence, then use GPT again to review the result.</p>
+      <a class="featured" href="/en/codex-gpt-workflow/">
+        <strong>Codex + GPT Coding Workflow</strong>
+        <span>Start a controlled workflow where GPT clarifies and reviews, Codex changes code and runs checks, and the developer keeps final authority.</span>
+        <em>Open workflow prompt</em>
+      </a>
+    </section>
+
+    <section id="common-scenarios">
+      <h2>Common Developer Scenarios</h2>
+      <p class="section-desc">Pick the closest situation and start a focused AI conversation with the right role, constraints, and output format.</p>
+      <div class="path-grid">
+        <div class="path-card">
+          <strong>Production bug</strong>
+          <a href="/en/bug-location/">
+            <span>Start a bug investigation conversation based on symptoms, reproduction steps, API responses, logs, and recent changes.</span>
+            <em>Bug Investigation Prompt</em>
+          </a>
+        </div>
+        <div class="path-card">
+          <strong>Slow database query</strong>
+          <a href="/en/slow-sql-optimization/">
+            <span>Start a slow SQL optimization conversation based on SQL, EXPLAIN output, indexes, table schema, and data volume.</span>
+            <em>Slow SQL Optimization Prompt</em>
+          </a>
+        </div>
+        <div class="path-card">
+          <strong>API design review</strong>
+          <a href="/en/api-design-review/">
+            <span>Review idempotency, security, extensibility, error handling, and operational risks before an API goes live.</span>
+            <em>API Design Review Prompt</em>
+          </a>
+        </div>
+        <div class="path-card">
+          <strong>Redis usage risk</strong>
+          <a href="/en/redis-usage-review/">
+            <span>Review Redis key design, TTL strategy, data consistency, cache penetration, breakdown, avalanche, and hot key risks.</span>
+            <em>Redis Usage Review Prompt</em>
+          </a>
+        </div>
+        <div class="path-card">
+          <strong>Monitoring and alerts</strong>
+          <a href="/en/monitoring-alert-design/">
+            <span>Design practical monitoring and alert rules based on business impact, failure signals, thresholds, and escalation paths.</span>
+            <em>Monitoring and Alert Design Prompt</em>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="quick-navigation">
+      <h2>Quick Navigation</h2>
+      <p class="section-desc">Jump to prompt categories by technical area.</p>
+      <nav class="category-nav" aria-label="PromptForge English prompt categories">
+        <a href="#ai-coding-category">AI Coding Workflow</a>
+        <a href="#debugging-troubleshooting">Debugging and Troubleshooting</a>
+        <a href="#performance-jvm">Performance and JVM</a>
+        <a href="#database-prompts">Database</a>
+        <a href="#api-review-prompts">API and Review</a>
+        <a href="#cache-redis-prompts">Cache and Redis</a>
+        <a href="#architecture-consistency">Architecture and Consistency</a>
+        <a href="#messaging-prompts">Messaging</a>
+      </nav>
+    </section>
+
+    <section id="all-prompt-categories" class="category">
+      <h2>All Prompt Categories</h2>
+      <p class="section-desc">Browse every English AI conversation starter currently available in PromptForge.</p>
+
+      <section id="ai-coding-category" class="category">
+        <h2>AI Coding Workflow</h2>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/codex-gpt-workflow/">
+            <strong>Codex + GPT Coding Workflow</strong>
+            <span>Start a controlled workflow where GPT clarifies and reviews while Codex changes code and reports evidence.</span>
+            <em>Start workflow</em>
+          </a>
+        </div>
+      </section>
+
+      <section id="debugging-troubleshooting" class="category">
+        <h2>Debugging and Troubleshooting</h2>
+        <p class="section-desc">Analyze failures from symptoms, logs, traces, timeouts, dependencies, and recent changes.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/bug-location/">
+            <strong>Bug Investigation Prompt</strong>
+            <span>Diagnose product bugs from symptoms, reproduction steps, API responses, logs, data state, and recent changes.</span>
+            <em>Diagnose bug</em>
+          </a>
+          <a class="prompt-card" href="/en/log-analysis/">
+            <strong>Log Analysis Prompt for Developers</strong>
+            <span>Analyze error logs, stack traces, trace IDs, request timelines, service context, and recent deployments.</span>
+            <em>Analyze logs</em>
+          </a>
+          <a class="prompt-card" href="/en/api-timeout-analysis/">
+            <strong>API Timeout Analysis Prompt</strong>
+            <span>Diagnose endpoint timeouts across gateway, backend, database, cache, third-party services, pools, and network boundaries.</span>
+            <em>Diagnose timeout</em>
+          </a>
+        </div>
+      </section>
+
+      <section id="performance-jvm" class="category">
+        <h2>Performance and JVM</h2>
+        <p class="section-desc">Review JVM behavior with GC evidence, resource limits, latency goals, and production safety in mind.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/gc-problem-analysis/">
+            <strong>GC Problem Analysis Prompt</strong>
+            <span>Analyze frequent GC, Full GC, long pauses, memory growth, allocation pressure, and OOM risk.</span>
+            <em>Analyze GC problem</em>
+          </a>
+          <a class="prompt-card" href="/en/jvm-parameter-tuning/">
+            <strong>JVM Parameter Tuning Prompt</strong>
+            <span>Review JVM parameters from GC logs, heap metrics, CPU usage, container limits, latency goals, and rollback plans.</span>
+            <em>Review JVM tuning</em>
+          </a>
+        </div>
+      </section>
+
+      <section id="database-prompts" class="category">
+        <h2>Database</h2>
+        <p class="section-desc">Analyze SQL performance, query plans, index behavior, optimizer choices, and data access constraints.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/slow-sql-optimization/">
+            <strong>Slow SQL Optimization Prompt</strong>
+            <span>Analyze SQL, EXPLAIN plans, indexes, table schema, data volume, and business constraints before changing queries.</span>
+            <em>Analyze slow SQL</em>
+          </a>
+          <a class="prompt-card" href="/en/index-failure-analysis/">
+            <strong>Index Failure Analysis Prompt</strong>
+            <span>Analyze optimizer choices, predicate matching, leftmost prefix behavior, sorting risk, and safer SQL or index changes.</span>
+            <em>Analyze index failure</em>
+          </a>
+        </div>
+      </section>
+
+      <section id="api-review-prompts" class="category">
+        <h2>API and Review</h2>
+        <p class="section-desc">Review API behavior, operational readiness, monitoring design, and production risk.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/api-design-review/">
+            <strong>API Design Review Prompt</strong>
+            <span>Review API behavior, safety, idempotency, permissions, error handling, compatibility, and release readiness.</span>
+            <em>Review API design</em>
+          </a>
+          <a class="prompt-card" href="/en/monitoring-alert-design/">
+            <strong>Monitoring and Alert Design Prompt</strong>
+            <span>Design monitoring targets, alert thresholds, escalation paths, dashboards, and release validation checks.</span>
+            <em>Design monitoring</em>
+          </a>
+        </div>
+      </section>
+
+      <section id="cache-redis-prompts" class="category">
+        <h2>Cache and Redis</h2>
+        <p class="section-desc">Analyze cache reliability and Redis usage risks from TTL, key design, traffic, consistency, and database pressure.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/redis-usage-review/">
+            <strong>Redis Usage Review Prompt</strong>
+            <span>Review Redis data structures, key patterns, TTL, consistency, hot key risks, big keys, and failure behavior.</span>
+            <em>Review Redis usage</em>
+          </a>
+          <a class="prompt-card" href="/en/cache-breakdown-avalanche-analysis/">
+            <strong>Cache Breakdown and Avalanche Analysis Prompt</strong>
+            <span>Analyze penetration, breakdown, avalanche, hot keys, big keys, TTL concentration, mitigation, monitoring, and verification.</span>
+            <em>Analyze cache risk</em>
+          </a>
+        </div>
+      </section>
+
+      <section id="architecture-consistency" class="category">
+        <h2>Architecture and Consistency</h2>
+        <p class="section-desc">Review business boundaries, source of truth, consistency models, compensation, reconciliation, and rollback risk.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/distributed-transaction-solution/">
+            <strong>Distributed Transaction Solution Prompt</strong>
+            <span>Review whether distributed transactions are needed and design minimal consistency, compensation, idempotency, and rollback paths.</span>
+            <em>Review transaction design</em>
+          </a>
+          <a class="prompt-card" href="/en/data-consistency-design/">
+            <strong>Data Consistency Design Prompt</strong>
+            <span>Design source of truth, write order, cache consistency, MQ consistency, retries, reconciliation, and user-visible behavior.</span>
+            <em>Design consistency</em>
+          </a>
+        </div>
+      </section>
+
+      <section id="messaging-prompts" class="category">
+        <h2>Messaging</h2>
+        <p class="section-desc">Diagnose message delivery problems and review retry-safe consumer behavior.</p>
+        <div class="prompt-grid">
+          <a class="prompt-card" href="/en/mq-message-loss-troubleshooting/">
+            <strong>MQ Message Loss Troubleshooting Prompt</strong>
+            <span>Diagnose message loss across producer, broker, consumer, retries, dead letters, and business processing evidence.</span>
+            <em>Diagnose message loss</em>
+          </a>
+          <a class="prompt-card" href="/en/mq-duplicate-consumption-handling/">
+            <strong>MQ Duplicate Consumption Handling Prompt</strong>
+            <span>Review idempotency keys, storage timing, transaction boundaries, retries, external side effects, and duplicate-safe processing.</span>
+            <em>Review duplicate handling</em>
+          </a>
+        </div>
+      </section>
+    </section>
+  </div>
+</body>
+</html>
