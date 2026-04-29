@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PromptForge - 开发者 Prompt 工具库</title>
-  <meta name="description" content="PromptForge 提供复制即用的开发者 Prompt，覆盖问题排查、性能优化、数据库、缓存、架构、安全与运维场景。">
+  <title>PromptForge - 开发者 AI 会话启动器</title>
+  <meta name="description" content="PromptForge 是面向真实开发工作的 AI 会话启动器，用于 Bug 定位、日志分析、慢 SQL 优化、接口评审、架构设计、上线发布，以及 GPT + Codex 协作开发。">
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
@@ -41,12 +41,19 @@
     }
 
     .hero .description,
+    .hero .principle,
     .note p {
       font-size: 15px;
       color: #64748b;
       margin: 0;
       line-height: 1.8;
       max-width: 760px;
+    }
+
+    .hero .principle {
+      color: #0f172a;
+      font-weight: 600;
+      margin-top: 14px;
     }
 
     section {
@@ -80,6 +87,37 @@
       font-size: 15px;
       color: #475569;
       line-height: 1.7;
+    }
+
+    .path-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .path-card {
+      padding: 18px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .path-card strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .path-card a {
+      display: block;
+      color: #2563eb;
+      font-size: 14px;
+      line-height: 1.8;
+      text-decoration: none;
+    }
+
+    .path-card a:hover {
+      text-decoration: underline;
     }
 
     .category-nav {
@@ -163,6 +201,10 @@
       .prompt-grid {
         grid-template-columns: 1fr;
       }
+
+      .path-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -170,17 +212,77 @@
 <body>
   <div class="container">
     <div class="hero">
-      <h1>PromptForge</h1>
-      <p class="subtitle">复制即用的开发者 Prompt 工具库</p>
-      <p class="description">覆盖问题排查、性能优化、数据库、缓存、架构、安全与运维场景，帮助开发者更快分析问题、设计方案和审查系统。</p>
+      <h1>开发者 AI 会话启动器</h1>
+      <p class="subtitle">不是泛泛的 Prompt 大全，而是面向真实开发工作的 Prompt 工具库。</p>
+      <p class="description">用于 Bug 定位、日志分析、慢 SQL 优化、接口评审、架构设计、上线发布，以及 GPT + Codex 协作开发。</p>
+      <p class="principle">让 GPT 负责分析和审查，让 Codex 负责执行，让开发者控制边界。</p>
     </div>
 
     <section>
-      <h2>推荐工具</h2>
+      <h2>核心入口</h2>
       <a class="featured" href="/codex-gpt-workflow/">
         <strong>Codex + GPT 开发协作流</strong>
         <span>用 GPT 收敛方案，用 Codex 执行代码修改，适合真实项目开发协作。</span>
       </a>
+    </section>
+
+    <section>
+      <h2>你现在遇到的问题</h2>
+      <div class="path-grid">
+        <div class="path-card">
+          <strong>线上出问题了</strong>
+          <a href="/bug-location/">Bug定位 Prompt</a>
+          <a href="/log-analysis/">日志分析 Prompt</a>
+          <a href="/api-timeout-analysis/">接口超时问题排查 Prompt</a>
+        </div>
+        <div class="path-card">
+          <strong>性能变差了</strong>
+          <a href="/slow-sql-optimization/">慢SQL优化 Prompt</a>
+          <a href="/system-bottleneck-analysis/">系统瓶颈定位 Prompt</a>
+          <a href="/redis-bigkey-analysis/">Redis大Key问题分析 Prompt</a>
+        </div>
+        <div class="path-card">
+          <strong>新功能要上线</strong>
+          <a href="/api-design-review/">接口设计评审 Prompt</a>
+          <a href="/gray-release-plan/">灰度发布方案 Prompt</a>
+          <a href="/monitoring-alert-design/">监控报警设计 Prompt</a>
+        </div>
+        <div class="path-card">
+          <strong>想用 AI 改代码</strong>
+          <a href="/codex-gpt-workflow/">Codex + GPT 开发协作流</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>核心工具</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/codex-gpt-workflow/">
+          <strong>Codex + GPT 开发协作流</strong>
+          <span>用 GPT 收敛需求、冻结方案和审查结果，用 Codex 执行代码修改并输出证据。</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/bug-location/">
+          <strong>Bug定位 Prompt</strong>
+          <span>启动 Bug 定位会话，围绕现象、日志、代码和数据状态收敛根因。</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/slow-sql-optimization/">
+          <strong>慢SQL优化 Prompt</strong>
+          <span>根据 SQL、EXPLAIN、索引和数据量判断瓶颈，给出最小优化方案。</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/api-design-review/">
+          <strong>接口设计评审 Prompt</strong>
+          <span>上线前评审接口幂等性、权限、参数边界、事务边界和外部依赖。</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/monitoring-alert-design/">
+          <strong>监控报警设计 Prompt</strong>
+          <span>为核心链路设计指标、阈值、告警分级和异常处理策略。</span>
+          <em>访问工具</em>
+        </a>
+      </div>
     </section>
 
     <section>
@@ -390,7 +492,7 @@
 
     <section class="note">
       <h2>简短说明</h2>
-      <p>每个 Prompt 页面都按场景、输入、输出和使用说明组织，适合在排查问题、评审方案和整理技术决策时直接复制使用。</p>
+      <p>每个 Prompt 页面都用于先复制角色 Prompt，启动一个专业 AI 会话；随后再补充真实工程材料，让 GPT 追问、分析、审查或输出方案。</p>
     </section>
   </div>
 </body>
