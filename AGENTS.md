@@ -507,7 +507,7 @@ Codex 完成任务后，必须输出：
 | 缓存设计 Prompt | /cache-design/ | 方案类 | 已改造 | 缓存 key、TTL、一致性、穿透击穿雪崩设计 | 是 | 已按会话启动器结构改造，并修复 Prompt 区 HTML 提前闭合问题 |
 | 并发问题分析 Prompt | /concurrency-problem-analysis/ | 排查类 | 已改造 | 并发冲突、重复提交、线程安全、锁问题 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
 | 数据库表设计 Prompt | /database-table-design/ | 方案类 | 已改造 | 表结构、字段、索引、约束、扩展性设计 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 分布式架构设计 Prompt | /distributed-architecture-design/ | 方案类 | 已改造 | 服务拆分、调用链路、扩展性、可用性设计 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
+| 分布式架构设计 Prompt | /distributed-architecture-design/ | 方案类 | 已改造 | 单体拆分、服务边界、调用链路、数据归属、一致性和高可用治理 | 是 | 已按角色 Prompt / 你接下来可以这样输入 / GPT 会这样输出 / 使用说明结构优化；全站审查未发现页面内旧式 {{}} 占位符 |
 | 问题原因分析 Prompt | /problem-cause-analysis/ | 排查类 | 已改造 | 通用问题原因分析和排查路径 | 是 | 已改造为通用兜底排查会话启动器，并提示必要时切换到具体领域页 |
 
 ---
