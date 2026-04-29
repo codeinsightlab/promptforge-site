@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/</loc>
+  </url>
+
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/api-design-review/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/api-performance-analysis/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/bug-location/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/cache-design/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/codex-gpt-workflow/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/concurrency-problem-analysis/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/database-table-design/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/distributed-architecture-design/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/log-analysis/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/problem-cause-analysis/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/slow-sql-optimization/</loc>
+  </url>
+
+</urlset>
