@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptForge</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 56px auto;
+      padding: 0 20px;
+    }
+
+    .hero {
+      margin-bottom: 40px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin: 0 0 12px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: #64748b;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    section {
+      margin-top: 36px;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 16px;
+    }
+
+    .featured {
+      display: block;
+      padding: 22px;
+      border: 1px solid #dbeafe;
+      border-radius: 14px;
+      background: #eff6ff;
+      text-decoration: none;
+      color: #0f172a;
+    }
+
+    .featured strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .featured span {
+      display: block;
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .prompt-card {
+      display: block;
+      padding: 18px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #f9fafb;
+      text-decoration: none;
+      color: #0f172a;
+    }
+
+    .prompt-card strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .prompt-card span {
+      display: block;
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .featured:hover,
+    .prompt-card:hover {
+      background: #f1f5f9;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        margin: 36px auto;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .prompt-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>PromptForge</h1>
+      <p>复制即用的开发者 Prompt 工具</p>
+    </div>
+
+    <section>
+      <h2>推荐工具</h2>
+      <a class="featured" href="codex-gpt-workflow/index.html">
+        <strong>Codex + GPT 开发协作流</strong>
+        <span>用 GPT 拆任务、审方案，用 Codex 执行代码修改，适合真实项目开发</span>
+      </a>
+    </section>
+
+    <section>
+      <h2>全部工具</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="codex-gpt-workflow/index.html">
+          <strong>Codex + GPT 开发协作流</strong>
+          <span>GPT 负责方案收敛与审查，Codex 负责代码执行</span>
+        </a>
+
+        <a class="prompt-card" href="problem-cause-analysis/index.html">
+          <strong>问题原因分析 Prompt</strong>
+          <span>根据问题描述 + 日志，输出可能原因（按概率排序）</span>
+        </a>
+        <a class="prompt-card" href="api-design-review/index.html">
+          <strong>接口设计评审 Prompt</strong>
+          <span>评估幂等性 / 安全性 / 扩展性</span>
+        </a>
+
+        <a class="prompt-card" href="api-performance-analysis/index.html">
+          <strong>接口性能分析 Prompt</strong>
+          <span>定位接口耗时与调用链瓶颈</span>
+        </a>
+
+        <a class="prompt-card" href="bug-location/index.html">
+          <strong>Bug定位 Prompt</strong>
+          <span>定位代码中最可能出错的位置</span>
+        </a>
+
+        <a class="prompt-card" href="cache-design/index.html">
+          <strong>缓存设计 Prompt</strong>
+          <span>输出缓存结构与失效策略</span>
+        </a>
+
+        <a class="prompt-card" href="concurrency-problem-analysis/index.html">
+          <strong>并发问题分析 Prompt</strong>
+          <span>分析线程安全 / 锁 / 竞态问题</span>
+        </a>
+
+        <a class="prompt-card" href="database-table-design/index.html">
+          <strong>数据库表设计 Prompt</strong>
+          <span>生成表结构与索引设计</span>
+        </a>
+
+        <a class="prompt-card" href="distributed-architecture-design/index.html">
+          <strong>分布式架构设计 Prompt</strong>
+          <span>输出系统拆分方案</span>
+        </a>
+
+        <a class="prompt-card" href="log-analysis/index.html">
+          <strong>日志分析 Prompt</strong>
+          <span>提取异常模式与关键错误点</span>
+        </a>
+
+        <a class="prompt-card" href="slow-sql-optimization/index.html">
+          <strong>慢SQL优化 Prompt</strong>
+          <span>给出索引与 SQL 优化建议</span>
+        </a>
+
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>

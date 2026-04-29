@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codex + GPT 开发协作流</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 48px auto;
+      padding: 0 16px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 0 8px;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #6b7280;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    section {
+      margin-top: 28px;
+    }
+
+    ol,
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #64748b;
+      line-height: 1.7;
+    }
+
+    .block {
+      position: relative;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #f9fafb;
+      padding: 16px;
+    }
+
+    pre {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.6;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      white-space: pre-wrap;
+    }
+
+    code {
+      font-family: inherit;
+    }
+
+    .action-bar {
+      position: absolute;
+      right: 12px;
+      top: 10px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .block:hover .action-bar {
+      opacity: 1;
+    }
+
+    .copy-action {
+      font-size: 12px;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: #f9fafb;
+    }
+
+    .copy-action:hover {
+      background: #f3f4f6;
+      color: #111827;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Codex + GPT 开发协作流</h1>
+  <p class="subtitle">用 GPT 收敛方案，用 Codex 执行代码修改</p>
+
+  <section>
+    <h2>场景</h2>
+    <p>当你要让 AI 参与真实项目开发，但又不希望它随意扩展、乱改代码时使用。</p>
+  </section>
+
+  <section>
+    <h2>你会得到什么</h2>
+    <p>一套可复制的协作 Prompt：GPT 负责拆任务和审查，Codex 负责按任务执行代码修改。</p>
+  </section>
+
+  <section>
+    <h2>GPT：任务拆解与审查 Prompt</h2>
+    <div class="block">
+      <div class="action-bar">
+        <span class="copy-action" onclick="copyPrompt(this)">复制</span>
+      </div>
+      <pre><code>你是我的技术负责人和方案审查官。
+
+你的职责不是直接写代码，而是帮我完成：
+
+1. 收敛需求
+2. 拆解任务
+3. 明确不做什么
+4. 输出给 Codex 执行的任务说明
+5. 审查 Codex 的修改结果
+
+请遵守以下原则：
+
+- 优先最小可行实现
+- 不提前做过度设计
+- 不随意增加新功能
+- 不引入不必要的抽象
+- 输出必须能让 Codex 直接执行
+
+请根据以下需求，输出：
+1. 本次目标
+2. 修改范围
+3. 不做什么
+4. Codex 执行 Prompt
+5. 验收标准
+
+需求：
+{{填写你的需求}}</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Codex：代码执行 Prompt</h2>
+    <div class="block">
+      <div class="action-bar">
+        <span class="copy-action" onclick="copyPrompt(this)">复制</span>
+      </div>
+      <pre><code>你是代码执行者。
+
+请严格按照任务要求修改代码，不要扩展需求，不要自行增加功能。
+
+执行原则：
+
+- 只改本次任务需要的文件
+- 不做无关重构
+- 不新增不必要的抽象
+- 不改变既有业务逻辑
+- 遇到不确定点，优先保持现状
+- 修改后输出关键证据
+
+任务说明：
+{{粘贴 GPT 输出的任务说明}}
+
+请完成后输出：
+
+1. 修改了哪些文件
+2. 每个文件改了什么
+3. 关键代码片段
+4. 如何验证
+5. 是否有风险点</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>最小协作流程</h2>
+    <ol>
+      <li>先让 GPT 收敛需求并生成 Codex 执行任务</li>
+      <li>再让 Codex 按任务修改代码</li>
+      <li>最后把 Codex 输出交给 GPT 做审查</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>不做</h2>
+    <ul>
+      <li>不做完整 AI 开发教程</li>
+      <li>不做多角色复杂工作流</li>
+      <li>不做自动化平台</li>
+      <li>不做代码生成器</li>
+    </ul>
+  </section>
+
+</div>
+
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+
+  el.innerText = "已复制";
+  setTimeout(() => {
+    el.innerText = "复制";
+  }, 1200);
+}
+</script>
+
+</body>
+</html>
