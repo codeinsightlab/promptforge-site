@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <title>PromptForge</title>
+  <title>PromptForge - 开发者 Prompt 工具库</title>
+  <meta name="description" content="PromptForge 提供复制即用的开发者 Prompt，覆盖问题排查、性能优化、数据库、缓存、架构、安全与运维场景。">
+  <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
     body {
@@ -16,7 +17,7 @@
     }
 
     .container {
-      max-width: 880px;
+      max-width: 1040px;
       margin: 56px auto;
       padding: 0 20px;
     }
@@ -26,33 +27,42 @@
     }
 
     .hero h1 {
-      font-size: 36px;
+      font-size: 40px;
       font-weight: 700;
       margin: 0 0 12px;
       letter-spacing: -0.03em;
     }
 
-    .hero p {
-      font-size: 16px;
-      color: #64748b;
-      margin: 0;
+    .hero .subtitle {
+      font-size: 18px;
+      color: #334155;
+      margin: 0 0 10px;
       line-height: 1.7;
     }
 
+    .hero .description,
+    .note p {
+      font-size: 15px;
+      color: #64748b;
+      margin: 0;
+      line-height: 1.8;
+      max-width: 760px;
+    }
+
     section {
-      margin-top: 36px;
+      margin-top: 40px;
     }
 
     h2 {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
       margin: 0 0 16px;
     }
 
     .featured {
       display: block;
-      padding: 22px;
-      border: 1px solid #dbeafe;
+      padding: 24px;
+      border: 1px solid #bfdbfe;
       border-radius: 14px;
       background: #eff6ff;
       text-decoration: none;
@@ -61,15 +71,42 @@
 
     .featured strong {
       display: block;
-      font-size: 20px;
+      font-size: 22px;
       margin-bottom: 8px;
     }
 
     .featured span {
       display: block;
-      font-size: 14px;
+      font-size: 15px;
       color: #475569;
-      line-height: 1.6;
+      line-height: 1.7;
+    }
+
+    .category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .category-nav a {
+      display: inline-block;
+      padding: 9px 13px;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      background: #f9fafb;
+      color: #334155;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .category-nav a:hover,
+    .featured:hover,
+    .prompt-card:hover {
+      background: #f1f5f9;
+    }
+
+    .category {
+      padding-top: 8px;
     }
 
     .prompt-grid {
@@ -83,7 +120,7 @@
       padding: 18px;
       border: 1px solid #e5e7eb;
       border-radius: 12px;
-      background: #f9fafb;
+      background: #ffffff;
       text-decoration: none;
       color: #0f172a;
     }
@@ -99,20 +136,28 @@
       font-size: 14px;
       color: #64748b;
       line-height: 1.6;
+      margin-bottom: 12px;
     }
 
-    .featured:hover,
-    .prompt-card:hover {
-      background: #f1f5f9;
+    .prompt-card em {
+      display: inline-block;
+      font-size: 13px;
+      font-style: normal;
+      color: #2563eb;
     }
 
-    @media (max-width: 640px) {
+    .note {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 24px;
+    }
+
+    @media (max-width: 720px) {
       .container {
         margin: 36px auto;
       }
 
       .hero h1 {
-        font-size: 30px;
+        font-size: 32px;
       }
 
       .prompt-grid {
@@ -120,82 +165,232 @@
       }
     }
   </style>
-  
 </head>
 
 <body>
   <div class="container">
     <div class="hero">
       <h1>PromptForge</h1>
-      <p>复制即用的开发者 Prompt 工具</p>
+      <p class="subtitle">复制即用的开发者 Prompt 工具库</p>
+      <p class="description">覆盖问题排查、性能优化、数据库、缓存、架构、安全与运维场景，帮助开发者更快分析问题、设计方案和审查系统。</p>
     </div>
 
     <section>
       <h2>推荐工具</h2>
       <a class="featured" href="/codex-gpt-workflow/">
-        <strong>Codex + GPT 开发协作</strong>
-        <span>用 GPT 拆任务、审方案，用 Codex 执行代码修改，适合真实项目开发</span>
+        <strong>Codex + GPT 开发协作流</strong>
+        <span>用 GPT 收敛方案，用 Codex 执行代码修改，适合真实项目开发协作。</span>
       </a>
     </section>
 
     <section>
-      <h2>全部工具</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/codex-gpt-workflow/">
-          <strong>Codex + GPT 开发协作流</strong>
-          <span>GPT 负责方案收敛与审查，Codex 负责代码执行</span>
-        </a>
+      <h2>分类导航</h2>
+      <nav class="category-nav" aria-label="Prompt 分类导航">
+        <a href="#troubleshooting">问题排查</a>
+        <a href="#performance">性能优化</a>
+        <a href="#database">数据库</a>
+        <a href="#cache-redis">缓存 / Redis</a>
+        <a href="#architecture">架构 / 分布式</a>
+        <a href="#gateway-security">网关 / 安全</a>
+        <a href="#ops-release">运维 / 发布</a>
+      </nav>
+    </section>
 
+    <section id="troubleshooting" class="category">
+      <h2>问题排查</h2>
+      <div class="prompt-grid">
         <a class="prompt-card" href="/problem-cause-analysis/">
           <strong>问题原因分析 Prompt</strong>
           <span>根据问题描述 + 日志，输出可能原因（按概率排序）</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/bug-location/">
+          <strong>Bug定位 Prompt</strong>
+          <span>输入代码片段 + 异常现象，定位最可能出错位置</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/log-analysis/">
+          <strong>日志分析 Prompt</strong>
+          <span>输入日志，提取异常模式与关键错误点</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/api-timeout-analysis/">
+          <strong>接口超时问题排查 Prompt</strong>
+          <span>输入调用链与日志，定位超时根因</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/system-bottleneck-analysis/">
+          <strong>系统瓶颈定位 Prompt</strong>
+          <span>输入系统指标，快速定位性能短板</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/service-avalanche-analysis/">
+          <strong>服务雪崩分析 Prompt</strong>
+          <span>输入系统现象，分析级联故障原因</span>
+          <em>访问工具</em>
+        </a>
+      </div>
+    </section>
+
+    <section id="performance" class="category">
+      <h2>性能优化</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/api-performance-analysis/">
+          <strong>接口性能分析 Prompt</strong>
+          <span>输入接口耗时/调用链，定位性能瓶颈</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/slow-sql-optimization/">
+          <strong>慢SQL优化 Prompt</strong>
+          <span>输入SQL + 执行情况，给出索引与优化建议</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/index-failure-analysis/">
+          <strong>索引失效分析 Prompt</strong>
+          <span>输入SQL与索引，分析未命中原因</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/redis-bigkey-analysis/">
+          <strong>Redis大Key问题分析 Prompt</strong>
+          <span>输入数据结构，分析性能隐患</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/thread-pool-configuration-optimization/">
+          <strong>线程池配置优化 Prompt</strong>
+          <span>输入参数与场景，优化线程池配置</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/jvm-parameter-tuning/">
+          <strong>JVM参数调优 Prompt</strong>
+          <span>根据系统表现，输出JVM调优建议</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/gc-problem-analysis/">
+          <strong>GC问题分析 Prompt</strong>
+          <span>输入GC日志，分析频繁GC原因</span>
+          <em>访问工具</em>
+        </a>
+      </div>
+    </section>
+
+    <section id="database" class="category">
+      <h2>数据库</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/database-table-design/">
+          <strong>数据库表设计 Prompt</strong>
+          <span>输入业务需求，生成表结构+索引设计</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/deadlock-troubleshooting/">
+          <strong>死锁问题排查 Prompt</strong>
+          <span>输入日志与SQL，定位死锁成因</span>
+          <em>访问工具</em>
+        </a>
+      </div>
+    </section>
+
+    <section id="cache-redis" class="category">
+      <h2>缓存 / Redis</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/cache-design/">
+          <strong>缓存设计 Prompt</strong>
+          <span>输入业务场景，输出缓存结构与失效策略</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/redis-usage-review/">
+          <strong>Redis使用评审 Prompt</strong>
+          <span>输入使用方式，评估是否存在风险</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/cache-breakdown-avalanche-analysis/">
+          <strong>缓存击穿/雪崩分析 Prompt</strong>
+          <span>输入缓存场景，分析击穿、穿透、雪崩风险</span>
+          <em>访问工具</em>
+        </a>
+      </div>
+    </section>
+
+    <section id="architecture" class="category">
+      <h2>架构 / 分布式</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/distributed-architecture-design/">
+          <strong>分布式架构设计 Prompt</strong>
+          <span>输入业务规模，输出系统拆分方案</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/data-consistency-design/">
+          <strong>数据一致性设计 Prompt</strong>
+          <span>根据业务场景设计最终一致性方案</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/distributed-transaction-solution/">
+          <strong>分布式事务方案 Prompt</strong>
+          <span>选择并设计合适的事务方案（TCC/Saga）</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/mq-message-loss-troubleshooting/">
+          <strong>MQ消息丢失排查 Prompt</strong>
+          <span>输入消息链路，分析丢失原因</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/mq-duplicate-consumption-handling/">
+          <strong>MQ重复消费处理 Prompt</strong>
+          <span>设计幂等消费与去重方案</span>
+          <em>访问工具</em>
+        </a>
+      </div>
+    </section>
+
+    <section id="gateway-security" class="category">
+      <h2>网关 / 安全</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/gateway-rate-limit-design/">
+          <strong>网关限流设计 Prompt</strong>
+          <span>设计接口限流与降级策略</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/api-security-design/">
+          <strong>API安全设计 Prompt</strong>
+          <span>设计接口防刷/防攻击方案</span>
+          <em>访问工具</em>
         </a>
         <a class="prompt-card" href="/api-design-review/">
           <strong>接口设计评审 Prompt</strong>
-          <span>评估幂等性 / 安全性 / 扩展性</span>
+          <span>输入接口定义，评估幂等性/安全性/扩展性</span>
+          <em>访问工具</em>
         </a>
-
-        <a class="prompt-card" href="/api-performance-analysis/">
-          <strong>接口性能分析 Prompt</strong>
-          <span>定位接口耗时与调用链瓶颈</span>
+        <a class="prompt-card" href="/permission-model-design/">
+          <strong>权限模型设计 Prompt</strong>
+          <span>根据业务设计RBAC/ABAC权限体系</span>
+          <em>访问工具</em>
         </a>
-
-        <a class="prompt-card" href="/bug-location/">
-          <strong>Bug定位 Prompt</strong>
-          <span>定位代码中最可能出错的位置</span>
-        </a>
-
-        <a class="prompt-card" href="/cache-design/">
-          <strong>缓存设计 Prompt</strong>
-          <span>输出缓存结构与失效策略</span>
-        </a>
-
-        <a class="prompt-card" href="/concurrency-problem-analysis/">
-          <strong>并发问题分析 Prompt</strong>
-          <span>分析线程安全 / 锁 / 竞态问题</span>
-        </a>
-
-        <a class="prompt-card" href="/database-table-design/">
-          <strong>数据库表设计 Prompt</strong>
-          <span>生成表结构与索引设计</span>
-        </a>
-
-        <a class="prompt-card" href="/distributed-architecture-design/">
-          <strong>分布式架构设计 Prompt</strong>
-          <span>输出系统拆分方案</span>
-        </a>
-
-        <a class="prompt-card" href="/log-analysis/">
-          <strong>日志分析 Prompt</strong>
-          <span>提取异常模式与关键错误点</span>
-        </a>
-
-        <a class="prompt-card" href="/slow-sql-optimization/">
-          <strong>慢SQL优化 Prompt</strong>
-          <span>给出索引与 SQL 优化建议</span>
-        </a>
-
       </div>
+    </section>
+
+    <section id="ops-release" class="category">
+      <h2>运维 / 发布</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/gray-release-plan/">
+          <strong>灰度发布方案 Prompt</strong>
+          <span>设计灰度与回滚策略</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/monitoring-alert-design/">
+          <strong>监控报警设计 Prompt</strong>
+          <span>设计系统监控与告警指标</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/logging-standard-design/">
+          <strong>日志规范设计 Prompt</strong>
+          <span>输出统一日志结构与埋点规范</span>
+          <em>访问工具</em>
+        </a>
+      </div>
+    </section>
+
+    <section class="note">
+      <h2>简短说明</h2>
+      <p>每个 Prompt 页面都按场景、输入、输出和使用说明组织，适合在排查问题、评审方案和整理技术决策时直接复制使用。</p>
     </section>
   </div>
 </body>

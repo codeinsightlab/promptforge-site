@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>慢SQL优化 Prompt</title>
+  <title>JVM参数调优 Prompt</title>
 
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -22,17 +22,17 @@
 
 <div class="container">
 
-  <h1>慢SQL优化 Prompt</h1>
+  <h1>JVM参数调优 Prompt</h1>
 
   <section>
     <h2>场景</h2>
-    <p>SQL 执行变慢或扫描行数过大时，根据 SQL、索引、表结构和执行计划给出优化建议。</p>
+    <p>Java 服务内存、吞吐或延迟异常时，根据 GC 日志、堆配置和对象分配给出参数调优建议。</p>
   </section>
 
   <section>
     <h2>Prompt</h2>
     <div class="block">
-      <pre><code>你是一个经验丰富的 Java 后端技术专家，请针对「慢SQL优化」进行分析。
+      <pre><code>你是一个经验丰富的 Java 后端技术专家，请针对「JVM参数调优」进行分析。
 
 【输入信息】
 问题描述：
@@ -68,15 +68,15 @@
     <h2>示例输入</h2>
     <div class="block">
       <pre><code>问题描述：
-订单查询接口响应从 200ms 上升到 2s。
+接口 P99 抖动明显，每隔几分钟升到 3s。
 运行环境：
-MySQL 8，order_info 8000 万行。
+JDK 17，G1，容器 4C8G，Xmx=2g。
 关键日志：
-慢日志显示 Query_time=2.1s，Rows_examined=120000。
+GC log 显示 mixed gc 频繁，old 使用率长期 82%。
 相关代码：
-select * from order_info where user_id=? and status=1 order by create_time desc limit 20。
+批量导出接口一次加载 20 万条记录。
 最近变更：
-订单表数据增长明显，新增 status 筛选。</code></pre>
+新增导出字段和对象转换。</code></pre>
     </div>
   </section>
 
@@ -84,9 +84,9 @@ select * from order_info where user_id=? and status=1 order by create_time desc 
     <h2>示例输出</h2>
     <div class="block">
       <pre><code>1. 问题分析 / 原因
-   - 数据库慢查询：概率最高，先验证关键日志与监控指标
-   - 索引失效：结合最近变更和代码路径进一步确认
-   - 深分页或排序成本高：作为次要方向排查资源与依赖状态
+   - 堆大小不匹配：概率最高，先验证关键日志与监控指标
+   - 年轻代晋升过快：结合最近变更和代码路径进一步确认
+   - GC 算法或停顿目标不合理：作为次要方向排查资源与依赖状态
 
 2. 判断依据
    - 现象与耗时、错误率或资源指标变化一致

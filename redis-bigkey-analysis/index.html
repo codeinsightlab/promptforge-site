@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>慢SQL优化 Prompt</title>
+  <title>Redis大Key问题分析 Prompt</title>
 
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -22,17 +22,17 @@
 
 <div class="container">
 
-  <h1>慢SQL优化 Prompt</h1>
+  <h1>Redis大Key问题分析 Prompt</h1>
 
   <section>
     <h2>场景</h2>
-    <p>SQL 执行变慢或扫描行数过大时，根据 SQL、索引、表结构和执行计划给出优化建议。</p>
+    <p>Redis 延迟抖动、内存异常或删除阻塞时，定位大 Key 类型、影响范围和治理方案。</p>
   </section>
 
   <section>
     <h2>Prompt</h2>
     <div class="block">
-      <pre><code>你是一个经验丰富的 Java 后端技术专家，请针对「慢SQL优化」进行分析。
+      <pre><code>你是一个经验丰富的 Java 后端技术专家，请针对「Redis大Key问题分析」进行分析。
 
 【输入信息】
 问题描述：
@@ -68,15 +68,15 @@
     <h2>示例输入</h2>
     <div class="block">
       <pre><code>问题描述：
-订单查询接口响应从 200ms 上升到 2s。
+Redis 偶发延迟从 2ms 升到 500ms。
 运行环境：
-MySQL 8，order_info 8000 万行。
+Redis Cluster 6，单分片 32GB。
 关键日志：
-慢日志显示 Query_time=2.1s，Rows_examined=120000。
+slowlog 出现 HGETALL user:coupon:10086，单 Key 约 80MB。
 相关代码：
-select * from order_info where user_id=? and status=1 order by create_time desc limit 20。
+用户优惠券全部存入一个 Hash。
 最近变更：
-订单表数据增长明显，新增 status 筛选。</code></pre>
+优惠券活动导入 3000 万张券。</code></pre>
     </div>
   </section>
 
@@ -84,9 +84,9 @@ select * from order_info where user_id=? and status=1 order by create_time desc 
     <h2>示例输出</h2>
     <div class="block">
       <pre><code>1. 问题分析 / 原因
-   - 数据库慢查询：概率最高，先验证关键日志与监控指标
-   - 索引失效：结合最近变更和代码路径进一步确认
-   - 深分页或排序成本高：作为次要方向排查资源与依赖状态
+   - Hash/List/Set 元素过多：概率最高，先验证关键日志与监控指标
+   - Value 体积过大：结合最近变更和代码路径进一步确认
+   - 删除或迁移阻塞主线程：作为次要方向排查资源与依赖状态
 
 2. 判断依据
    - 现象与耗时、错误率或资源指标变化一致
