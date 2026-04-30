@@ -422,7 +422,29 @@ Codex 新增或改造页面后，完成报告必须额外输出：
 
 ---
 
-## 13. Codex 执行约束
+## 13. 新增 Prompt 数据流程
+
+后续新增普通 Prompt 页面，默认不直接修改 HTML 页面。
+
+标准流程：
+
+1. 新增 `data/prompts/{slug}.json`。
+2. 确保 `type = "standard-prompt"`。
+3. 执行 `npm run validate`。
+4. 执行 `npm run generate`。
+5. 执行 `npm run build`。
+6. 本地检查 `dist/`。
+7. 提交并推送。
+
+说明：
+
+- 普通 Prompt 页面使用 `standard-prompt`，由生成器生成详情页和 sitemap。
+- 协作型页面使用 `workflow-prompt`。
+- `workflow-prompt` 当前由生成器跳过，需要手工维护页面。
+
+---
+
+## 14. Codex 执行约束
 
 后续 Codex 执行 PromptForge 任务时必须遵守：
 
@@ -442,7 +464,7 @@ Codex 新增或改造页面后，完成报告必须额外输出：
 
 ---
 
-## 14. 默认完成报告要求
+## 15. 默认完成报告要求
 
 Codex 完成任务后，必须输出：
 

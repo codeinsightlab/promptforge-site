@@ -1,5 +1,7 @@
 {
   "scripts": {
+    "validate": "node scripts/validate-prompts.js",
+    "generate": "node scripts/generate-prompts.js",
     "build": "node scripts/generate-prompts.js && node scripts/build-dist.js",
     "generate:index": "node scripts/generate-index.js"
   }
