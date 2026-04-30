@@ -3,6 +3,7 @@ const path = require("path");
 
 const rootDir = path.resolve(__dirname, "..");
 const dataDir = path.join(rootDir, "data", "prompts");
+const siteUrl = "https://prompt.learnaiwithcode.com";
 
 const promptHeadingOverrides = {
   "codex-gpt-workflow": {
@@ -188,6 +189,28 @@ function writePrompt(record) {
   fs.writeFileSync(path.join(enDir, "index.html"), renderPage(record, "en"));
 }
 
+function renderSitemap(records) {
+  const slugs = records.map((record) => record.slug).sort();
+  const urls = [
+    `${siteUrl}/`,
+    `${siteUrl}/en/`,
+    ...slugs.map((slug) => `${siteUrl}/${slug}/`),
+    ...slugs.map((slug) => `${siteUrl}/en/${slug}/`),
+  ];
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((url) => `  <url>
+    <loc>${escapeHtml(url)}</loc>
+  </url>`).join("\n")}
+</urlset>
+`;
+}
+
+function writeSitemap(records) {
+  fs.writeFileSync(path.join(rootDir, "sitemap.xml"), renderSitemap(records));
+}
+
 function main() {
   const records = readPrompts();
   const generated = [];
@@ -207,6 +230,8 @@ function main() {
     generated.push(record.slug);
   }
 
+  writeSitemap(records);
+
   console.log(
     JSON.stringify(
       {
@@ -215,6 +240,7 @@ function main() {
         zhPages: generated.length,
         enPages: generated.length,
         skippedWorkflowPrompt: skipped,
+        sitemapUrls: 2 + records.length * 2,
       },
       null,
       2,

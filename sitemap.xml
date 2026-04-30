@@ -4,6 +4,9 @@
     <loc>https://prompt.learnaiwithcode.com/</loc>
   </url>
   <url>
+    <loc>https://prompt.learnaiwithcode.com/en/</loc>
+  </url>
+  <url>
     <loc>https://prompt.learnaiwithcode.com/api-design-review/</loc>
   </url>
   <url>
@@ -97,10 +100,10 @@
     <loc>https://prompt.learnaiwithcode.com/system-bottleneck-analysis/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/thread-pool-configuration-optimization/</loc>
+    <loc>https://prompt.learnaiwithcode.com/tech-lead-agent/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/en/</loc>
+    <loc>https://prompt.learnaiwithcode.com/thread-pool-configuration-optimization/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/en/api-design-review/</loc>
@@ -196,12 +199,9 @@
     <loc>https://prompt.learnaiwithcode.com/en/system-bottleneck-analysis/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/en/thread-pool-configuration-optimization/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/tech-lead-agent/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/en/tech-lead-agent/</loc>
+  </url>
+  <url>
+    <loc>https://prompt.learnaiwithcode.com/en/thread-pool-configuration-optimization/</loc>
   </url>
 </urlset>
