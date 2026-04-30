@@ -8,3 +8,4 @@ scripts/*
 !scripts/generate-prompts.js
 !scripts/build-dist.js
 .idea/
+dist/
