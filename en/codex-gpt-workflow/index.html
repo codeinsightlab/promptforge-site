@@ -14,6 +14,7 @@
     h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
     h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
     p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    .subtitle { color: #334155; margin-top: 4px; }
     section { margin-top: 32px; }
     .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
     pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
@@ -28,10 +29,12 @@
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
   <h1>AI Engineering Collaboration Orchestrator Prompt</h1>
+
   <section>
     <h2>Scenario</h2>
     <p>Use this prompt to start a controlled engineering collaboration session between User, GPT, and Codex. It is designed for development tasks where requirements need clarification, boundaries must be frozen, code changes must be precise, and results require evidence-based review and human acceptance.</p>
   </section>
+
   <section>
     <h2>What You Get</h2>
     <div class="block"><pre><code>- A GPT role for requirement clarification, scope control, and result review
@@ -40,8 +43,9 @@
 - A workflow from requirement confirmation to code acceptance
 - A control framework that reduces unintended changes, over-engineering, and scope creep</code></pre></div>
   </section>
+
   <section>
-    <h2>Core Prompt (GPT + Codex)</h2>
+    <h2>Core Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
       <pre><code id="codex-gpt-workflow-prompt"># GPT Prompt
@@ -265,6 +269,7 @@ List the files, modules, or capability boundaries that Codex is allowed to modif
 Before output, self-check the Markdown format. Confirm that headings, lists, fenced code blocks, and backticks are paired correctly. Pay special attention to missing or extra ``` fences.</code></pre>
     </div>
   </section>
+
   <section>
     <h2>Why This Is More Controlled</h2>
     <div class="block"><pre><code>Asking AI to modify code directly can cause:
@@ -281,6 +286,7 @@ User → final confirmation
 
 This improves controllability and stability.</code></pre></div>
   </section>
+
   <section>
     <h2>Usage Flow</h2>
     <div class="block"><pre><code>1. Provide the requirement to GPT
@@ -290,6 +296,7 @@ This improves controllability and stability.</code></pre></div>
 5. GPT reviews the result
 6. The user makes the final decision</code></pre></div>
   </section>
+
   <section>
     <h2>Example Input</h2>
     <div class="block"><pre><code>Requirement:
@@ -299,6 +306,7 @@ Current state: no automatic cancellation mechanism
 
 Use this as a reference, not a form. Send the context you have; GPT should ask for missing details.</code></pre></div>
   </section>
+
   <section>
     <h2>Example Output</h2>
     <div class="block"><pre><code>1. Objective:
@@ -312,17 +320,19 @@ Scheduled job module
 Do not introduce MQ
 Do not change the database schema</code></pre></div>
   </section>
+
   <section>
-    <h2>Usage notes</h2>
+    <h2>Usage</h2>
     <div class="block"><pre><code>1. Copy the Core Prompt (GPT + Codex).
 2. Paste it into GPT or ChatGPT to start the AI Engineering Collaboration Orchestrator role.
 3. Send the real requirement, code context, constraints, and acceptance criteria.
 4. GPT first decides whether follow-up questions are required; when information is enough, it outputs a draft frozen requirement boundary.
 5. After the user explicitly confirms the frozen requirement, GPT generates the Codex execution prompt.
 6. Send the Codex prompt to Codex for code execution.
-7. Return Codex's changed files, command results, and risk evidence to GPT for review.
+7. Return Codex&#39;s changed files, command results, and risk evidence to GPT for review.
 8. The user makes the final acceptance decision.</code></pre></div>
   </section>
+
   <section>
     <h2>Do Not</h2>
     <div class="block"><pre><code>- Do not let Codex perform broad code changes while requirements are ambiguous

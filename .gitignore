@@ -7,5 +7,6 @@ scripts/*
 !scripts/extract-prompts.js
 !scripts/generate-prompts.js
 !scripts/build-dist.js
+!scripts/validate-prompts.js
 .idea/
 dist/

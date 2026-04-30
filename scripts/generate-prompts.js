@@ -64,6 +64,36 @@ function pageLabels(lang) {
       };
 }
 
+function workflowLabels(lang) {
+  return lang === "zh"
+    ? {
+        scenario: "场景",
+        whatYouGet: "你会得到什么",
+        prompt: "核心 Prompt",
+        whyControlled: "为什么这样更可控",
+        usageFlow: "使用流程",
+        exampleInput: "示例输入",
+        exampleOutput: "示例输出",
+        usage: "使用说明",
+        doNot: "不做",
+        copyLabel: "复制核心 Prompt",
+        copied: "已复制",
+      }
+    : {
+        scenario: "Scenario",
+        whatYouGet: "What You Get",
+        prompt: "Core Prompt",
+        whyControlled: "Why This Is More Controlled",
+        usageFlow: "Usage Flow",
+        exampleInput: "Example Input",
+        exampleOutput: "Example Output",
+        usage: "Usage",
+        doNot: "Do Not",
+        copyLabel: "Copy Core Prompt",
+        copied: "Copied",
+      };
+}
+
 function css(includeNav) {
   return `  <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -85,6 +115,17 @@ ${includeNav ? "    .nav { margin-bottom: 24px; }\n    .nav a { color: #2563eb; 
 
 function codeBlock(text) {
   return `<div class="block"><pre><code>${escapeHtml(text)}</code></pre></div>`;
+}
+
+function optionalCodeSection(heading, text) {
+  if (typeof text !== "string" || text.trim() === "") return "";
+
+  return `
+
+  <section>
+    <h2>${escapeHtml(heading)}</h2>
+    ${codeBlock(text)}
+  </section>`;
 }
 
 function script(copiedText) {
@@ -170,6 +211,76 @@ ${script(labels.copied)}
 `;
 }
 
+function renderWorkflowPage(record, lang) {
+  const content = record[lang];
+  const labels = workflowLabels(lang);
+  const isEnglish = lang === "en";
+  const htmlLang = isEnglish ? ' lang="en"' : "";
+  const descriptionMeta = content.description
+    ? `\n  <meta name="description" content="${escapeHtml(content.description)}">`
+    : "";
+  const subtitle = content.description && record.slug === "tech-lead-agent"
+    ? `\n  <p class="subtitle">${escapeHtml(content.description)}</p>`
+    : "";
+  const nav = isEnglish ? '\n  <div class="nav"><a href="/en/">Back to English home</a></div>' : "";
+
+  return `<!DOCTYPE html>
+<html${htmlLang}>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(content.title)}</title>${descriptionMeta}
+  <link rel="icon" type="image/png" href="/favicon.png">
+${css(isEnglish)}
+</head>
+<body>
+<div class="container">${nav}
+  <h1>${escapeHtml(content.title)}</h1>${subtitle}
+
+  <section>
+    <h2>${labels.scenario}</h2>
+    <p>${escapeHtml(content.scenario)}</p>
+  </section>
+
+  <section>
+    <h2>${labels.whatYouGet}</h2>
+    ${codeBlock(content.whatYouGet)}
+  </section>
+
+  <section>
+    <h2>${labels.prompt}</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">${escapeHtml(labels.copyLabel)}</span></div>
+      <pre><code id="${escapeHtml(record.slug)}-prompt">${escapeHtml(content.prompt)}</code></pre>
+    </div>
+  </section>${optionalCodeSection(labels.whyControlled, content.whyControlled)}${optionalCodeSection(labels.usageFlow, content.usageFlow)}
+
+  <section>
+    <h2>${labels.exampleInput}</h2>
+    ${codeBlock(content.exampleInput)}
+  </section>
+
+  <section>
+    <h2>${labels.exampleOutput}</h2>
+    ${codeBlock(content.exampleOutput)}
+  </section>
+
+  <section>
+    <h2>${labels.usage}</h2>
+    ${codeBlock(content.usage)}
+  </section>
+
+  <section>
+    <h2>${labels.doNot}</h2>
+    ${codeBlock(content.doNot)}
+  </section>
+</div>
+${script(labels.copied)}
+</body>
+</html>
+`;
+}
+
 function readPrompts() {
   return fs
     .readdirSync(dataDir)
@@ -178,15 +289,15 @@ function readPrompts() {
     .map((file) => JSON.parse(fs.readFileSync(path.join(dataDir, file), "utf8")));
 }
 
-function writePrompt(record) {
+function writePrompt(record, render) {
   const zhDir = path.join(rootDir, record.slug);
   const enDir = path.join(rootDir, "en", record.slug);
 
   fs.mkdirSync(zhDir, { recursive: true });
   fs.mkdirSync(enDir, { recursive: true });
 
-  fs.writeFileSync(path.join(zhDir, "index.html"), renderPage(record, "zh"));
-  fs.writeFileSync(path.join(enDir, "index.html"), renderPage(record, "en"));
+  fs.writeFileSync(path.join(zhDir, "index.html"), render(record, "zh"));
+  fs.writeFileSync(path.join(enDir, "index.html"), render(record, "en"));
 }
 
 function renderSitemap(records) {
@@ -213,21 +324,23 @@ function writeSitemap(records) {
 
 function main() {
   const records = readPrompts();
-  const generated = [];
-  const skipped = [];
+  const generatedStandard = [];
+  const generatedWorkflow = [];
 
   for (const record of records) {
-    if (record.type === "workflow-prompt") {
-      skipped.push(record.slug);
+    if (record.type === "standard-prompt") {
+      writePrompt(record, renderPage);
+      generatedStandard.push(record.slug);
       continue;
     }
 
-    if (record.type !== "standard-prompt") {
-      throw new Error(`Unsupported prompt type for ${record.slug}: ${record.type}`);
+    if (record.type === "workflow-prompt") {
+      writePrompt(record, renderWorkflowPage);
+      generatedWorkflow.push(record.slug);
+      continue;
     }
 
-    writePrompt(record);
-    generated.push(record.slug);
+    throw new Error(`Unsupported prompt type for ${record.slug}: ${record.type}`);
   }
 
   writeSitemap(records);
@@ -236,10 +349,10 @@ function main() {
     JSON.stringify(
       {
         prompts: records.length,
-        generatedStandardPrompt: generated.length,
-        zhPages: generated.length,
-        enPages: generated.length,
-        skippedWorkflowPrompt: skipped,
+        generatedStandardPrompt: generatedStandard.length,
+        generatedWorkflowPrompt: generatedWorkflow.length,
+        zhPages: generatedStandard.length + generatedWorkflow.length,
+        enPages: generatedStandard.length + generatedWorkflow.length,
         sitemapUrls: 2 + records.length * 2,
       },
       null,
