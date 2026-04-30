@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build": "node scripts/generate-prompts.js && node scripts/build-dist.js",
     "generate:index": "node scripts/generate-index.js"
   }
 }
