@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PromptForge - 开发者 AI 会话启动器</title>
-  <meta name="description" content="PromptForge 是面向真实开发工作的 AI 会话启动器，用于 Bug 定位、日志分析、慢 SQL 优化、接口评审、架构设计、上线发布，以及 GPT + Codex 协作开发。">
+  <title>开发者 AI 会话启动器 - PromptForge</title>
+  <meta name="description" content="PromptForge 提供面向真实开发工作的开发者 Prompt，覆盖 Bug 定位、慢 SQL、接口评审，以及 Codex 和 GPT 协作开发。">
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
@@ -287,42 +287,10 @@
     </div>
 
     <div class="hero">
-      <h1>PromptForge</h1>
-      <p class="subtitle">开发者 AI 会话启动器</p>
-      <p class="description">不是泛泛的 Prompt 大全，而是面向真实开发工作的 Prompt 工具库。</p>
-      <p class="description">用于 Bug 定位、日志分析、慢 SQL 优化、接口评审、架构设计、上线发布，以及 GPT + Codex 协作开发。</p>
-      <p class="principle">让 GPT 负责分析和审查，让 Codex 负责执行，让开发者控制边界。</p>
+      <h1>开发者 AI 会话启动器</h1>
+      <p class="subtitle">不是 Prompt 大全，而是用于真实开发工作的 AI 工具库。</p>
+      <p class="description">覆盖 Bug 定位、日志分析、慢 SQL 优化、接口评审、架构设计、上线发布，以及 GPT + Codex 协作开发。</p>
     </div>
-
-    <section>
-      <h2>它不是让 AI 替你开发，而是帮你控制 AI 开发流程</h2>
-      <div class="role-grid">
-        <div class="role-card">
-          <strong>GPT</strong>
-          <span>负责分析问题、收敛方案、审查结果，帮助你判断方向是否正确。</span>
-        </div>
-        <div class="role-card">
-          <strong>Codex</strong>
-          <span>负责根据明确任务修改代码、执行检查、输出变更证据。</span>
-        </div>
-        <div class="role-card">
-          <strong>开发者</strong>
-          <span>负责定义边界、确认方案、决定是否进入下一步。</span>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>AI 协作流程</h2>
-      <p class="section-desc">想用 AI 改代码，但不想失控？先让 GPT 收敛需求和边界，再让 Codex 执行修改，最后回到 GPT 审查结果。</p>
-      <div>
-        <a class="featured" href="/codex-gpt-workflow/">
-          <strong>Codex + GPT 开发协作流</strong>
-          <span>GPT 负责判断方向、冻结边界和审查结果；Codex 负责执行代码修改、运行检查并输出证据；开发者最终决定是否合入。</span>
-          <em>查看协作流程</em>
-        </a>
-      </div>
-    </section>
 
     <section>
       <h2>你现在遇到的问题</h2>
@@ -331,7 +299,7 @@
         <div class="path-card">
           <strong>线上出问题了</strong>
           <a href="/bug-location/">
-            <span>从现象、日志、接口响应和最近改动中定位最可能根因，可配合 /log-analysis/ 使用。</span>
+            <span>从现象、日志、接口响应和最近改动中定位最可能根因。</span>
             <em>Bug定位 Prompt</em>
           </a>
         </div>
@@ -345,7 +313,7 @@
         <div class="path-card">
           <strong>新接口要上线</strong>
           <a href="/api-design-review/">
-            <span>上线前评估接口的幂等性、安全性、扩展性和异常处理。</span>
+            <span>上线前评估接口幂等性、安全性、扩展性和异常处理。</span>
             <em>接口设计评审 Prompt</em>
           </a>
         </div>
@@ -357,12 +325,64 @@
           </a>
         </div>
         <div class="path-card">
-          <strong>想用 AI 改代码</strong>
-          <a href="/codex-gpt-workflow/">
-            <span>先让 GPT 收敛任务，再让 Codex 执行修改，最后由 GPT 审查结果。</span>
-            <em>Codex + GPT 开发协作流</em>
+          <strong>监控怎么做</strong>
+          <a href="/monitoring-alert-design/">
+            <span>根据业务影响、失败信号、阈值和升级路径设计监控报警。</span>
+            <em>监控报警设计 Prompt</em>
           </a>
         </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>AI开发协作方式</h2>
+      <p class="section-desc">当你希望 AI 参与真实项目开发时，可以根据当前阶段选择不同能力。</p>
+      <div class="path-grid">
+        <div class="path-card">
+          <strong>技术判断：Tech Lead Agent</strong>
+          <a href="/tech-lead-agent/">
+            <span>用于判断方案是否合理、是否过度设计、是否存在数据、状态或并发风险。</span>
+            <em>Tech Lead Agent（技术判断）</em>
+          </a>
+        </div>
+        <div class="path-card">
+          <strong>代码执行：Codex + GPT 开发协作流</strong>
+          <a href="/codex-gpt-workflow/">
+            <span>用于在需求明确后生成 Codex 执行任务，并通过 GPT 控制边界和审查结果。</span>
+            <em>Codex + GPT 开发协作流（代码执行）</em>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>推荐工具</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/tech-lead-agent/">
+          <strong>Tech Lead Agent</strong>
+          <span>判断技术方案是否合理，控制复杂度并识别关键风险。</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/codex-gpt-workflow/">
+          <strong>Codex + GPT 开发协作流</strong>
+          <span>生成 Codex 执行任务，并通过 GPT 控制边界和审查结果。</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/bug-location/">
+          <strong>Bug定位 Prompt</strong>
+          <span>根据现象、日志、接口响应和最近改动定位根因。</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/slow-sql-optimization/">
+          <strong>慢SQL优化 Prompt</strong>
+          <span>根据 SQL、执行计划、索引和数据量判断优化路径。</span>
+          <em>访问工具</em>
+        </a>
+        <a class="prompt-card" href="/api-design-review/">
+          <strong>接口设计评审 Prompt</strong>
+          <span>上线前评估接口幂等性、安全性、扩展性和异常处理。</span>
+          <em>访问工具</em>
+        </a>
       </div>
     </section>
 

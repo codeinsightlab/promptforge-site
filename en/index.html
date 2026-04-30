@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PromptForge - AI Conversation Starters for Developers</title>
-  <meta name="description" content="PromptForge provides AI conversation starters for developers to guide GPT analysis, Codex code changes, and developer decisions across debugging, SQL optimization, API review, monitoring, and coding workflows.">
+  <title>AI Conversation Starters for Developers - PromptForge</title>
+  <meta name="description" content="PromptForge provides developer prompts for bug investigation, slow SQL, API review, and controlled Codex and GPT collaboration in real development workflows.">
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
@@ -216,40 +216,10 @@
     </div>
 
     <div class="hero">
-      <h1>PromptForge</h1>
-      <p class="subtitle">AI Conversation Starters for Developers</p>
-      <p class="description">Use structured prompts to guide GPT for analysis and review, Codex for code changes, and developers for final decisions.</p>
-      <p class="description">PromptForge helps developers start focused AI conversations for debugging, log analysis, slow SQL optimization, API review, architecture design, release planning, and GPT + Codex coding workflows.</p>
-      <p class="principle">Let GPT analyze and review, let Codex execute, and keep the developer in control of scope and merge decisions.</p>
+      <h1>AI Conversation Starters for Developers</h1>
+      <p class="subtitle">Not a prompt list, but a toolkit for real development workflows.</p>
+      <p class="description">Covers bug investigation, log analysis, slow SQL optimization, API review, architecture design, release planning, and GPT + Codex collaboration.</p>
     </div>
-
-    <section id="collaboration-model">
-      <h2>Collaboration Model</h2>
-      <div class="role-grid">
-        <div class="role-card">
-          <strong>GPT</strong>
-          <span>Analyzes problems, reviews plans, identifies risks, and helps turn rough engineering context into focused decisions.</span>
-        </div>
-        <div class="role-card">
-          <strong>Codex</strong>
-          <span>Executes code changes, runs checks, inspects files, and reports concrete evidence from the workspace.</span>
-        </div>
-        <div class="role-card">
-          <strong>Developer</strong>
-          <span>Defines boundaries, provides real context, reviews results, and decides what should be merged or rejected.</span>
-        </div>
-      </div>
-    </section>
-
-    <section id="ai-coding-workflow">
-      <h2>AI Coding Workflow</h2>
-      <p class="section-desc">Want to use AI to change code without losing control? Let GPT clarify the task and boundaries, let Codex modify the code and report evidence, then use GPT again to review the result.</p>
-      <a class="featured" href="/en/codex-gpt-workflow/">
-        <strong>Codex + GPT Coding Workflow</strong>
-        <span>Start a controlled workflow where GPT clarifies and reviews, Codex changes code and runs checks, and the developer keeps final authority.</span>
-        <em>Open workflow prompt</em>
-      </a>
-    </section>
 
     <section id="common-scenarios">
       <h2>Common Developer Scenarios</h2>
@@ -258,28 +228,28 @@
         <div class="path-card">
           <strong>Production bug</strong>
           <a href="/en/bug-location/">
-            <span>Start a bug investigation conversation based on symptoms, reproduction steps, API responses, logs, and recent changes.</span>
+            <span>Investigate the most likely root cause from symptoms, logs, API responses, and recent changes.</span>
             <em>Bug Investigation Prompt</em>
           </a>
         </div>
         <div class="path-card">
-          <strong>Slow database query</strong>
+          <strong>Performance degradation</strong>
           <a href="/en/slow-sql-optimization/">
-            <span>Start a slow SQL optimization conversation based on SQL, EXPLAIN output, indexes, table schema, and data volume.</span>
+            <span>Start with slow SQL, GC, cache, and API timeout issues.</span>
             <em>Slow SQL Optimization Prompt</em>
           </a>
         </div>
         <div class="path-card">
-          <strong>API design review</strong>
+          <strong>API ready for release</strong>
           <a href="/en/api-design-review/">
-            <span>Review idempotency, security, extensibility, error handling, and operational risks before an API goes live.</span>
+            <span>Review idempotency, security, extensibility, and error handling before release.</span>
             <em>API Design Review Prompt</em>
           </a>
         </div>
         <div class="path-card">
           <strong>Redis usage risk</strong>
           <a href="/en/redis-usage-review/">
-            <span>Review Redis key design, TTL strategy, data consistency, cache penetration, breakdown, avalanche, and hot key risks.</span>
+            <span>Review Redis consistency, cache penetration, breakdown, avalanche, and expiration strategy risks.</span>
             <em>Redis Usage Review Prompt</em>
           </a>
         </div>
@@ -290,6 +260,58 @@
             <em>Monitoring and Alert Design Prompt</em>
           </a>
         </div>
+      </div>
+    </section>
+
+    <section id="ai-coding-workflow">
+      <h2>AI Development Collaboration</h2>
+      <p class="section-desc">When using AI in real development workflows, choose the capability that matches your current stage.</p>
+      <div class="path-grid">
+        <div class="path-card">
+          <strong>Technical Decision: Tech Lead Agent</strong>
+          <a href="/en/tech-lead-agent/">
+            <span>Use this to evaluate whether a solution is correct, over-engineered, or risky.</span>
+            <em>Tech Lead Agent (Decision)</em>
+          </a>
+        </div>
+        <div class="path-card">
+          <strong>Code Execution: Codex + GPT Workflow</strong>
+          <a href="/en/codex-gpt-workflow/">
+            <span>Use this after requirements are clear to generate Codex execution tasks and review results with GPT.</span>
+            <em>Codex + GPT Workflow (Execution)</em>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="featured-tools">
+      <h2>Featured Tools</h2>
+      <div class="prompt-grid">
+        <a class="prompt-card" href="/en/tech-lead-agent/">
+          <strong>Tech Lead Agent</strong>
+          <span>Evaluate technical decisions, control complexity, and identify important risks.</span>
+          <em>Open tool</em>
+        </a>
+        <a class="prompt-card" href="/en/codex-gpt-workflow/">
+          <strong>Codex + GPT Workflow</strong>
+          <span>Generate Codex execution tasks and review implementation results with GPT.</span>
+          <em>Open tool</em>
+        </a>
+        <a class="prompt-card" href="/en/bug-location/">
+          <strong>Bug Investigation Prompt</strong>
+          <span>Investigate likely root causes from symptoms, logs, API responses, and recent changes.</span>
+          <em>Open tool</em>
+        </a>
+        <a class="prompt-card" href="/en/slow-sql-optimization/">
+          <strong>Slow SQL Optimization Prompt</strong>
+          <span>Analyze SQL, execution plans, indexes, schema, and data volume before optimization.</span>
+          <em>Open tool</em>
+        </a>
+        <a class="prompt-card" href="/en/api-design-review/">
+          <strong>API Design Review Prompt</strong>
+          <span>Review idempotency, security, extensibility, and error handling before release.</span>
+          <em>Open tool</em>
+        </a>
       </div>
     </section>
 
