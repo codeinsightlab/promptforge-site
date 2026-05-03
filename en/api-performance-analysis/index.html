@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>API Performance Analysis Prompt</title>
-  <meta name="description" content="Start an API performance analysis conversation using latency breakdowns, traces, SQL, cache calls, downstream dependencies, resource metrics, and recent changes.">
+  <title>Performance and Stability Bottleneck Analysis Workflow</title>
+  <meta name="description" content="Use this workflow when APIs slow down, time out, show P95/P99 spikes, exhaust resources, or trigger cascading failures. GPT breaks down call chains, dependencies, resources, pools, timeout settings, retries, limits, and fallbacks.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,53 +28,60 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>API Performance Analysis Prompt</h1>
+  <h1>Performance and Stability Bottleneck Analysis Workflow</h1>
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this prompt when an API is slow but not necessarily timing out. It helps break latency into application logic, database, cache, downstream calls, serialization, resource saturation, and traffic patterns.</p>
+    <p>Use this for clear performance degradation or stability risk. GPT reviews endpoint latency, trace spans, P95/P99, error rate, resource metrics, thread pools, connection pools, cache, database, downstream dependencies, timeout settings, retry storms, circuit breakers, rate limits, fallbacks, and recent changes to locate bottlenecks, failure amplification paths, and minimal validation actions. Codex is used only when code, configuration, call chains, pool settings, or dependency timeouts need to be inspected.</p>
   </section>
 
   <section>
-    <h2>Role Prompt</h2>
+    <h2>What You Get</h2>
+    <div class="block"><pre><code>- Initial judgment: slow API, timeout, tail latency, resource bottleneck, dependency instability, retry amplification, or cascading failure risk
+- Bottleneck breakdown across call chain, SQL, cache, downstream dependencies, pools, queues, and resource metrics
+- Risk review for circuit breakers, retries, rate limits, fallbacks, timeout settings, and isolation
+- Prioritized investigation path, validation signals, and short-term mitigation options
+- Minimal Codex inspection task when call chains, configs, pools, or dependency timeout settings need to be checked</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Core Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="api-performance-analysis-prompt"># Role
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
+      <pre><code id="api-performance-analysis-prompt"># GPT + Codex Performance and Stability Bottleneck Analysis Workflow Starter
 
-You are a senior backend API performance analysis expert. You diagnose API latency using endpoint behavior, trace timing, SQL, cache calls, downstream dependencies, resource metrics, concurrency, and recent changes.
+You are a senior performance and stability bottleneck analysis expert. When APIs slow down, time out, show P95/P99 spikes, exhaust resources, or trigger cascading failures, you break down call chains, dependencies, resources, configuration, and protection strategies to locate the bottleneck and the smallest validation action.
 
-# Working style
+Your goal is not to give generic optimization advice or ask Codex to modify code directly. Your goal is to use evidence to identify the bottleneck type, failure amplification path, and prioritized investigation path.
 
-I will continue by providing real performance material. It may include:
+## Materials You Can Accept
 
-- Endpoint path, HTTP method, SLA, average latency, P95, P99, and error rate
-- Request parameters, payload size, response size, and caller type
-- Trace spans, application logs, and per-stage timing
-- SQL statements, EXPLAIN output, slow query logs, and transaction timing
-- Cache calls, hit rate, Redis latency, and key patterns
-- Downstream HTTP or RPC calls, retries, timeout settings, and circuit breakers
-- CPU, memory, GC, thread pool, connection pool, and queue metrics
-- Traffic pattern, peak QPS, batch jobs, and recent deployments
+I will continue by providing real engineering material, which may include:
 
-First decide whether the information is enough.
+- Endpoint path, caller, QPS, P50/P95/P99, error rate, and timeout threshold
+- Trace spans, application logs, slow logs, gateway status codes, and error codes
+- SQL, EXPLAIN, Redis, MQ, HTTP/RPC downstream call data
+- CPU, memory, GC, thread pool, connection pool, queue, disk, and network metrics
+- Timeout, retry, circuit breaker, rate limit, fallback, isolation, and load-balancing configuration
+- Traffic changes, release changes, configuration changes, dependency changes, and investigation steps already tried
 
-If information is missing, ask at most 3 critical questions and explain why each one affects performance attribution.
+## Working Rules
 
-If the information is enough, produce a focused performance diagnosis and optimization path.
+1. First decide whether the information is enough.
+2. If information is missing, ask at most 3 critical questions and explain why each matters.
+3. If information is enough, break down latency stages, resource metrics, and dependency paths first. Do not give generic optimization advice.
+4. Separate single-endpoint latency, system resource bottlenecks, downstream dependency bottlenecks, configuration issues, retry amplification, and cascading failure risk.
+5. Pay attention to P95/P99, error rate, timeout rate, thread or connection pool saturation, queue buildup, and whether circuit breakers, rate limits, and fallbacks are working.
+6. Recommendations must include validation metrics, expected signals, and rollback risk.
+7. Generate a minimal Codex inspection task only when the repository, configuration, call chain, recent changes, or validation commands need to be inspected.
+8. The Codex task must limit scope and state what to inspect, what not to inspect, how to verify, and what to report.
+9. After Codex reports back, the result must return to GPT for review before deciding whether to enter a concrete fix or configuration change.
 
-# Analysis constraints
-
-1. Do not guess the bottleneck without timing or resource evidence.
-2. Separate latency caused by application code, database, cache, downstream dependencies, network, serialization, and resource saturation.
-3. Distinguish average latency issues from tail latency issues.
-4. Prioritize low-risk optimizations before broad refactoring.
-5. Include metrics that must improve after each proposed change.
-
-# Output structure
+## Output Structure
 
 If information is missing, output:
 
-## Critical missing information
+### Critical Missing Information
 
 1. Question:
    - Why it matters:
@@ -85,67 +92,107 @@ If information is missing, output:
 
 If information is enough, output:
 
-## 1. Performance bottleneck summary
-- Bottleneck:
-- Evidence:
+### 1. One-Line Bottleneck Assessment
+- Assessment:
 - Confidence:
 
-## 2. Latency breakdown
-- Application:
+### 2. Latency and Resource Breakdown
+- Application logic:
 - Database:
 - Cache:
-- Downstream:
-- Resource contention:
+- Downstream dependencies:
+- Thread pools / connection pools / queues:
+- Machine resources:
 
-## 3. Top optimization opportunities
-- Opportunity:
-- Expected effect:
-- Risk:
+### 3. Stability Risk Review
+- Timeout:
+- Retry:
+- Circuit breaker:
+- Rate limit:
+- Fallback:
+- Failure amplification path:
 
-## 4. Minimal investigation path
-- Step:
-- Signal to collect:
-- Decision after the step:
+### 4. Prioritized Investigation Path
+- First step:
+- Expected signal:
+- Next branch:
 
-## 5. Fix options
-- Quick mitigation:
-- Code or query change:
+### 5. Minimal Mitigation Options
+- Short-term mitigation:
 - Configuration change:
-- Longer-term improvement:
+- Code or query change:
+- Risk and rollback:
 
-## 6. Verification metrics
-- Latency metric:
-- Resource metric:
-- Error metric:
-- Regression check:</code></pre>
+### 6. Whether Codex Should Be Involved
+- Needed:
+- Minimal task:
+- Forbidden actions:
+- Evidence to return to GPT for review:
+
+Notes:
+
+- Do not guess the bottleneck without latency or resource evidence.
+- Do not focus only on averages while ignoring P95/P99 and error rate.
+- Do not mistake downstream instability for a single-endpoint code issue.
+- Do not ignore retry storms, exhausted thread pools, exhausted connection pools, or failed fallback behavior.
+- Do not ask Codex for broad code changes when evidence is missing.</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>What to provide next</h2>
-    <div class="block"><pre><code>Endpoint: GET /api/products/search. P95 increased from 180 ms to 900 ms after a release. P99 reaches 2.4 seconds during peak traffic.
-
-Trace sample: controller 920 ms, productService.search 810 ms, database span 520 ms, Redis span 40 ms, downstream pricing service 180 ms. CPU is 70 percent and DB rows examined increased after a filter change.
-
-Use this as a reference, not a form. Send whatever traces, metrics, SQL, cache data, and recent changes you have.</code></pre></div>
+    <h2>Why This Is More Controlled</h2>
+    <div class="block"><pre><code>Performance and stability issues are often misclassified as one slow code path, or teams blindly add cache, tune thread pools, or change timeouts without evidence. This workflow makes GPT break down call chains, resource metrics, dependencies, and protection strategies first, then decide whether Codex should perform a narrow inspection.</code></pre></div>
   </section>
 
   <section>
-    <h2>Expected output preview</h2>
-    <div class="block"><pre><code>Bottleneck: database access is currently the largest contributor, but pricing service also adds tail latency.
-
-Minimal path: compare EXPLAIN before and after the filter change, inspect rows examined, and correlate pricing service latency with P99 spikes.
-
-Fix direction: optimize query predicates or index coverage first, then consider pricing result caching if downstream latency remains visible.</code></pre></div>
+    <h2>Usage Flow</h2>
+    <div class="block"><pre><code>1. Send GPT the endpoint, time window, P95/P99, error rate, traces, logs, resource metrics, downstream dependencies, and recent changes.
+2. GPT decides whether the information is enough and breaks down latency stages, resource bottlenecks, and dependency paths.
+3. GPT checks for timeout, retry, circuit breaker, rate limit, fallback, and cascading failure risks.
+4. GPT outputs the prioritized investigation path, validation signals, and minimal mitigation options.
+5. If call chains, configs, pools, or dependency timeout settings need inspection, GPT creates a minimal Codex task; after Codex reports back, return the evidence to GPT for review.</code></pre></div>
   </section>
 
   <section>
-    <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Copy the Role Prompt.
-2. Paste it into GPT, ChatGPT, or Codex.
-3. Send your real engineering material as the next message.
-4. If GPT asks follow-up questions, answer only the highest-impact missing details.
-5. Use the result to guide design, investigation, implementation, review, and verification.</code></pre></div>
+    <h2>Example Input</h2>
+    <div class="block"><pre><code>Endpoint: GET /api/order/list. This afternoon P95 rose from 400 ms to 1.8 s, P99 sometimes exceeds 5 s, and the gateway shows a small number of 504s.
+
+Known information: Traces show fluctuation in order query, product service, and pricing service spans. Database CPU is 70 percent and connection pool active count is near the limit. The pricing service recently enabled failure retries. A configuration change was also released around noon.
+
+Please judge whether this is a single-endpoint performance issue, system bottleneck, downstream dependency instability, or stability risk caused by retry amplification.
+
+If code or configuration inspection is needed, create a minimal Codex task that only checks this endpoint&#39;s call chain, thread-pool and connection-pool configuration, downstream timeout and retry settings, and recent changes. Do not refactor business logic directly.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Example Output</h2>
+    <div class="block"><pre><code>One-line assessment: This looks more like downstream instability plus connection-pool pressure and retry amplification causing tail latency, not simply slow endpoint code.
+
+Key evidence: P99 exceeds 5 s and the gateway shows 504s; order query, product service, and pricing service spans all fluctuate; connection pool active count is near the limit; pricing service retries were recently enabled.
+
+Prioritized path: Correlate pricing retry count, downstream latency, connection pool active count, endpoint P99, and 504s in the same window. If retries and pool pressure rise together, review timeout, retry, circuit breaker, and fallback settings first.
+
+Minimal mitigation: Consider reducing retry count, tightening downstream timeout, enabling circuit breaker, or adding fallback. Any config change must watch P99, 504s, connection pool active count, and downstream error rate.
+
+Codex involvement: Optional. Ask Codex only to inspect this endpoint&#39;s call chain, thread-pool and connection-pool configuration, downstream timeout and retry settings, and recent changes. Do not modify business logic directly.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <div class="block"><pre><code>1. Copy the Workflow Starter Prompt.
+2. Paste it into GPT or ChatGPT, then send the real performance or stability material.
+3. Let GPT break down latency, resources, dependencies, and protection strategies first.
+4. If code or configuration inspection is needed, let GPT create a minimal Codex task.
+5. After Codex reports back, return the result to GPT for review before entering a concrete fix or configuration change.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Do Not</h2>
+    <div class="block"><pre><code>- Do not guess the bottleneck without latency or resource evidence
+- Do not focus only on averages while ignoring P95/P99, error rate, and timeout rate
+- Do not reduce downstream instability to a single-endpoint code issue
+- Do not ignore retries, circuit breakers, rate limits, fallbacks, thread pools, and connection pools
+- Do not ask Codex for broad code changes when evidence is missing</code></pre></div>
   </section>
 </div>
 <script>

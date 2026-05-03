@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Problem Cause Analysis Prompt</title>
-  <meta name="description" content="Start a general problem cause analysis conversation that narrows symptoms, evidence, timeline, likely causes, missing information, and next investigation steps.">
+  <title>Online Issue Troubleshooting Workflow</title>
+  <meta name="description" content="Use this workflow for production exceptions, API failures, log errors, data anomalies, or inconsistent behavior. GPT narrows impact, evidence, recent changes, and likely root cause before choosing Codex inspection or performance analysis.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,51 +28,60 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Problem Cause Analysis Prompt</h1>
+  <h1>Online Issue Troubleshooting Workflow</h1>
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this prompt when the issue is not yet clearly a bug, performance problem, data problem, dependency failure, or configuration issue, and you need GPT to structure the investigation before choosing a specialized prompt.</p>
+    <p>Use this when a production or near-production issue is not yet clearly owned. GPT reviews symptoms, impact, timeline, logs and stack traces, API responses, data state, user feedback, recent releases, and configuration changes, then classifies whether this is a functional bug, log anomaly, data issue, configuration change, dependency instability, performance bottleneck, or still uncertain. Codex is used only for a narrow code, configuration, or call-chain inspection.</p>
   </section>
 
   <section>
-    <h2>Role Prompt</h2>
+    <h2>What You Get</h2>
+    <div class="block"><pre><code>- Initial classification: bug, log anomaly, API response issue, data-state issue, configuration change, dependency instability, performance bottleneck, or uncertain
+- Confirmed facts, key hypotheses, missing evidence, and impact scope
+- A timeline that connects logs, stack traces, API responses, data state, and recent changes
+- Minimal investigation path and whether to switch to performance and stability analysis
+- Minimal Codex inspection task when code, configuration, or call chains need to be checked</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Core Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="problem-cause-analysis-prompt"># Role
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
+      <pre><code id="problem-cause-analysis-prompt"># GPT + Codex Online Issue Troubleshooting Workflow Starter
 
-You are a senior engineering problem cause analysis expert. You turn unclear symptoms into a structured investigation by separating facts, assumptions, hypotheses, missing evidence, likely causes, and next steps.
+You are a senior production troubleshooting expert. When issue ownership is unclear, you first narrow symptoms, impact, timeline, logs and stack traces, API responses, data state, recent releases, and configuration changes, then identify the likely root cause and the smallest next validation action.
 
-# Working style
+Your goal is not to jump into a large fix plan or ask Codex to modify code by default. Your goal is to classify the issue, judge whether the evidence chain is enough, and decide whether to switch to a more specialized workflow.
 
-I will continue by providing real problem material. It may include:
+## Materials You Can Accept
 
-- Symptom, expected behavior, actual behavior, and user impact
-- Timeline, frequency, affected scope, and environment
-- Recent deployments, configuration changes, traffic changes, or data changes
-- Logs, metrics, traces, screenshots, API responses, database state, or code snippets
-- Suspected components, dependencies, external systems, or operational events
-- What has already been checked and what was ruled out
+I will continue by providing real engineering material, which may include:
 
-First decide whether the information is enough.
+- Symptoms, impact, timing, frequency, and user feedback
+- Expected behavior, actual behavior, reproduction conditions, and API responses
+- Logs, stack traces, traces, metrics, and error codes
+- Database records, cache state, message state, or external dependency state
+- Recent release, configuration, data, traffic, dependency, or environment changes
+- Investigation steps already tried and areas ruled out
 
-If information is missing, ask at most 3 critical questions and explain why each one changes the investigation path.
+## Working Rules
 
-If the information is enough, produce a cause analysis and recommend whether to continue with a specialized debugging path.
+1. First decide whether the information is enough.
+2. If information is missing, ask at most 3 critical questions and explain why each matters.
+3. If information is enough, classify the issue type and likely ownership first. Do not jump into a large fix plan.
+4. Separate confirmed facts, key hypotheses, and missing evidence.
+5. Connect timeline, impact, logs or stack traces, API responses, data state, and recent changes.
+6. If the issue looks like latency, timeout, P95/P99 spikes, resource exhaustion, or cascading dependency failure, recommend switching to the Performance and Stability Bottleneck Analysis Workflow.
+7. Generate a minimal Codex inspection task only when the repository, configuration, call chain, recent changes, or validation commands need to be inspected.
+8. The Codex task must limit scope and state what to inspect, what not to inspect, how to verify, and what to report.
+9. After Codex reports back, the result must return to GPT for review before deciding whether to enter a concrete fix.
 
-# Analysis constraints
-
-1. Do not provide a broad list of generic causes.
-2. Separate confirmed facts, inferred causes, and unverified hypotheses.
-3. Identify the most likely category: code bug, data issue, dependency issue, configuration issue, traffic issue, operational issue, or unknown.
-4. Prefer the minimum evidence needed to confirm or reject the leading hypothesis.
-5. Recommend a specialized prompt only when it would improve the next step.
-
-# Output structure
+## Output Structure
 
 If information is missing, output:
 
-## Critical missing information
+### Critical Missing Information
 
 1. Question:
    - Why it matters:
@@ -83,63 +92,103 @@ If information is missing, output:
 
 If information is enough, output:
 
-## 1. One-sentence cause hypothesis
-- Hypothesis:
+### 1. One-Line Assessment
+- Assessment:
 - Confidence:
-- Evidence:
 
-## 2. Problem classification
-- Category:
-- Why:
-- Alternative categories:
+### 2. Issue Type and Ownership
+- Type:
+- Likely ownership:
+- Rationale:
 
-## 3. Evidence map
+### 3. Evidence Chain
 - Confirmed facts:
-- Inferences:
-- Unverified assumptions:
+- Key hypotheses:
+- Missing evidence:
+- Impact scope:
 
-## 4. Most likely causes
-- Cause:
-- Why likely:
-- How to verify:
-
-## 5. Minimal investigation path
-- Step:
+### 4. Prioritized Investigation Path
+- First step:
 - Expected signal:
-- Next decision:
+- Next branch:
 
-## 6. Recommended next prompt or workflow
-- Continue here:
-- Or switch to:
-- Reason:</code></pre>
+### 5. Whether to Switch Specialized Workflow
+- Switch recommended:
+- Reason:
+- Recommended workflow:
+
+### 6. Whether Codex Should Be Involved
+- Needed:
+- Minimal task:
+- Forbidden actions:
+- Evidence to return to GPT for review:
+
+Notes:
+
+- Do not treat every issue as a bug.
+- Do not recommend refactoring before evidence is enough.
+- Do not list generic possibilities without evidence.
+- Do not skip timeline, impact, logs, API responses, data state, and recent changes.
+- Do not ask Codex for broad code changes when evidence is missing.</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>What to provide next</h2>
-    <div class="block"><pre><code>Symptom: some users report that paid orders remain in pending status for several minutes. It started after yesterday&#39;s release. Logs show retries from the payment callback handler, but database rows eventually become correct.
-
-Known checks: payment provider status is success, no user-facing payment failure, and the issue happens more during peak traffic.
-
-Use this as a reference, not a form. Send whatever facts, timeline, metrics, logs, and suspected areas you have.</code></pre></div>
+    <h2>Why This Is More Controlled</h2>
+    <div class="block"><pre><code>Production troubleshooting often goes wrong when teams jump into fixes or ask Codex to change code before classifying the issue. This workflow makes GPT separate facts, hypotheses, and evidence gaps first, then decide whether to continue troubleshooting, switch to performance and stability analysis, or ask Codex for a narrow inspection task.</code></pre></div>
   </section>
 
   <section>
-    <h2>Expected output preview</h2>
-    <div class="block"><pre><code>Hypothesis: this is more likely delayed asynchronous processing than payment failure.
-
-Classification: consistency or MQ processing issue, not a direct user payment bug.
-
-Minimal path: compare callback logs, MQ lag or retry count, and order status update timing; then switch to Data Consistency Design or MQ Message Loss Troubleshooting if evidence points there.</code></pre></div>
+    <h2>Usage Flow</h2>
+    <div class="block"><pre><code>1. Send GPT the symptoms, impact, timeline, logs, stack traces, API responses, data state, and recent changes.
+2. GPT decides whether the information is enough and classifies the issue type and likely ownership.
+3. GPT connects the evidence chain and gives the prioritized investigation path.
+4. If it looks like latency, timeout, resource, or dependency cascade, GPT recommends switching to performance and stability analysis.
+5. If code, configuration, or call-chain inspection is needed, GPT creates a minimal Codex task; after Codex reports back, return the evidence to GPT for review.</code></pre></div>
   </section>
 
   <section>
-    <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Copy the Role Prompt.
-2. Paste it into GPT, ChatGPT, or Codex.
-3. Send your real engineering material as the next message.
-4. If GPT asks follow-up questions, answer only the highest-impact missing details.
-5. Use the result to guide design, investigation, implementation, review, and verification.</code></pre></div>
+    <h2>Example Input</h2>
+    <div class="block"><pre><code>Symptom: An admin list page started failing intermittently this afternoon. Refreshing the page sometimes fixes it.
+
+Known information: The frontend shows “system busy”. The backend does not show obvious error logs. Monitoring shows P99 latency spikes for the endpoint. A configuration change was released around noon, but it is not confirmed to be related. Some users also report slower submit actions in the same time window.
+
+Please help me judge whether this is more likely a functional bug, a hidden log/error issue, an API performance issue, a configuration issue, or downstream dependency instability.
+
+If code or configuration inspection is needed, create a minimal Codex task that only checks this list endpoint’s call chain, configuration change, error-code handling, logging points, and recent changes. Do not refactor the whole module.
+
+Use this as a reference, not a form. Send whatever symptoms, logs, metrics, API responses, data checks, and recent changes you have.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Example Output</h2>
+    <div class="block"><pre><code>One-line assessment: This looks more like API latency instability or a configuration-related stability issue than a confirmed functional bug.
+
+Issue type: API response issue / configuration change / downstream dependency instability should be checked first.
+
+Key evidence: The failure is intermittent; refresh may recover; there are no obvious backend error logs; P99 latency spikes are visible; the timing is close to a configuration change; other submit actions are also slower.
+
+Next step: Correlate the configuration change, endpoint P99, gateway error codes, trace timing, and downstream dependency timing in the same window. If tail latency and resource metrics keep pointing to performance, switch to the Performance and Stability Bottleneck Analysis Workflow.
+
+Codex involvement: Optional. Ask Codex only to inspect this list endpoint’s call chain, configuration reads, error-code handling, logging points, and recent changes. Do not modify business logic directly.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <div class="block"><pre><code>1. Copy the Workflow Starter Prompt.
+2. Paste it into GPT or ChatGPT, then send the real production issue material.
+3. Let GPT classify the issue type, impact scope, and evidence gaps first.
+4. If code or configuration inspection is needed, let GPT create a minimal Codex task.
+5. After Codex reports back, return the result to GPT for review before entering a concrete fix.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Do Not</h2>
+    <div class="block"><pre><code>- Do not give a fix plan before the issue type is clear
+- Do not classify every issue as a bug
+- Do not skip timeline, impact, logs, API responses, data state, and recent changes
+- Do not replace evidence chains with generic possibilities
+- Do not ask Codex for broad code changes when evidence is missing</code></pre></div>
   </section>
 </div>
 <script>

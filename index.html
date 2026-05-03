@@ -1,607 +1,98 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>开发者 AI 会话启动器 - PromptForge</title>
-  <meta name="description" content="PromptForge 提供面向真实开发工作的开发者 Prompt，覆盖 Bug 定位、慢 SQL、接口评审，以及 Codex 和 GPT 协作开发。">
+  <title>PromptForge - 开发者 AI 工作流</title>
+  <meta name="description" content="PromptForge 提供少量高质量 GPT + Codex 开发工作流入口，帮助开发者排查线上问题、评审接口、分析性能瓶颈并组织 AI 协作。">
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      background: #ffffff;
-      color: #0f172a;
-    }
-
-    .container {
-      max-width: 1040px;
-      margin: 56px auto;
-      padding: 0 20px;
-    }
-
-    .hero {
-      margin-bottom: 40px;
-    }
-
-    .language-entry {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 24px;
-    }
-
-    .language-entry a {
-      color: #2563eb;
-      font-size: 14px;
-      text-decoration: none;
-    }
-
-    .language-entry a:hover {
-      text-decoration: underline;
-    }
-
-    .hero h1 {
-      font-size: 40px;
-      font-weight: 700;
-      margin: 0 0 12px;
-      letter-spacing: -0.03em;
-    }
-
-    .hero .subtitle {
-      font-size: 18px;
-      color: #334155;
-      margin: 0 0 10px;
-      line-height: 1.7;
-    }
-
-    .hero .description,
-    .hero .principle,
-    .section-desc,
-    .note p {
-      font-size: 15px;
-      color: #64748b;
-      margin: 0;
-      line-height: 1.8;
-      max-width: 760px;
-    }
-
-    .hero .principle {
-      color: #0f172a;
-      font-weight: 600;
-      margin-top: 14px;
-    }
-
-    section {
-      margin-top: 40px;
-    }
-
-    h2 {
-      font-size: 20px;
-      font-weight: 700;
-      margin: 0 0 16px;
-    }
-
-    .section-desc {
-      margin: -6px 0 18px;
-    }
-
-    .role-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .role-card {
-      padding: 18px;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      background: #ffffff;
-    }
-
-    .role-card strong {
-      display: block;
-      font-size: 17px;
-      margin-bottom: 8px;
-    }
-
-    .role-card span {
-      display: block;
-      font-size: 14px;
-      color: #64748b;
-      line-height: 1.7;
-    }
-
-    .featured {
-      display: block;
-      padding: 24px;
-      border: 1px solid #bfdbfe;
-      border-radius: 14px;
-      background: #eff6ff;
-      text-decoration: none;
-      color: #0f172a;
-    }
-
-    .featured strong {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    .featured span {
-      display: block;
-      font-size: 15px;
-      color: #475569;
-      line-height: 1.7;
-    }
-
-    .featured em {
-      display: inline-block;
-      margin-top: 14px;
-      font-size: 14px;
-      font-style: normal;
-      color: #2563eb;
-    }
-
-    .path-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .path-card {
-      padding: 18px;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      background: #ffffff;
-    }
-
-    .path-card strong {
-      display: block;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    .path-card a {
-      display: block;
-      color: #2563eb;
-      text-decoration: none;
-    }
-
-    .path-card a span {
-      display: block;
-      color: #64748b;
-      font-size: 14px;
-      line-height: 1.7;
-      margin: 6px 0 10px;
-    }
-
-    .path-card a em {
-      display: inline-block;
-      font-size: 13px;
-      font-style: normal;
-    }
-
-    .path-card a:hover {
-      text-decoration: underline;
-    }
-
-    .category-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .category-nav a {
-      display: inline-block;
-      padding: 9px 13px;
-      border: 1px solid #e5e7eb;
-      border-radius: 999px;
-      background: #f9fafb;
-      color: #334155;
-      font-size: 14px;
-      text-decoration: none;
-    }
-
-    .category-nav a:hover,
-    .featured:hover,
-    .prompt-card:hover {
-      background: #f1f5f9;
-    }
-
-    .category {
-      padding-top: 8px;
-    }
-
-    .prompt-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .prompt-card {
-      display: block;
-      padding: 18px;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      background: #ffffff;
-      text-decoration: none;
-      color: #0f172a;
-    }
-
-    .prompt-card strong {
-      display: block;
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-
-    .prompt-card span {
-      display: block;
-      font-size: 14px;
-      color: #64748b;
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-
-    .prompt-card em {
-      display: inline-block;
-      font-size: 13px;
-      font-style: normal;
-      color: #2563eb;
-    }
-
-    .note {
-      border-top: 1px solid #e5e7eb;
-      padding-top: 24px;
-    }
-
-    @media (max-width: 720px) {
-      .container {
-        margin: 36px auto;
-      }
-
-      .hero h1 {
-        font-size: 32px;
-      }
-
-      .prompt-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .role-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .path-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 960px; margin: 48px auto; padding: 0 18px 56px; }
+    .language-entry, .top-link { display: flex; justify-content: flex-end; gap: 16px; margin-bottom: 28px; }
+    .language-entry a, .top-link a { color: #2563eb; font-size: 14px; text-decoration: none; }
+    .hero { max-width: 780px; margin-bottom: 36px; }
+    h1 { font-size: 40px; line-height: 1.15; margin: 0 0 12px; font-weight: 700; }
+    .subtitle { font-size: 18px; color: #334155; line-height: 1.7; margin: 0; }
+    h2 { font-size: 20px; margin: 0 0 10px; }
+    .section-desc { color: #64748b; font-size: 14px; line-height: 1.7; margin: 0 0 18px; }
+    .workflow-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .workflow-card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; text-decoration: none; color: inherit; background: #ffffff; min-height: 138px; display: flex; flex-direction: column; justify-content: space-between; }
+    .workflow-card:hover { border-color: #2563eb; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); }
+    .workflow-card strong { display: block; font-size: 16px; line-height: 1.4; margin-bottom: 8px; }
+    .workflow-card span { display: block; color: #64748b; font-size: 14px; line-height: 1.65; }
+    .workflow-card em { color: #2563eb; font-size: 13px; font-style: normal; margin-top: 12px; }
+    .note { border-top: 1px solid #e5e7eb; margin-top: 34px; padding-top: 20px; color: #64748b; font-size: 14px; line-height: 1.7; }
+    @media (max-width: 860px) { .workflow-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 620px) { .container { margin: 34px auto; } h1 { font-size: 32px; } .workflow-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="language-entry">
+  <main class="container">
+    <nav class="language-entry" aria-label="语言切换">
       <a href="/en/">English</a>
-    </div>
+    </nav>
 
-    <div class="hero">
-      <h1>开发者 AI 会话启动器</h1>
-      <p class="subtitle">不是 Prompt 大全，而是用于真实开发工作的 AI 工具库。</p>
-      <p class="description">覆盖 Bug 定位、日志分析、慢 SQL 优化、接口评审、架构设计、上线发布，以及 GPT + Codex 协作开发。</p>
-    </div>
-
-    <section>
-      <h2>你现在遇到的问题</h2>
-      <p class="section-desc">从当前开发问题出发，选择最接近的场景，直接启动一次可执行的 AI 会话。</p>
-      <div class="path-grid">
-        <div class="path-card">
-          <strong>线上出问题了</strong>
-          <a href="/bug-location/">
-            <span>从现象、日志、接口响应和最近改动中定位最可能根因。</span>
-            <em>Bug定位 Prompt</em>
-          </a>
-        </div>
-        <div class="path-card">
-          <strong>性能变差了</strong>
-          <a href="/slow-sql-optimization/">
-            <span>优先排查慢 SQL、GC、缓存和接口超时问题。</span>
-            <em>慢SQL优化 Prompt</em>
-          </a>
-        </div>
-        <div class="path-card">
-          <strong>新接口要上线</strong>
-          <a href="/api-design-review/">
-            <span>上线前评估接口幂等性、安全性、扩展性和异常处理。</span>
-            <em>接口设计评审 Prompt</em>
-          </a>
-        </div>
-        <div class="path-card">
-          <strong>缓存方案不确定</strong>
-          <a href="/redis-usage-review/">
-            <span>检查 Redis 使用中的一致性、穿透、击穿、雪崩和过期策略风险。</span>
-            <em>Redis使用评审 Prompt</em>
-          </a>
-        </div>
-        <div class="path-card">
-          <strong>监控怎么做</strong>
-          <a href="/monitoring-alert-design/">
-            <span>根据业务影响、失败信号、阈值和升级路径设计监控报警。</span>
-            <em>监控报警设计 Prompt</em>
-          </a>
-        </div>
-      </div>
+    <section class="hero">
+      <h1>开发者 AI 工作流入口</h1>
+      <p class="subtitle">PromptForge 不再做 Prompt 大全，只保留少量适合真实工程场景的 GPT + Codex 协作工作流。</p>
     </section>
 
     <section>
-      <h2>AI开发协作方式</h2>
-      <p class="section-desc">当你希望 AI 参与真实项目开发时，可以根据当前阶段选择不同能力。</p>
-      <div class="path-grid">
-        <div class="path-card">
-          <strong>技术判断：Tech Lead Agent</strong>
-          <a href="/tech-lead-agent/">
-            <span>用于判断方案是否合理、是否过度设计、是否存在数据、状态或并发风险。</span>
-            <em>Tech Lead Agent（技术判断）</em>
-          </a>
-        </div>
-        <div class="path-card">
-          <strong>代码执行：Codex + GPT 开发协作流</strong>
-          <a href="/codex-gpt-workflow/">
-            <span>用于在需求明确后生成 Codex 执行任务，并通过 GPT 控制边界和审查结果。</span>
-            <em>Codex + GPT 开发协作流（代码执行）</em>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>推荐工具</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/tech-lead-agent/">
-          <strong>Tech Lead Agent</strong>
-          <span>判断技术方案是否合理，控制复杂度并识别关键风险。</span>
-          <em>访问工具</em>
+      <h2>精选工作流</h2>
+      <p class="section-desc">先选最接近的问题入口，让 GPT 收敛事实、风险和下一步动作；需要查代码时，再生成可交给 Codex 的最小任务。</p>
+      <div class="workflow-grid">
+        <a class="workflow-card" href="/problem-cause-analysis/">
+          <strong>线上问题排查</strong>
+          <span>线上异常、接口失败、日志报错或表现不一致时，先收敛影响范围、证据链和最可能根因。</span>
+          <em>启动排查</em>
         </a>
-        <a class="prompt-card" href="/codex-gpt-workflow/">
+        <a class="workflow-card" href="/api-performance-analysis/">
+          <strong>性能与稳定性瓶颈分析</strong>
+          <span>接口变慢、超时、P95/P99 抖动或服务连锁异常时，拆解调用链、依赖、资源和配置瓶颈。</span>
+          <em>分析瓶颈</em>
+        </a>
+        <a class="workflow-card" href="/slow-sql-optimization/">
+          <strong>SQL 与数据库优化</strong>
+          <span>围绕 SQL、EXPLAIN、索引、表结构和数据量判断最小优化路径。</span>
+          <em>优化查询</em>
+        </a>
+        <a class="workflow-card" href="/redis-usage-review/">
+          <strong>缓存与 Redis 稳定性评审</strong>
+          <span>评审 key、TTL、一致性、热点、大 Key、穿透、击穿和雪崩风险。</span>
+          <em>评审缓存</em>
+        </a>
+        <a class="workflow-card" href="/api-design-review/">
+          <strong>接口上线前评审</strong>
+          <span>上线前检查接口幂等性、权限、安全、异常处理、兼容性和回归风险。</span>
+          <em>评审接口</em>
+        </a>
+        <a class="workflow-card" href="/distributed-architecture-design/">
+          <strong>分布式方案评审</strong>
+          <span>评审服务边界、数据归属、调用链路、一致性、可用性和演进风险。</span>
+          <em>评审方案</em>
+        </a>
+        <a class="workflow-card" href="/monitoring-alert-design/">
+          <strong>发布与监控设计</strong>
+          <span>围绕发布节奏、观测指标、告警阈值、异常升级和回滚条件设计上线保护。</span>
+          <em>设计保护</em>
+        </a>
+        <a class="workflow-card" href="/tech-lead-agent/">
+          <strong>Tech Lead 技术判断</strong>
+          <span>判断方案是否合理、是否过度设计，以及是否存在数据、状态或并发风险。</span>
+          <em>做技术判断</em>
+        </a>
+        <a class="workflow-card" href="/codex-gpt-workflow/">
           <strong>Codex + GPT 开发协作流</strong>
-          <span>生成 Codex 执行任务，并通过 GPT 控制边界和审查结果。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/bug-location/">
-          <strong>Bug定位 Prompt</strong>
-          <span>根据现象、日志、接口响应和最近改动定位根因。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/slow-sql-optimization/">
-          <strong>慢SQL优化 Prompt</strong>
-          <span>根据 SQL、执行计划、索引和数据量判断优化路径。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/api-design-review/">
-          <strong>接口设计评审 Prompt</strong>
-          <span>上线前评估接口幂等性、安全性、扩展性和异常处理。</span>
-          <em>访问工具</em>
+          <span>冻结需求边界，生成 Codex 执行任务，再把执行证据交回 GPT 审查。</span>
+          <em>组织协作</em>
         </a>
       </div>
     </section>
 
-    <section>
-      <h2>快速定位</h2>
-      <p class="section-desc">按技术方向快速跳转到对应 Prompt 分类。</p>
-      <nav class="category-nav" aria-label="快速定位 Prompt 分类">
-        <a href="#troubleshooting">问题排查</a>
-        <a href="#performance">性能优化</a>
-        <a href="#database">数据库</a>
-        <a href="#cache-redis">缓存 / Redis</a>
-        <a href="#architecture">架构 / 分布式</a>
-        <a href="#gateway-security">网关 / 安全</a>
-        <a href="#ops-release">运维 / 发布</a>
-      </nav>
-    </section>
-
-    <!-- <section>
-      <h2>全部 Prompt 分类</h2>
-      <p class="section-desc">如果你已经知道要处理的技术方向，可以按分类查找对应 Prompt。</p>
-    </section> -->
-
-    <section id="troubleshooting" class="category">
-      <h2>问题排查</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/problem-cause-analysis/">
-          <strong>问题原因分析 Prompt</strong>
-          <span>启动通用原因分析会话，先收敛现象、证据和最可能的问题方向。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/bug-location/">
-          <strong>Bug定位 Prompt</strong>
-          <span>启动 Bug 定位会话，根据现象、复现步骤、接口响应和最近改动判断根因。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/log-analysis/">
-          <strong>日志分析 Prompt</strong>
-          <span>启动日志分析会话，根据堆栈、时间线和上下文判断异常链路。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/api-timeout-analysis/">
-          <strong>接口超时问题排查 Prompt</strong>
-          <span>启动接口超时排查会话，沿调用链、日志和依赖耗时定位瓶颈。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/system-bottleneck-analysis/">
-          <strong>系统瓶颈定位 Prompt</strong>
-          <span>启动系统瓶颈定位会话，结合资源指标、调用链和依赖状态判断短板。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/service-avalanche-analysis/">
-          <strong>服务雪崩分析 Prompt</strong>
-          <span>启动雪崩故障分析会话，还原故障传播链路和放大因素。</span>
-          <em>访问工具</em>
-        </a>
-      </div>
-    </section>
-
-    <section id="performance" class="category">
-      <h2>性能优化</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/api-performance-analysis/">
-          <strong>接口性能分析 Prompt</strong>
-          <span>启动接口性能分析会话，拆解耗时阶段并判断优化优先级。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/slow-sql-optimization/">
-          <strong>慢SQL优化 Prompt</strong>
-          <span>启动慢 SQL 优化会话，根据 SQL、执行计划、索引和数据量判断优化路径。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/index-failure-analysis/">
-          <strong>索引失效分析 Prompt</strong>
-          <span>启动索引失效分析会话，结合 SQL、字段类型和执行计划判断失效原因。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/redis-bigkey-analysis/">
-          <strong>Redis大Key问题分析 Prompt</strong>
-          <span>启动 Redis 大 Key 分析会话，评估内存、阻塞、拆分和迁移风险。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/thread-pool-configuration-optimization/">
-          <strong>线程池配置优化 Prompt</strong>
-          <span>启动线程池调优会话，根据任务类型、队列、拒绝策略和下游容量评估配置。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/jvm-parameter-tuning/">
-          <strong>JVM参数调优 Prompt</strong>
-          <span>启动 JVM 参数调优会话，结合 GC、容器资源和延迟目标判断调整方向。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/gc-problem-analysis/">
-          <strong>GC问题分析 Prompt</strong>
-          <span>启动 GC 问题分析会话，根据停顿、频率和分配特征判断内存压力来源。</span>
-          <em>访问工具</em>
-        </a>
-      </div>
-    </section>
-
-    <section id="database" class="category">
-      <h2>数据库</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/database-table-design/">
-          <strong>数据库表设计 Prompt</strong>
-          <span>启动表设计评审会话，根据业务对象、查询场景和数据增长评估表结构。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/deadlock-troubleshooting/">
-          <strong>死锁问题排查 Prompt</strong>
-          <span>启动死锁排查会话，还原事务锁等待关系并收敛最小修复方案。</span>
-          <em>访问工具</em>
-        </a>
-      </div>
-    </section>
-
-    <section id="cache-redis" class="category">
-      <h2>缓存 / Redis</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/cache-design/">
-          <strong>缓存设计 Prompt</strong>
-          <span>启动缓存设计会话，围绕 Key、TTL、一致性和失效策略收敛方案。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/redis-usage-review/">
-          <strong>Redis使用评审 Prompt</strong>
-          <span>启动 Redis 使用审查会话，评估一致性、穿透、击穿、雪崩和过期策略风险。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/cache-breakdown-avalanche-analysis/">
-          <strong>缓存击穿/雪崩分析 Prompt</strong>
-          <span>启动缓存稳定性分析会话，判断击穿、穿透、雪崩和热点 Key 风险。</span>
-          <em>访问工具</em>
-        </a>
-      </div>
-    </section>
-
-    <section id="architecture" class="category">
-      <h2>架构 / 分布式</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/distributed-architecture-design/">
-          <strong>分布式架构设计 Prompt</strong>
-          <span>启动分布式架构评审会话，根据业务边界和调用链路收敛拆分取舍。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/data-consistency-design/">
-          <strong>数据一致性设计 Prompt</strong>
-          <span>启动一致性设计会话，围绕数据流转、失败场景和补偿机制确认边界。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/distributed-transaction-solution/">
-          <strong>分布式事务方案 Prompt</strong>
-          <span>启动分布式事务方案会话，评估事务边界、幂等、重试、补偿和对账。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/mq-message-loss-troubleshooting/">
-          <strong>MQ消息丢失排查 Prompt</strong>
-          <span>启动 MQ 丢失排查会话，沿生产、Broker、消费和业务落库分段确认问题。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/mq-duplicate-consumption-handling/">
-          <strong>MQ重复消费处理 Prompt</strong>
-          <span>启动重复消费处理会话，评估消费幂等、去重约束、重试和补偿策略。</span>
-          <em>访问工具</em>
-        </a>
-      </div>
-    </section>
-
-    <section id="gateway-security" class="category">
-      <h2>网关 / 安全</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/gateway-rate-limit-design/">
-          <strong>网关限流设计 Prompt</strong>
-          <span>启动网关限流评审会话，确认限流维度、阈值、降级和误伤控制。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/api-security-design/">
-          <strong>API安全设计 Prompt</strong>
-          <span>启动 API 安全评审会话，检查鉴权、越权、重放、参数篡改和敏感信息风险。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/api-design-review/">
-          <strong>接口设计评审 Prompt</strong>
-          <span>启动接口评审会话，检查幂等性、安全性、扩展性和异常处理风险。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/permission-model-design/">
-          <strong>权限模型设计 Prompt</strong>
-          <span>启动权限模型设计会话，评估角色、资源、数据权限和审计边界。</span>
-          <em>访问工具</em>
-        </a>
-      </div>
-    </section>
-
-    <section id="ops-release" class="category">
-      <h2>运维 / 发布</h2>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/gray-release-plan/">
-          <strong>灰度发布方案 Prompt</strong>
-          <span>启动灰度发布评审会话，收敛放量节奏、观察指标、暂停条件和回滚方案。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/monitoring-alert-design/">
-          <strong>监控报警设计 Prompt</strong>
-          <span>启动监控报警设计会话，确认核心指标、阈值、告警分级和处理动作。</span>
-          <em>访问工具</em>
-        </a>
-        <a class="prompt-card" href="/logging-standard-design/">
-          <strong>日志规范设计 Prompt</strong>
-          <span>启动日志规范设计会话，围绕排查、审计、链路追踪和脱敏要求收敛规则。</span>
-          <em>访问工具</em>
-        </a>
-      </div>
-    </section>
-
-    <section class="note">
-      <h2>简短说明</h2>
-      <p>每个 Prompt 页面都用于先复制角色 Prompt，启动一个专业 AI 会话；随后再补充真实工程材料，让 GPT 追问、分析、审查或输出方案。</p>
-    </section>
-  </div>
+    <p class="note">旧的细分排查入口已收口到主工作流中。先从高层工作流进入，再根据证据决定是否切换到更具体的数据库、缓存、架构或发布类页面。</p>
+  </main>
 </body>
-
 </html>

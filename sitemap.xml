@@ -16,12 +16,6 @@
     <loc>https://prompt.learnaiwithcode.com/api-security-design/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/api-timeout-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/bug-location/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/cache-breakdown-avalanche-analysis/</loc>
   </url>
   <url>
@@ -64,9 +58,6 @@
     <loc>https://prompt.learnaiwithcode.com/jvm-parameter-tuning/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/log-analysis/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/logging-standard-design/</loc>
   </url>
   <url>
@@ -91,13 +82,7 @@
     <loc>https://prompt.learnaiwithcode.com/redis-usage-review/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/service-avalanche-analysis/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/slow-sql-optimization/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/system-bottleneck-analysis/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/tech-lead-agent/</loc>
@@ -113,12 +98,6 @@
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/en/api-security-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/api-timeout-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/bug-location/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/en/cache-breakdown-avalanche-analysis/</loc>
@@ -163,9 +142,6 @@
     <loc>https://prompt.learnaiwithcode.com/en/jvm-parameter-tuning/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/en/log-analysis/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/en/logging-standard-design/</loc>
   </url>
   <url>
@@ -190,13 +166,7 @@
     <loc>https://prompt.learnaiwithcode.com/en/redis-usage-review/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/en/service-avalanche-analysis/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/en/slow-sql-optimization/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/system-bottleneck-analysis/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/en/tech-lead-agent/</loc>

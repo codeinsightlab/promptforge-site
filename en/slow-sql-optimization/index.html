@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slow SQL Optimization Prompt</title>
-  <meta name="description" content="Start a slow SQL optimization conversation using SQL, EXPLAIN output, table schema, existing indexes, data volume, slow query logs, and business constraints.">
+  <title>Slow SQL Optimization Workflow</title>
+  <meta name="description" content="Use GPT to diagnose SQL, execution plan, index, and data-volume bottlenecks first, then let Codex inspect call sites or create minimal SQL/index changes only when needed.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,51 +28,47 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Slow SQL Optimization Prompt</h1>
+  <h1>Slow SQL Optimization Workflow</h1>
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this prompt when you have a slow MySQL query and want GPT to analyze the SQL, execution plan, indexes, schema, data volume, and business constraints before recommending the smallest safe optimization.</p>
+    <p>Use this workflow when you have a slow query, EXPLAIN output, slow logs, schema, or latency data, but still need to determine whether the bottleneck is indexing, sorting, lookups, pagination, or application query behavior.</p>
   </section>
 
   <section>
-    <h2>Role Prompt</h2>
+    <h2>What You Get</h2>
+    <div class="block"><pre><code>- Evidence-based diagnosis of SQL slowness, execution plan, and data distribution
+- Analysis of index order, sorting, pagination, back-to-table lookups, temporary tables, and scanned rows
+- A minimal optimization path across index changes, SQL rewrites, pagination changes, or caller parameters
+- A controlled Codex task for mapper/DAO inspection, SQL rewrite, or tests
+- Review criteria for Codex output using EXPLAIN, latency comparison, and rollback risk
+- Developer decision points for write cost, release window, and business query semantics</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Core Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="slow-sql-optimization-prompt"># Role
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
+      <pre><code id="slow-sql-optimization-prompt"># GPT + Codex Slow SQL Optimization Workflow Starter
 
-You are a senior MySQL slow SQL optimization expert. You diagnose query slowness using the SQL statement, EXPLAIN or EXPLAIN ANALYZE output, table schema, existing indexes, data volume, slow query logs, and business constraints.
+You are the GPT coordinator for a controlled slow SQL optimization workflow. First reason from the SQL, EXPLAIN, schema, indexes, data volume, slow logs, and business query semantics before deciding whether Codex should inspect code or produce a minimal change.
 
-# Working style
+## Working method
 
-I will continue by providing real database material. It may include:
+1. Decide whether the current material is enough to analyze the execution plan and business query semantics.
+2. If information is missing, ask at most 3 critical questions, such as full SQL, EXPLAIN, schema, indexes, data volume, pagination style, or production latency.
+3. If information is enough, identify the likely cause: index miss, excessive scanned rows, filesort, temporary table, lookup cost, deep pagination, function conversion, or caller behavior.
+4. Provide the minimal optimization direction and verification method. Do not default to only saying add an index.
+5. Generate a Codex task only when mapper/DAO inspection, caller checks, dynamic SQL review, tests, or a minimal patch are needed.
+6. The Codex task must require code evidence, SQL changes, verification commands, and rollback concerns.
+7. After Codex reports back, review EXPLAIN, latency, index cost, and business semantics evidence.
+8. The developer confirms index rollout timing, write cost, rollback plan, and query-result semantics.
 
-- SQL statement, execution time, call scenario, and expected latency
-- EXPLAIN or EXPLAIN ANALYZE result
-- Table schema, existing indexes, column cardinality, and data volume
-- WHERE conditions, ORDER BY, GROUP BY, LIMIT, pagination style, and returned rows
-- Slow query log, QPS, write pressure, and business constraints
-
-First decide whether the information is enough.
-
-If information is missing, ask at most 3 critical questions and explain why each one affects the optimization.
-
-If the information is enough, produce a low-risk optimization plan.
-
-# Analysis constraints
-
-1. Do not only say &quot;add an index&quot;; specify index columns, order, and rationale.
-2. Identify full scan, index miss, filesort, temporary table, back-to-table lookup, deep pagination, and excessive scanned rows when relevant.
-3. Explain how the execution plan causes the slowness.
-4. Prefer the smallest change that improves latency while considering write and storage cost.
-5. Include verification with before-and-after EXPLAIN and latency comparison.
-6. Include a rollback plan for index or SQL changes.
-
-# Output structure
+## Output structure
 
 If information is missing, output:
 
-## Critical missing information
+### Critical missing information
 
 1. Question:
    - Why it matters:
@@ -83,42 +79,67 @@ If information is missing, output:
 
 If information is enough, output:
 
-## 1. Root cause of slowness
-- Conclusion:
+### 1. Slowness diagnosis
+
+- Main cause:
 - Evidence:
 - Confidence:
 
-## 2. Execution plan analysis
-- Access type:
-- Possible and chosen indexes:
-- Rows scanned:
-- Filesort or temporary table:
-- Back-to-table risk:
+### 2. Minimal optimization path
 
-## 3. Recommended indexes
-- Index:
-- Why this order:
-- Write and storage cost:
+- Recommendation:
+- Why minimal:
+- Expected gain:
+- Side effects:
 
-## 4. SQL rewrite suggestions
-- Rewrite:
-- Why it helps:
-- Risk:
+### 3. Verification method
 
-## 5. Verification method
-- EXPLAIN check:
-- Latency check:
-- Production safety check:
+- Before signal:
+- After signal:
+- Production signals:
 
-## 6. Rollback plan
-- What can be rolled back:
-- Trigger condition:
-- Fallback query or index plan:</code></pre>
+### 4. Whether Codex is needed
+
+- Needed or not:
+- What Codex should inspect:
+- What Codex should not do:
+
+### 5. Codex execution task, only if needed
+
+- Objective:
+- Allowed read or change scope:
+- Forbidden actions:
+- Steps:
+- Verification commands or SQL:
+- Output requirements:
+
+### 6. Result review
+
+- Did EXPLAIN improve:
+- Did latency improve:
+- Are write and storage costs acceptable:
+- Is query semantics unchanged:
+- Release and rollback risk:</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>What to provide next</h2>
+    <h2>Why This Is More Controlled</h2>
+    <div class="block"><pre><code>Slow SQL work becomes risky when AI blindly adds indexes, changes query semantics, or ignores write cost. This workflow makes GPT reason through the execution plan and business constraints first, then lets Codex perform controlled call-site inspection, SQL rewrite, tests, or a minimal patch, with EXPLAIN and latency evidence reviewed afterward.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage Flow</h2>
+    <div class="block"><pre><code>1. Send SQL, EXPLAIN, schema, indexes, data volume, slow logs, QPS, and business constraints to GPT.
+2. GPT decides whether the material is enough and outputs the slowness cause, minimal optimization path, and verification method.
+3. If repository evidence is needed, GPT writes a Codex execution task.
+4. Codex only inspects mapper/DAO code, dynamic SQL, caller parameters, tests, or creates a minimal patch within that task.
+5. Return Codex SQL changes, file evidence, command results, and risks to GPT for review.
+6. The developer confirms query semantics, index rollout window, write cost, and rollback plan.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Example Input</h2>
     <div class="block"><pre><code>SQL: SELECT * FROM orders WHERE user_id = 18277 AND status IN (1,2) ORDER BY created_at DESC LIMIT 20;
 
 The table has 80 million rows. Current indexes are PRIMARY(id), idx_user_id(user_id), and idx_status(status). EXPLAIN shows type=ref on idx_user_id, rows=180000, Extra=Using where; Using filesort.
@@ -129,21 +150,33 @@ Use this as a reference, not a form. Send whatever database material you have; G
   </section>
 
   <section>
-    <h2>Expected output preview</h2>
-    <div class="block"><pre><code>Root cause: the query uses user_id but still scans many rows and sorts by created_at, causing filesort under large per-user order volume.
+    <h2>Example Output</h2>
+    <div class="block"><pre><code>GPT initial judgment: the query uses only the user_id single-column index, then scans many rows and performs filesort; do not start by refactoring pagination infrastructure.
 
-Recommended index: (user_id, status, created_at) or (user_id, created_at) depending on status selectivity and query patterns.
+Codex task: inspect only the order-list mapper, dynamic SQL conditions, and related tests; if needed, produce a minimal SQL or index recommendation without changing unrelated queries.
 
-Verification: compare EXPLAIN rows, Extra, and P95 latency before and after the index in a staging or shadow environment.</code></pre></div>
+Review focus: whether EXPLAIN rows and Extra improve, whether P95 latency drops, and whether composite-index write cost and rollback are clear.</code></pre></div>
   </section>
 
   <section>
-    <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Copy the Role Prompt.
-2. Paste it into GPT, ChatGPT, or Codex.
-3. Send the SQL, EXPLAIN, schema, indexes, data volume, and constraints you have.
-4. If GPT asks follow-up questions, provide only the missing high-impact details.
-5. Validate the suggested index or rewrite before applying it to production.</code></pre></div>
+    <h2>Usage</h2>
+    <div class="block"><pre><code>1. Copy the Core Prompt.
+2. Paste it into GPT or ChatGPT to start the slow SQL workflow.
+3. Send real SQL, EXPLAIN, schema, indexes, data volume, and business constraints.
+4. Let GPT decide the optimization direction and whether Codex is needed.
+5. If repository inspection is needed, send the GPT-generated task to Codex for SQL call-site checks or a minimal patch.
+6. Return Codex output to GPT for review, then confirm rollout and rollback risk yourself.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Do Not</h2>
+    <div class="block"><pre><code>- Do not only say add an index without column order and evidence
+- Do not skip EXPLAIN, schema, indexes, data volume, and business semantics
+- Do not let Codex refactor DAO, pagination infrastructure, or multiple query modules casually
+- Do not claim success without performance evidence
+- Do not change query-result semantics for speed
+- Do not ignore index write cost, storage cost, and rollback plan
+- Do not delegate production index rollout timing to AI</code></pre></div>
   </section>
 </div>
 <script>

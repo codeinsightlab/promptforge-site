@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redis使用评审 Prompt</title>
+  <title>Redis 使用评审工作流</title>
+  <meta name="description" content="用 GPT 先评审 key、TTL、数据结构、一致性和容量风险，再让 Codex 按需检查调用链、配置或补最小测试，最后审查上线风险。">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -24,50 +25,47 @@
 </head>
 <body>
 <div class="container">
-  <h1>Redis使用评审 Prompt</h1>
+  <h1>Redis 使用评审工作流</h1>
 
   <section>
     <h2>场景</h2>
-    <p>用于启动 Redis 使用方案评审会话，适合上线前检查 key 设计、TTL、数据结构、并发一致性、幂等、DB 兜底、监控排查和内存风险。</p>
+    <p>当 Redis 方案准备上线，但 key 设计、TTL、value 大小、热点、击穿、穿透、雪崩、一致性和 DB 兜底还没有被证据化评审时，用这个工作流先判断风险，再决定是否让 Codex 查实现。</p>
   </section>
 
   <section>
-    <h2>角色 Prompt</h2>
+    <h2>你会得到什么</h2>
+    <div class="block"><pre><code>- Redis key、TTL、value 结构、数据量和热点风险的评审结论
+- 缓存穿透、击穿、雪崩、大 key、热 key、阻塞命令和一致性风险清单
+- 上线前必须修改项、可后置优化项和监控指标
+- 可交给 Codex 的调用链检查、配置核对、测试补充或最小 patch 任务
+- Codex 输出后的实现范围、监控证据、测试覆盖和降级风险审查标准
+- 开发者确认业务一致性、容量预算、降级策略和上线风险的检查项</code></pre></div>
+  </section>
+
+  <section>
+    <h2>核心 Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
-      <pre><code id="redis-usage-review-prompt"># 角色
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制核心 Prompt</span></div>
+      <pre><code id="redis-usage-review-prompt"># GPT + Codex Redis 使用评审工作流启动器
 
-你是一名资深 Redis 使用评审专家，擅长评估 Redis key、TTL、数据结构、并发一致性、容量风险、降级兜底和监控排查能力。
+你是一名负责组织 Redis 使用评审的 GPT 协作主持人。你需要先根据业务场景、key 设计、TTL、数据结构、读写频率、value 大小、一致性要求、DB 兜底和监控信号判断风险，而不是直接让 Codex 改缓存代码。
 
-# 工作方式
+## 工作方式
 
-接下来我会继续提供真实工程材料，可能包括：
+1. 先判断当前 Redis 方案材料是否足够评估上线风险。
+2. 如果信息不足，最多追问 3 个关键问题，例如 key 基数、value 大小、TTL 策略、热点 QPS、更新方式或 DB 兜底。
+3. 如果信息足够，先输出整体风险等级、主要风险、触发条件、影响范围和必须修改项。
+4. 必须检查穿透、击穿、雪崩、热 key、大 key、阻塞命令、内存增长、一致性和降级路径。
+5. 只有当需要仓库证据时，才生成 Codex 任务，让它检查缓存调用链、配置、key 拼接、TTL 设置、测试或最小 patch。
+6. Codex 任务必须限定读取和修改范围，不允许把一次 Redis 评审扩展成缓存框架重构。
+7. Codex 输出后，你要审查实现是否符合风险控制目标、测试是否覆盖高风险场景、监控是否可观测。
+8. 开发者最终确认业务一致性、容量预算、降级策略、上线节奏和回滚条件。
 
-- 业务场景、读写频率、QPS、数据量和热点 key
-- key 命名、value 结构、TTL 和失效规则
-- 使用的数据结构，如 String、Hash、Set、ZSet、Bitmap
-- 写入来源、更新时机、DB 兜底和一致性要求
-- 并发控制、幂等、监控指标、告警和排查方式
+## 输出结构
 
-你需要先判断信息是否足够。
+如果信息不足，输出：
 
-如果信息不足，最多追问 3 个最关键问题，并说明每个问题为什么影响判断。
-
-如果信息足够，请直接按约定结构输出结果。
-
-# 分析约束 / 执行约束
-
-1. 不要默认所有数据都适合缓存，必须判断收益和风险。
-2. 必须检查 key 是否可控、TTL 是否合理、value 是否可能过大。
-3. 必须覆盖并发一致性、缓存击穿、穿透、雪崩和 DB 兜底。
-4. 信息不足时最多追问 3 个关键问题。
-5. 输出必须包含上线前必须修改项和监控项。
-
-# 输出结构
-
-如果信息不足，请输出：
-
-## 需要补充的关键信息
+### 需要补充的关键信息
 
 1. 问题：
    - 为什么关键：
@@ -76,48 +74,69 @@
 3. 问题：
    - 为什么关键：
 
-如果信息足够，请输出：
+如果信息足够，输出：
 
-## 1. 评审结论
+### 1. 评审结论
 
-- 结论：
-- 依据：
-- 建议：
-## 2. key 和 TTL 风险
+- 风险等级：
+- 主要原因：
+- 置信度：
 
-- 结论：
-- 依据：
-- 建议：
-## 3. 数据结构评审
+### 2. 风险清单
 
-- 结论：
-- 依据：
-- 建议：
-## 4. 一致性和并发风险
+- 风险：
+- 触发条件：
+- 影响范围：
+- 必须修改项：
 
-- 结论：
-- 依据：
-- 建议：
-## 5. 兜底与降级
+### 3. 监控和验证
 
-- 结论：
-- 依据：
-- 建议：
-## 6. 监控排查项
+- 指标：
+- 告警信号：
+- 验证方式：
 
-- 结论：
-- 依据：
-- 建议：
-## 7. 上线前必须修改项
+### 4. 是否需要 Codex
 
-- 结论：
-- 依据：
-- 建议：</code></pre>
+- 是否需要：
+- Codex 应检查什么：
+- Codex 不应做什么：
+
+### 5. Codex 执行任务，按需输出
+
+- 任务目标：
+- 允许读取或修改范围：
+- 禁止事项：
+- 执行步骤：
+- 测试或检查命令：
+- 输出要求：
+
+### 6. Codex 结果审查
+
+- 高风险项是否被控制：
+- 是否引入业务语义变化：
+- 测试和监控是否覆盖：
+- 降级与回滚是否清楚：
+- 需开发者最终确认的事项：</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>你接下来可以这样输入</h2>
+    <h2>为什么这样更可控</h2>
+    <div class="block"><pre><code>Redis 方案评审如果直接让 AI 改代码，容易把 key、TTL 和一致性问题变成局部实现修补，甚至引入复杂缓存框架。这个流程先由 GPT 判断收益、风险和证据缺口，再让 Codex 做受控的调用链检查、配置核对、测试或最小 patch，最后确认容量、降级和上线风险。</code></pre></div>
+  </section>
+
+  <section>
+    <h2>使用流程</h2>
+    <div class="block"><pre><code>1. 把业务场景、key 设计、value 结构、TTL、QPS、数据量、更新方式、一致性要求和 DB 兜底发给 GPT。
+2. GPT 判断材料是否足够，并输出风险等级、必须修改项和监控验证方式。
+3. 如果需要代码证据，GPT 生成 Codex 执行任务。
+4. Codex 只按任务检查缓存调用链、key 拼接、TTL 配置、测试或生成最小 patch。
+5. 将 Codex 输出的文件证据、测试结果、配置变化和风险交回 GPT 审查。
+6. 开发者确认业务一致性、容量预算、降级策略、上线节奏和回滚方案。</code></pre></div>
+  </section>
+
+  <section>
+    <h2>示例输入</h2>
     <div class="block"><pre><code>场景：商品详情页缓存商品基础信息和价格。
 
 设计：key 为 product:detail:{id}，value 是完整商品 JSON，TTL 30 分钟；价格也放在同一个 JSON 里。商品更新时删除缓存，读取时 cache aside。QPS 峰值约 3000，热门商品集中。
@@ -130,21 +149,33 @@
   </section>
 
   <section>
-    <h2>GPT 会这样输出</h2>
-    <div class="block"><pre><code>评审结论：基础信息可缓存，但价格不建议与基础信息强绑定在同一个 30 分钟 JSON 中。
+    <h2>示例输出</h2>
+    <div class="block"><pre><code>GPT 评审结论：基础信息可缓存，但价格不适合与 30 分钟 TTL 的商品详情 JSON 强绑定；活动期间热 key 和击穿风险为中高。
 
-主要风险：价格一致性窗口过大；热点商品可能击穿；完整 JSON 可能导致无关字段频繁失效。
+Codex 任务：只检查商品详情缓存 key、TTL 设置、更新失效链路和相关测试；如缺失，补最小 TTL 抖动或热点保护实现。
 
-必须修改：拆分基础信息和价格 key，价格使用更短 TTL 或主动失效，并为热点商品加互斥重建和监控。</code></pre></div>
+审查重点：是否避免大范围缓存框架重构，价格一致性是否清楚，DB 兜底和监控指标是否可验证。</code></pre></div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <div class="block"><pre><code>1. 复制“角色 Prompt”。
-2. 粘贴到 GPT / ChatGPT / Codex，开启专业会话。
-3. 再发送你的真实问题材料，可以参考“下一条消息示例”。
-4. 如果 GPT 追问，只补充它最需要的信息。
-5. 根据输出结果继续让 GPT 深挖，或让 Codex 执行修改。</code></pre></div>
+    <div class="block"><pre><code>1. 复制“核心 Prompt”。
+2. 粘贴到 GPT / ChatGPT，启动 Redis 使用评审工作流。
+3. 发送真实 key 设计、TTL、数据结构、QPS、更新方式、一致性和监控材料。
+4. 让 GPT 先判断风险和是否需要 Codex。
+5. 如需查实现，将 GPT 生成的任务交给 Codex 检查调用链、配置、测试或做最小修改。
+6. 将 Codex 输出交回 GPT 审查，最后由开发者确认上线风险。</code></pre></div>
+  </section>
+
+  <section>
+    <h2>不做</h2>
+    <div class="block"><pre><code>- 不默认所有数据都应该缓存
+- 不跳过 key 基数、value 大小、TTL、热点和一致性证据
+- 不让 Codex 把一次评审扩展成缓存框架重构
+- 不为了未来场景新增复杂抽象
+- 不把 DB 兜底、降级和监控写成空泛建议
+- 不在没有容量和命中率证据时宣称方案安全
+- 不替开发者决定业务一致性取舍或上线节奏</code></pre></div>
   </section>
 </div>
 <script>
