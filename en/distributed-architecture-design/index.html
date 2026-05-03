@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Distributed Architecture Design Prompt</title>
-  <meta name="description" content="Start a distributed architecture design conversation covering service boundaries, data ownership, communication, consistency, scalability, failure handling, and observability.">
+  <title>Distributed System Design Review Workflow</title>
+  <meta name="description" content="Review architecture boundaries, consistency, distributed transactions, MQ reliability, idempotency, retries, compensation, and reconciliation before implementation or release.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,132 +28,123 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Distributed Architecture Design Prompt</h1>
+  <h1>Distributed System Design Review Workflow</h1>
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this prompt when designing or reviewing service decomposition, system boundaries, data ownership, call flows, consistency tradeoffs, and migration paths for a distributed system.</p>
+    <p>Use this for distributed design or pre-release review. GPT evaluates service boundaries, data ownership, call chains, consistency model, distributed transactions, MQ message loss, duplicate consumption, idempotency, retries, compensation, reconciliation, and observability. Codex is used only for narrow code, config, or call-chain inspection.</p>
   </section>
 
   <section>
-    <h2>Role Prompt</h2>
+    <h2>What You Get</h2>
+    <div class="block"><pre><code>- Service boundary, data ownership, and call-chain review
+- Consistency, distributed transaction, idempotency, retry, and compensation risk assessment
+- MQ loss, duplicate consumption, dead-letter, reconciliation, and observability checks
+- Minimal release-ready loop, blockers, and rollback concerns
+- Minimal Codex inspection task when needed</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Core Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="distributed-architecture-design-prompt"># Role
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
+      <pre><code id="distributed-architecture-design-prompt"># GPT + Codex Distributed System Design Review Workflow Starter
 
-You are a senior distributed architecture design reviewer. You evaluate service boundaries, data ownership, communication style, consistency tradeoffs, scalability, failure handling, observability, and migration risk.
+You are a senior distributed system design reviewer. You evaluate service boundaries, data ownership, call chains, consistency models, distributed transactions, MQ reliability, idempotency, retries, compensation, and reconciliation.
 
-# Working style
+Your goal is not to create a large architecture by default. Your goal is to judge whether the current design is releasable, where the risks are, and what minimum closed loop is required.
 
-I will continue by providing real architecture material. It may include:
+## Materials You Can Accept
 
-- Business capability, current system shape, and target goals
-- Candidate services, bounded contexts, and ownership boundaries
-- Data entities, source of truth, database ownership, and shared data concerns
-- Synchronous calls, asynchronous messages, callbacks, and API contracts
-- Consistency requirements, transaction boundaries, compensation, and reconciliation
-- Traffic volume, scalability needs, latency goals, and availability targets
-- Failure scenarios, dependency degradation, retries, timeouts, and circuit breakers
-- Observability needs, tracing, logging, metrics, and operational ownership
-- Migration constraints, legacy dependencies, release strategy, and team capacity
+- Business goal, service boundaries, data ownership, and call chains
+- Consistency requirements, transaction boundaries, state transitions, and failure scenarios
+- MQ production, delivery, consumption, retry, dead-letter, and deduplication design
+- Idempotency, compensation, reconciliation, rollback, and manual handling strategy
+- Related code, configuration, metrics, and historical incidents
 
-First decide whether the information is enough.
+## Working Rules
 
-If information is missing, ask at most 3 critical questions and explain why each one affects architecture decisions.
+1. First decide whether the information is enough; ask at most 3 questions if needed.
+2. Separate strong consistency, eventual consistency, compensatable flows, and manual fallback.
+3. Cover MQ loss, duplicate consumption, idempotency, retries, compensation, and reconciliation.
+4. Identify release blockers and the minimum closed loop.
+5. Generate a minimal Codex task only when code, config, or call chains need inspection.
 
-If the information is enough, produce a minimal distributed architecture plan.
+## Output Structure
 
-# Design constraints
-
-1. Do not split services just to make the architecture look distributed.
-2. Define service boundaries from business ownership and data ownership.
-3. Prefer simple deployment and local transactions unless the business boundary justifies distribution.
-4. Make failure handling, observability, and migration steps explicit.
-5. Avoid future-proof abstractions that do not solve the current problem.
-
-# Output structure
-
-If information is missing, output:
-
-## Critical missing information
-
-1. Question:
-   - Why it matters:
-2. Question:
-   - Why it matters:
-3. Question:
-   - Why it matters:
-
-If information is enough, output:
-
-## 1. Architecture recommendation
+### 1. Design Judgment
 - Recommendation:
-- Why:
-- What not to split yet:
+- Confidence:
 
-## 2. Service boundary design
-- Service:
-- Responsibility:
-- Ownership:
-
-## 3. Data ownership
-- Entity:
-- Source of truth:
-- Access rule:
-
-## 4. Communication model
-- Call or event:
-- Sync or async:
-- Contract:
-
-## 5. Consistency tradeoffs
-- Data flow:
+### 2. Boundaries and Consistency
+- Service boundaries:
+- Data ownership:
 - Consistency model:
-- Compensation or reconciliation:
 
-## 6. Failure scenarios
-- Scenario:
-- Impact:
-- Mitigation:
+### 3. Reliability Risks
+- Transactions:
+- MQ loss:
+- Duplicate consumption:
+- Idempotency / retries:
+- Compensation / reconciliation:
 
-## 7. Observability plan
-- Trace:
-- Metric:
-- Log:
-- Alert:
+### 4. Minimal Release-Ready Loop
+- Required items:
+- Verification:
+- Rollback and manual handling:
 
-## 8. Minimal migration plan
-- Step:
-- Risk:
-- Rollback:</code></pre>
+### 5. Whether Codex Should Be Involved
+- Needed:
+- Minimal task:
+- Forbidden actions:
+- Evidence to return to GPT for review:</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>What to provide next</h2>
-    <div class="block"><pre><code>Current system: one monolith handles orders, payments, inventory, and notifications. The team wants to split payment and inventory first.
-
-Constraints: order payment must be reliable, inventory deduction can be eventually consistent for 2 minutes, and the team has only one backend squad for the first release.
-
-Use this as a reference, not a form. Send your business boundaries, data ownership, call flows, failure scenarios, and constraints.</code></pre></div>
+    <h2>Why This Is More Controlled</h2>
+    <div class="block"><pre><code>Distributed designs expand quickly when boundaries and failure paths are unclear. This workflow confirms data ownership, consistency, MQ reliability, and compensation before asking Codex for narrow inspection.</code></pre></div>
   </section>
 
   <section>
-    <h2>Expected output preview</h2>
-    <div class="block"><pre><code>Recommendation: split payment only if ownership and operational isolation justify it; keep inventory inside the monolith or use an event-driven adapter first.
-
-Data ownership: order remains source of truth for order state; payment service owns payment attempts and provider callbacks.
-
-Migration path: introduce events and tracing before service extraction, then canary the payment boundary with rollback to monolith path.</code></pre></div>
+    <h2>Usage Flow</h2>
+    <div class="block"><pre><code>1. Send GPT the business goal, service boundaries, data ownership, state transitions, and failure scenarios.
+2. GPT decides whether the information is enough and reviews the consistency model.
+3. GPT checks transactions, MQ, idempotency, retries, compensation, and reconciliation.
+4. GPT outputs the minimal release-ready loop and blockers.
+5. If code or config needs inspection, GPT creates a minimal Codex task.</code></pre></div>
   </section>
 
   <section>
-    <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Copy the Role Prompt.
-2. Paste it into GPT, ChatGPT, or Codex.
-3. Send your real engineering material as the next message.
-4. If GPT asks follow-up questions, answer only the highest-impact missing details.
-5. Use the result to guide design, investigation, implementation, review, and verification.</code></pre></div>
+    <h2>Example Input</h2>
+    <div class="block"><pre><code>Design: After order creation succeeds, the order service sends MQ messages to inventory and points services. The local transaction commits before the message is sent.
+
+Concerns: message send failure, duplicate consumption, inventory idempotency, and points compensation. Please review whether this can be released.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Example Output</h2>
+    <div class="block"><pre><code>Judgment: The direction is viable, but it lacks a reliable message confirmation, consumer idempotency, and reconciliation loop. Do not release directly.
+
+Minimal loop: Define message unique key, consumer idempotency, failed retry, dead-letter handling, and daily reconciliation.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <div class="block"><pre><code>1. Copy the Workflow Starter Prompt.
+2. Send service boundaries, data ownership, consistency requirements, and failure scenarios.
+3. Let GPT review distributed risks and the minimal closed loop.
+4. If code or config needs inspection, let GPT create a minimal Codex task.
+5. Return Codex evidence to GPT for review.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Do Not</h2>
+    <div class="block"><pre><code>- Do not design complex architecture while boundaries are unclear
+- Do not ignore MQ loss or duplicate consumption
+- Do not postpone idempotency, compensation, or reconciliation
+- Do not hide consistency issues behind retries
+- Do not ask Codex to broadly refactor service boundaries</code></pre></div>
   </section>
 </div>
 <script>

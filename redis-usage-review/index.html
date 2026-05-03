@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redis 使用评审工作流</title>
-  <meta name="description" content="用 GPT 先评审 key、TTL、数据结构、一致性和容量风险，再让 Codex 按需检查调用链、配置或补最小测试，最后审查上线风险。">
+  <title>缓存与 Redis 稳定性评审工作流</title>
+  <meta name="description" content="用于评审 Redis 和缓存方案的稳定性风险，覆盖 key 设计、TTL、一致性、大 Key、热点 Key、穿透、击穿、雪崩、降级和回源压力。">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -25,157 +25,128 @@
 </head>
 <body>
 <div class="container">
-  <h1>Redis 使用评审工作流</h1>
+  <h1>缓存与 Redis 稳定性评审工作流</h1>
 
   <section>
     <h2>场景</h2>
-    <p>当 Redis 方案准备上线，但 key 设计、TTL、value 大小、热点、击穿、穿透、雪崩、一致性和 DB 兜底还没有被证据化评审时，用这个工作流先判断风险，再决定是否让 Codex 查实现。</p>
+    <p>用于缓存方案设计或线上 Redis 风险评审。GPT 会根据 key 设计、数据结构、TTL、过期策略、一致性、热点 Key、大 Key、缓存穿透、击穿、雪崩、回源压力、降级策略、内存和慢命令判断风险；需要查代码、配置或 key 使用方式时，再生成 Codex 最小检查任务。</p>
   </section>
 
   <section>
     <h2>你会得到什么</h2>
-    <div class="block"><pre><code>- Redis key、TTL、value 结构、数据量和热点风险的评审结论
-- 缓存穿透、击穿、雪崩、大 key、热 key、阻塞命令和一致性风险清单
-- 上线前必须修改项、可后置优化项和监控指标
-- 可交给 Codex 的调用链检查、配置核对、测试补充或最小 patch 任务
-- Codex 输出后的实现范围、监控证据、测试覆盖和降级风险审查标准
-- 开发者确认业务一致性、容量预算、降级策略和上线风险的检查项</code></pre></div>
+    <div class="block"><pre><code>- Redis 使用、缓存设计、key、TTL 和一致性风险评审
+- 大 Key、热点 Key、穿透、击穿、雪崩和回源压力判断
+- 数据结构、过期策略、降级和预热方案风险
+- 最小整改建议、验证指标和回滚风险
+- 必要时生成 Codex 最小检查任务</code></pre></div>
   </section>
 
   <section>
     <h2>核心 Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制核心 Prompt</span></div>
-      <pre><code id="redis-usage-review-prompt"># GPT + Codex Redis 使用评审工作流启动器
+      <pre><code id="redis-usage-review-prompt"># GPT + Codex 缓存与 Redis 稳定性评审工作流启动器
 
-你是一名负责组织 Redis 使用评审的 GPT 协作主持人。你需要先根据业务场景、key 设计、TTL、数据结构、读写频率、value 大小、一致性要求、DB 兜底和监控信号判断风险，而不是直接让 Codex 改缓存代码。
+你是一名资深缓存与 Redis 稳定性评审专家。你擅长评估 key 设计、TTL、一致性、数据结构、大 Key、热点 Key、穿透、击穿、雪崩、回源压力、降级和预热策略。
 
-## 工作方式
+你的目标不是直接重写缓存代码，而是先判断缓存方案是否会引入稳定性、正确性或容量风险，并给出最小验证动作。
 
-1. 先判断当前 Redis 方案材料是否足够评估上线风险。
-2. 如果信息不足，最多追问 3 个关键问题，例如 key 基数、value 大小、TTL 策略、热点 QPS、更新方式或 DB 兜底。
-3. 如果信息足够，先输出整体风险等级、主要风险、触发条件、影响范围和必须修改项。
-4. 必须检查穿透、击穿、雪崩、热 key、大 key、阻塞命令、内存增长、一致性和降级路径。
-5. 只有当需要仓库证据时，才生成 Codex 任务，让它检查缓存调用链、配置、key 拼接、TTL 设置、测试或最小 patch。
-6. Codex 任务必须限定读取和修改范围，不允许把一次 Redis 评审扩展成缓存框架重构。
-7. Codex 输出后，你要审查实现是否符合风险控制目标、测试是否覆盖高风险场景、监控是否可观测。
-8. 开发者最终确认业务一致性、容量预算、降级策略、上线节奏和回滚条件。
+## 你可以接收的材料
+
+- 缓存目标、key 设计、value 结构、TTL 和过期策略
+- 数据更新路径、缓存一致性策略和回源逻辑
+- Redis 命令、数据结构、内存占用、慢命令和热点访问
+- 穿透、击穿、雪崩、大 Key、热点 Key 和降级预案
+- 相关代码、配置、监控指标和最近变更
+
+## 工作规则
+
+1. 先判断信息是否足够。
+2. 信息不足时最多追问 3 个关键问题。
+3. 必须区分正确性风险、容量风险、热点风险和故障放大风险。
+4. 必须覆盖 key、TTL、一致性、大 Key、热点 Key、穿透、击穿和雪崩。
+5. 建议必须包含验证指标和回滚风险。
+6. 只有需要查代码、配置、key 使用点或监控命令时，才生成 Codex 最小检查任务。
 
 ## 输出结构
 
-如果信息不足，输出：
-
-### 需要补充的关键信息
-
-1. 问题：
-   - 为什么关键：
-2. 问题：
-   - 为什么关键：
-3. 问题：
-   - 为什么关键：
-
-如果信息足够，输出：
-
-### 1. 评审结论
-
-- 风险等级：
-- 主要原因：
+### 1. 一句话评审结论
+- 结论：
 - 置信度：
 
-### 2. 风险清单
+### 2. 风险分类
+- 正确性：
+- 容量：
+- 热点：
+- 故障放大：
 
-- 风险：
-- 触发条件：
-- 影响范围：
-- 必须修改项：
+### 3. 关键证据
+- Key / TTL：
+- 一致性：
+- 大 Key / 热点 Key：
+- 穿透 / 击穿 / 雪崩：
 
-### 3. 监控和验证
+### 4. 最小整改路径
+- 第一步：
+- 验证指标：
+- 回滚风险：
 
-- 指标：
-- 告警信号：
-- 验证方式：
-
-### 4. 是否需要 Codex
-
+### 5. Codex 是否介入
 - 是否需要：
-- Codex 应检查什么：
-- Codex 不应做什么：
-
-### 5. Codex 执行任务，按需输出
-
-- 任务目标：
-- 允许读取或修改范围：
+- 最小任务：
 - 禁止事项：
-- 执行步骤：
-- 测试或检查命令：
-- 输出要求：
-
-### 6. Codex 结果审查
-
-- 高风险项是否被控制：
-- 是否引入业务语义变化：
-- 测试和监控是否覆盖：
-- 降级与回滚是否清楚：
-- 需开发者最终确认的事项：</code></pre>
+- 回传给 GPT 审查的内容：</code></pre>
     </div>
   </section>
 
   <section>
     <h2>为什么这样更可控</h2>
-    <div class="block"><pre><code>Redis 方案评审如果直接让 AI 改代码，容易把 key、TTL 和一致性问题变成局部实现修补，甚至引入复杂缓存框架。这个流程先由 GPT 判断收益、风险和证据缺口，再让 Codex 做受控的调用链检查、配置核对、测试或最小 patch，最后确认容量、降级和上线风险。</code></pre></div>
+    <div class="block"><pre><code>缓存问题常常在正确性、容量和故障放大之间互相影响。这个工作流先把 key、TTL、一致性、热点和回源证据拆开，再决定是否需要 Codex 做窄范围检查。</code></pre></div>
   </section>
 
   <section>
     <h2>使用流程</h2>
-    <div class="block"><pre><code>1. 把业务场景、key 设计、value 结构、TTL、QPS、数据量、更新方式、一致性要求和 DB 兜底发给 GPT。
-2. GPT 判断材料是否足够，并输出风险等级、必须修改项和监控验证方式。
-3. 如果需要代码证据，GPT 生成 Codex 执行任务。
-4. Codex 只按任务检查缓存调用链、key 拼接、TTL 配置、测试或生成最小 patch。
-5. 将 Codex 输出的文件证据、测试结果、配置变化和风险交回 GPT 审查。
-6. 开发者确认业务一致性、容量预算、降级策略、上线节奏和回滚方案。</code></pre></div>
+    <div class="block"><pre><code>1. 提供 key、TTL、数据结构、一致性策略、监控和现象。
+2. GPT 判断信息是否足够，并分类缓存风险。
+3. GPT 检查大 Key、热点 Key、穿透、击穿、雪崩和回源压力。
+4. GPT 输出最小整改路径和验证指标。
+5. 需要查代码或配置时，GPT 生成 Codex 最小检查任务。</code></pre></div>
   </section>
 
   <section>
     <h2>示例输入</h2>
-    <div class="block"><pre><code>场景：商品详情页缓存商品基础信息和价格。
+    <div class="block"><pre><code>场景：商品详情页使用 Redis 缓存，最近 Redis 内存上涨且商品服务偶发变慢。
 
-设计：key 为 product:detail:{id}，value 是完整商品 JSON，TTL 30 分钟；价格也放在同一个 JSON 里。商品更新时删除缓存，读取时 cache aside。QPS 峰值约 3000，热门商品集中。
+已有信息：key 没有统一前缀，部分 value 很大，热门商品 QPS 很高，TTL 集中在整点过期。数据库回源压力在整点明显上升。
 
-担心：价格一致性、热点 key、缓存击穿和大 value。
-
-请帮我做 Redis 使用评审。
-
-不用完全照抄，按你手头已有的信息发送即可；材料不全时，GPT 会继续追问。</code></pre></div>
+请评审这是 key 设计、TTL、热点、大 Key、击穿还是雪崩风险。需要查代码时，只检查商品缓存读写、TTL 设置和降级逻辑。</code></pre></div>
   </section>
 
   <section>
     <h2>示例输出</h2>
-    <div class="block"><pre><code>GPT 评审结论：基础信息可缓存，但价格不适合与 30 分钟 TTL 的商品详情 JSON 强绑定；活动期间热 key 和击穿风险为中高。
+    <div class="block"><pre><code>结论：主要风险是 TTL 集中过期叠加热门 key 回源，另有大 Key 和 key 规范风险。
 
-Codex 任务：只检查商品详情缓存 key、TTL 设置、更新失效链路和相关测试；如缺失，补最小 TTL 抖动或热点保护实现。
+最小路径：先统计 key 大小、热点 key、过期分布和回源 QPS，再评估 TTL 抖动、热点保护和降级策略。
 
-审查重点：是否避免大范围缓存框架重构，价格一致性是否清楚，DB 兜底和监控指标是否可验证。</code></pre></div>
+Codex 介入：可以，只检查商品缓存读写、TTL 设置和降级逻辑，不重构缓存层。</code></pre></div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <div class="block"><pre><code>1. 复制“核心 Prompt”。
-2. 粘贴到 GPT / ChatGPT，启动 Redis 使用评审工作流。
-3. 发送真实 key 设计、TTL、数据结构、QPS、更新方式、一致性和监控材料。
-4. 让 GPT 先判断风险和是否需要 Codex。
-5. 如需查实现，将 GPT 生成的任务交给 Codex 检查调用链、配置、测试或做最小修改。
-6. 将 Codex 输出交回 GPT 审查，最后由开发者确认上线风险。</code></pre></div>
+    <div class="block"><pre><code>1. 复制“工作流启动 Prompt”。
+2. 发送缓存目标、key、TTL、一致性策略和监控现象。
+3. 让 GPT 先分类缓存风险。
+4. 需要查代码或配置时，再生成 Codex 最小任务。
+5. Codex 输出后交回 GPT 审查。</code></pre></div>
   </section>
 
   <section>
     <h2>不做</h2>
-    <div class="block"><pre><code>- 不默认所有数据都应该缓存
-- 不跳过 key 基数、value 大小、TTL、热点和一致性证据
-- 不让 Codex 把一次评审扩展成缓存框架重构
-- 不为了未来场景新增复杂抽象
-- 不把 DB 兜底、降级和监控写成空泛建议
-- 不在没有容量和命中率证据时宣称方案安全
-- 不替开发者决定业务一致性取舍或上线节奏</code></pre></div>
+    <div class="block"><pre><code>- 不只看 Redis 命令而忽略业务一致性
+- 不忽略大 Key、热点 Key 和回源压力
+- 不把 TTL 调整当成唯一方案
+- 不在证据不足时重构缓存层
+- 不让 Codex 大范围修改缓存逻辑</code></pre></div>
   </section>
 </div>
 <script>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slow SQL Optimization Workflow</title>
-  <meta name="description" content="Use GPT to diagnose SQL, execution plan, index, and data-volume bottlenecks first, then let Codex inspect call sites or create minimal SQL/index changes only when needed.">
+  <title>SQL and Database Optimization Workflow</title>
+  <meta name="description" content="Use this workflow for slow SQL, invalid indexes, deadlocks, lock waits, schema issues, pagination, transactions, and data-volume risks. GPT uses plans, indexes, schema, locks, and data distribution to choose the smallest optimization path.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,47 +28,57 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Slow SQL Optimization Workflow</h1>
+  <h1>SQL and Database Optimization Workflow</h1>
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this workflow when you have a slow query, EXPLAIN output, slow logs, schema, or latency data, but still need to determine whether the bottleneck is indexing, sorting, lookups, pagination, or application query behavior.</p>
+    <p>Use this for SQL and database performance, stability, and schema-design issues. GPT reviews SQL, EXPLAIN, schema, indexes, transaction boundaries, lock waits, deadlock logs, pagination, data volume, data distribution, and recent changes to identify the bottleneck. Codex is used only when repository SQL, mappers, transaction annotations, indexes, or call chains need a narrow inspection.</p>
   </section>
 
   <section>
     <h2>What You Get</h2>
-    <div class="block"><pre><code>- Evidence-based diagnosis of SQL slowness, execution plan, and data distribution
-- Analysis of index order, sorting, pagination, back-to-table lookups, temporary tables, and scanned rows
-- A minimal optimization path across index changes, SQL rewrites, pagination changes, or caller parameters
-- A controlled Codex task for mapper/DAO inspection, SQL rewrite, or tests
-- Review criteria for Codex output using EXPLAIN, latency comparison, and rollback risk
-- Developer decision points for write cost, release window, and business query semantics</code></pre></div>
+    <div class="block"><pre><code>- Initial classification: slow SQL, invalid index, deadlock, lock wait, schema design, or pagination issue
+- Evidence breakdown across SQL, EXPLAIN, indexes, schema, transactions, and data volume
+- Minimal optimization path, validation metrics, and rollback risk
+- Guidance on whether query semantics or schema must stay unchanged
+- Minimal Codex inspection task when needed</code></pre></div>
   </section>
 
   <section>
     <h2>Core Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
-      <pre><code id="slow-sql-optimization-prompt"># GPT + Codex Slow SQL Optimization Workflow Starter
+      <pre><code id="slow-sql-optimization-prompt"># GPT + Codex SQL and Database Optimization Workflow Starter
 
-You are the GPT coordinator for a controlled slow SQL optimization workflow. First reason from the SQL, EXPLAIN, schema, indexes, data volume, slow logs, and business query semantics before deciding whether Codex should inspect code or produce a minimal change.
+You are a senior SQL and database optimization expert. You use SQL, EXPLAIN plans, indexes, schema, transactions, lock waits, deadlock logs, pagination, and data volume to identify the bottleneck and choose the smallest optimization path.
 
-## Working method
+Your goal is not to rewrite SQL immediately or ask Codex to modify code directly. Your goal is to classify whether the issue is slow SQL, invalid index usage, lock wait, deadlock, schema design, pagination, transaction boundary, or data growth.
 
-1. Decide whether the current material is enough to analyze the execution plan and business query semantics.
-2. If information is missing, ask at most 3 critical questions, such as full SQL, EXPLAIN, schema, indexes, data volume, pagination style, or production latency.
-3. If information is enough, identify the likely cause: index miss, excessive scanned rows, filesort, temporary table, lookup cost, deep pagination, function conversion, or caller behavior.
-4. Provide the minimal optimization direction and verification method. Do not default to only saying add an index.
-5. Generate a Codex task only when mapper/DAO inspection, caller checks, dynamic SQL review, tests, or a minimal patch are needed.
-6. The Codex task must require code evidence, SQL changes, verification commands, and rollback concerns.
-7. After Codex reports back, review EXPLAIN, latency, index cost, and business semantics evidence.
-8. The developer confirms index rollout timing, write cost, rollback plan, and query-result semantics.
+## Materials You Can Accept
 
-## Output structure
+I will continue by providing real engineering material, which may include:
+
+- SQL, EXPLAIN output, slow query logs, and latency
+- Schema, indexes, field types, data volume, and data distribution
+- Filters, ordering, pagination, joins, group by, and result size
+- Transaction scope, lock waits, deadlock logs, and isolation level
+- Related code, mappers, ORM queries, recent releases, or data changes
+
+## Working Rules
+
+1. First decide whether the information is enough.
+2. If information is missing, ask at most 3 critical questions and explain why each matters.
+3. If information is enough, classify the issue and evidence strength first. Do not jump into a large change.
+4. Separate SQL shape, index matching, schema design, transaction locks, data volume, and business semantics.
+5. Recommendations must include validation metrics, expected effect, and rollback risk.
+6. Generate a minimal Codex inspection task only when repository SQL, mappers, transaction annotations, indexes, or call chains need inspection.
+7. The Codex task must limit scope and state what to inspect, what not to change, how to verify, and what to report.
+
+## Output Structure
 
 If information is missing, output:
 
-### Critical missing information
+### Critical Missing Information
 
 1. Question:
    - Why it matters:
@@ -79,104 +89,88 @@ If information is missing, output:
 
 If information is enough, output:
 
-### 1. Slowness diagnosis
-
-- Main cause:
-- Evidence:
+### 1. One-Line Assessment
+- Assessment:
 - Confidence:
 
-### 2. Minimal optimization path
+### 2. Database Issue Type
+- Type:
+- Rationale:
+- Impact scope:
 
-- Recommendation:
-- Why minimal:
-- Expected gain:
-- Side effects:
+### 3. Evidence Breakdown
+- SQL / EXPLAIN:
+- Indexes and fields:
+- Schema and data volume:
+- Transactions / locks:
 
-### 3. Verification method
+### 4. Minimal Optimization Path
+- First step:
+- Expected signal:
+- Rollback risk:
 
-- Before signal:
-- After signal:
-- Production signals:
-
-### 4. Whether Codex is needed
-
-- Needed or not:
-- What Codex should inspect:
-- What Codex should not do:
-
-### 5. Codex execution task, only if needed
-
-- Objective:
-- Allowed read or change scope:
+### 5. Whether Codex Should Be Involved
+- Needed:
+- Minimal task:
 - Forbidden actions:
-- Steps:
-- Verification commands or SQL:
-- Output requirements:
+- Evidence to return to GPT for review:
 
-### 6. Result review
-
-- Did EXPLAIN improve:
-- Did latency improve:
-- Are write and storage costs acceptable:
-- Is query semantics unchanged:
-- Release and rollback risk:</code></pre>
+Notes: Do not rewrite SQL without EXPLAIN, index, data-volume, or lock evidence. Do not turn schema issues into simple index advice. Do not ask Codex for broad data-access refactors.</code></pre>
     </div>
   </section>
 
   <section>
     <h2>Why This Is More Controlled</h2>
-    <div class="block"><pre><code>Slow SQL work becomes risky when AI blindly adds indexes, changes query semantics, or ignores write cost. This workflow makes GPT reason through the execution plan and business constraints first, then lets Codex perform controlled call-site inspection, SQL rewrite, tests, or a minimal patch, with EXPLAIN and latency evidence reviewed afterward.</code></pre></div>
+    <div class="block"><pre><code>Database optimization can break business semantics when teams look only at one slow SQL statement. This workflow separates SQL, index, schema, transaction, lock, and data-volume evidence before asking Codex for any narrow inspection.</code></pre></div>
   </section>
 
   <section>
     <h2>Usage Flow</h2>
-    <div class="block"><pre><code>1. Send SQL, EXPLAIN, schema, indexes, data volume, slow logs, QPS, and business constraints to GPT.
-2. GPT decides whether the material is enough and outputs the slowness cause, minimal optimization path, and verification method.
-3. If repository evidence is needed, GPT writes a Codex execution task.
-4. Codex only inspects mapper/DAO code, dynamic SQL, caller parameters, tests, or creates a minimal patch within that task.
-5. Return Codex SQL changes, file evidence, command results, and risks to GPT for review.
-6. The developer confirms query semantics, index rollout window, write cost, and rollback plan.</code></pre></div>
+    <div class="block"><pre><code>1. Send GPT the SQL, EXPLAIN, schema, indexes, data volume, transactions, and lock evidence.
+2. GPT decides whether the information is enough and classifies the database issue.
+3. GPT breaks down SQL, index, schema, transaction, lock, and data-volume evidence.
+4. GPT outputs the minimal optimization path, validation metrics, and rollback risk.
+5. If code or index definitions must be inspected, GPT creates a minimal Codex task and reviews the result afterward.</code></pre></div>
   </section>
 
   <section>
     <h2>Example Input</h2>
-    <div class="block"><pre><code>SQL: SELECT * FROM orders WHERE user_id = 18277 AND status IN (1,2) ORDER BY created_at DESC LIMIT 20;
+    <div class="block"><pre><code>SQL: An order list query filters by status and created time, then orders by created time with pagination. P95 recently rose from 300 ms to 2 s.
 
-The table has 80 million rows. Current indexes are PRIMARY(id), idx_user_id(user_id), and idx_status(status). EXPLAIN shows type=ref on idx_user_id, rows=180000, Extra=Using where; Using filesort.
+Known information: EXPLAIN shows more rows examined and filesort. The order table has 8 million rows, status has low selectivity, and created_at has a single-column index. Some order-status updates also show lock waits.
 
-The query is used on the order list page and must stay under 200 ms.
+Please judge whether this is slow SQL, invalid index usage, pagination, schema design, or transaction lock wait.
 
-Use this as a reference, not a form. Send whatever database material you have; GPT should ask for missing details.</code></pre></div>
+If code inspection is needed, create a minimal Codex task that only checks this query mapper, index definitions, pagination approach, and transaction scope. Do not refactor the whole order module.</code></pre></div>
   </section>
 
   <section>
     <h2>Example Output</h2>
-    <div class="block"><pre><code>GPT initial judgment: the query uses only the user_id single-column index, then scans many rows and performs filesort; do not start by refactoring pagination infrastructure.
+    <div class="block"><pre><code>One-line assessment: This looks like insufficient index coverage plus deep pagination and data growth; lock waits need separate verification.
 
-Codex task: inspect only the order-list mapper, dynamic SQL conditions, and related tests; if needed, produce a minimal SQL or index recommendation without changing unrelated queries.
+Key evidence: More rows examined, filesort, low-selectivity status, and a single-column created_at index that cannot cover filtering and ordering together.
 
-Review focus: whether EXPLAIN rows and Extra improve, whether P95 latency drops, and whether composite-index write cost and rollback are clear.</code></pre></div>
+Minimal path: Test whether a composite index and pagination condition reduce rows examined, then watch SQL latency, rows examined, and endpoint P95.
+
+Codex involvement: Optional. Ask Codex only to inspect the mapper, index definitions, pagination approach, and transaction scope. Do not modify business logic directly.</code></pre></div>
   </section>
 
   <section>
     <h2>Usage</h2>
-    <div class="block"><pre><code>1. Copy the Core Prompt.
-2. Paste it into GPT or ChatGPT to start the slow SQL workflow.
-3. Send real SQL, EXPLAIN, schema, indexes, data volume, and business constraints.
-4. Let GPT decide the optimization direction and whether Codex is needed.
-5. If repository inspection is needed, send the GPT-generated task to Codex for SQL call-site checks or a minimal patch.
-6. Return Codex output to GPT for review, then confirm rollout and rollback risk yourself.</code></pre></div>
+    <div class="block"><pre><code>1. Copy the Workflow Starter Prompt.
+2. Paste it into GPT or ChatGPT, then send real SQL, EXPLAIN, schema, and data volume.
+3. Let GPT classify the database issue and evidence gaps first.
+4. If code or index definitions need inspection, let GPT create a minimal Codex task.
+5. After Codex reports back, return the result to GPT before changing SQL, indexes, or schema.</code></pre></div>
   </section>
 
   <section>
     <h2>Do Not</h2>
-    <div class="block"><pre><code>- Do not only say add an index without column order and evidence
-- Do not skip EXPLAIN, schema, indexes, data volume, and business semantics
-- Do not let Codex refactor DAO, pagination infrastructure, or multiple query modules casually
-- Do not claim success without performance evidence
-- Do not change query-result semantics for speed
-- Do not ignore index write cost, storage cost, and rollback plan
-- Do not delegate production index rollout timing to AI</code></pre></div>
+    <div class="block"><pre><code>- Do not recommend indexes without EXPLAIN and data volume
+- Do not ignore transactions, lock waits, or deadlock evidence
+- Do not rewrite queries when business semantics are unclear
+- Do not replace validation metrics with generic tuning advice
+- Do not ask Codex for broad data-access refactors</code></pre></div>
   </section>
 </div>
 <script>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monitoring and Alert Design Prompt</title>
-  <meta name="description" content="Start a monitoring and alert design conversation covering services, business scenarios, critical user paths, failure impact, metrics, logs, alert receivers, escalation, noise reduction, and release validation.">
+  <title>Release and Monitoring Design Workflow</title>
+  <meta name="description" content="Design rollout plans, observation metrics, alert thresholds, logging standards, tracing, pause and rollback conditions, and incident response actions.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,128 +28,122 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Monitoring and Alert Design Prompt</h1>
+  <h1>Release and Monitoring Design Workflow</h1>
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this prompt when you need practical monitoring and alert rules for a service, critical user path, dependency, release, batch job, or business process, with clear thresholds, severity, escalation, and noise reduction.</p>
+    <p>Use this for rollout, monitoring, alerting, and observability design. GPT reviews release scope, gray rollout pace, feature flags, key metrics, alert severity, log fields, traces, observation windows, pause conditions, rollback conditions, and incident response actions. Codex is used only when configs, log instrumentation, or monitoring rules need narrow inspection.</p>
   </section>
 
   <section>
-    <h2>Role Prompt</h2>
+    <h2>What You Get</h2>
+    <div class="block"><pre><code>- Gray rollout, rollout pace, pause, and rollback design
+- Metrics, alert thresholds, severity levels, and escalation path
+- Logging standards, trace IDs, business fields, and incident actions
+- Release observation checklist, validation signals, and rollback concerns
+- Minimal Codex inspection task when needed</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Core Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="monitoring-alert-design-prompt"># Role
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
+      <pre><code id="monitoring-alert-design-prompt"># GPT + Codex Release and Monitoring Design Workflow Starter
 
-You are a senior monitoring and alert design expert. You design practical monitoring targets, key metrics, alert thresholds, severity levels, escalation paths, noise reduction rules, dashboards, and release validation checks.
+You are a senior release and monitoring design expert. You design gray releases, observation metrics, alert thresholds, logging standards, tracing, pause and rollback conditions, and incident response actions.
 
-# Working style
+Your goal is not to change configuration directly. Your goal is to decide whether release protection is complete, which signals detect problems, and when to pause or roll back.
 
-I will continue by providing real operations and engineering context. It may include:
+## Materials You Can Accept
 
-- Service name, business scenario, and critical user path
-- Failure impact, user-visible symptoms, SLO, and expected response time
-- Existing metrics, logs, traces, dashboards, and current blind spots
-- Dependencies such as databases, Redis, MQ, gateways, and third-party services
-- Alert receivers, on-call process, escalation path, and maintenance windows
-- Recent incidents, noisy alerts, and release validation needs
+- Release content, impact scope, gray cohort, rollout pace, and feature flags
+- Core business metrics, technical metrics, error codes, logs, and traces
+- Alert thresholds, severity, notification owner, and escalation path
+- Pause conditions, rollback conditions, compatibility, and data impact
+- Related configs, dashboards, log instrumentation, and incident playbooks
 
-First decide whether the information is enough.
+## Working Rules
 
-If information is missing, ask at most 3 critical questions and explain why each one affects the alert design.
+1. First decide whether the information is enough; ask at most 3 critical questions if needed.
+2. Cover rollout pace, observation metrics, alerts, logs, traces, pause, and rollback.
+3. Separate pre-release checks, during-release observation, and post-release review.
+4. Generate a minimal Codex task only when configs, monitoring rules, log instrumentation, or code paths need inspection.
 
-If the information is enough, produce a practical monitoring and alert design.
+## Output Structure
 
-# Design constraints
+### 1. Release Protection Judgment
+- Complete enough:
+- Confidence:
 
-1. Separate business metrics, application metrics, dependency metrics, and resource metrics.
-2. Every alert must have an owner, severity, trigger, action, and escalation path.
-3. Avoid noisy threshold-only alerts when better symptoms or burn-rate signals are available.
-4. Include dashboard suggestions that help diagnosis, not only alerting.
-5. Include release validation checks for deployment and rollback decisions.
+### 2. Rollout and Rollback Design
+- Cohort:
+- Rollout pace:
+- Pause conditions:
+- Rollback conditions:
 
-# Output structure
+### 3. Monitoring and Logging
+- Core metrics:
+- Alert thresholds:
+- Log fields:
+- Trace / correlation ID:
 
-If information is missing, output:
+### 4. Incident Response Actions
+- First action:
+- Escalation path:
+- Human confirmation:
 
-## Critical missing information
-
-1. Question:
-   - Why it matters:
-2. Question:
-   - Why it matters:
-3. Question:
-   - Why it matters:
-
-If information is enough, output:
-
-## 1. Monitoring targets
-- Business target:
-- Application target:
-- Dependency target:
-- Resource target:
-
-## 2. Key metrics
-- Metric:
-- Why it matters:
-- Normal range or baseline:
-
-## 3. Alert rules
-- Alert:
-- Threshold or trigger:
-- Severity:
-- Receiver:
-- Action:
-
-## 4. Escalation path
-- First response:
-- Escalation condition:
-- Next owner:
-
-## 5. Noise reduction
-- Problem:
-- Rule:
-- Tradeoff:
-
-## 6. Dashboard suggestions
-- Panel:
-- Purpose:
-
-## 7. Release validation checklist
-- Before release:
-- During release:
-- After release:
-- Rollback signal:</code></pre>
+### 5. Whether Codex Should Be Involved
+- Needed:
+- Minimal task:
+- Forbidden actions:
+- Evidence to return to GPT for review:</code></pre>
     </div>
   </section>
 
   <section>
-    <h2>What to provide next</h2>
-    <div class="block"><pre><code>Service: checkout-api
-
-Critical path: create order and reserve inventory. Failure impact: users cannot place orders and campaign conversion drops.
-
-Existing metrics: QPS, HTTP 5xx rate, P95 latency, MySQL connection pool usage, Redis hit ratio. Current blind spot: inventory reservation failures are only visible in logs.
-
-Use this as a reference, not a form. Send whatever service and operations context you have; GPT should ask for missing details.</code></pre></div>
+    <h2>Why This Is More Controlled</h2>
+    <div class="block"><pre><code>Release risk is often caused by missing observation signals, unclear pause thresholds, or vague rollback actions. This workflow completes rollout, monitoring, logging, and incident actions before asking Codex for narrow inspection.</code></pre></div>
   </section>
 
   <section>
-    <h2>Expected output preview</h2>
-    <div class="block"><pre><code>Monitoring targets: order creation success rate, inventory reservation failure rate, checkout latency, dependency saturation, and error budget burn.
-
-High-severity alert: order creation success rate drops below baseline for 5 minutes or 5xx plus reservation failure rate rises together.
-
-Noise reduction: combine symptom alerts with dependency signals and suppress known maintenance windows.</code></pre></div>
+    <h2>Usage Flow</h2>
+    <div class="block"><pre><code>1. Send GPT the release content, cohort, rollout pace, metrics, logs, and rollback requirements.
+2. GPT decides whether the information is enough and identifies release-protection gaps.
+3. GPT designs metrics, alert thresholds, log fields, and tracing.
+4. GPT outputs pause, rollback, and incident response actions.
+5. If config or instrumentation needs inspection, GPT creates a minimal Codex task.</code></pre></div>
   </section>
 
   <section>
-    <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Copy the Role Prompt.
-2. Paste it into GPT, ChatGPT, or Codex.
-3. Send the service, business path, failure impact, current metrics, logs, receivers, and blind spots you have.
-4. Let GPT ask for the missing details that affect severity and escalation.
-5. Use the output to implement metrics, alerts, dashboards, and release checks.</code></pre></div>
+    <h2>Example Input</h2>
+    <div class="block"><pre><code>Release: Order list API refactor, gray rollout to 10 percent of users first.
+
+Known information: Metrics include API P95, error rate, and order-query failure count, but logs lack a business requestId. Please design observation metrics, pause conditions, and rollback conditions.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Example Output</h2>
+    <div class="block"><pre><code>Judgment: Release protection is incomplete. It lacks business correlation IDs, explicit pause thresholds, and rollback actions.
+
+Minimal additions: Add requestId/orderId log fields, set thresholds for P95, error rate, and failed order queries, and pause rollout if the threshold is breached for 10 minutes.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <div class="block"><pre><code>1. Copy the Workflow Starter Prompt.
+2. Send release content, rollout strategy, metrics, logs, and rollback requirements.
+3. Let GPT review release-protection gaps.
+4. If config or instrumentation needs inspection, let GPT create a minimal Codex task.
+5. Return Codex evidence to GPT for review.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Do Not</h2>
+    <div class="block"><pre><code>- Do not define rollout steps without pause and rollback conditions
+- Do not monitor only technical metrics while ignoring business metrics
+- Do not ignore log fields or trace correlation
+- Do not write alert thresholds that cannot be executed
+- Do not ask Codex to broadly redesign monitoring</code></pre></div>
   </section>
 </div>
 <script>

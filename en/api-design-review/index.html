@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>API Design Review Workflow</title>
-  <meta name="description" content="Use GPT to review API boundaries, idempotency, permissions, state, and transaction risks first, then let Codex inspect implementation or add minimal tests only when needed.">
+  <title>Pre-release API Review Workflow</title>
+  <meta name="description" content="Review idempotency, permissions, security, parameter boundaries, error handling, compatibility, gateway limits, and regression risks before an API release.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,154 +28,121 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>API Design Review Workflow</h1>
+  <h1>Pre-release API Review Workflow</h1>
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this workflow before API implementation or release when request and response shape, permissions, idempotency, state transitions, transaction boundaries, external dependencies, and rollback conditions still need review.</p>
+    <p>Use this before releasing an API. GPT reviews endpoint definitions, request and response shape, authorization, idempotency, parameter boundaries, error codes, compatibility, gateway limits, audit needs, and regression impact. Codex is used only when code, configuration, or call chains need narrow inspection.</p>
   </section>
 
   <section>
     <h2>What You Get</h2>
-    <div class="block"><pre><code>- A structured review of endpoint path, request and response shape, error codes, and compatibility
-- Risk grading for idempotency, permission boundaries, parameter validation, state transitions, transaction consistency, and external dependencies
-- A release recommendation with must-fix items and deferrable improvements
-- A controlled Codex task for implementation inspection, call-chain search, test additions, or a minimal patch
-- Review criteria for Codex output covering scope, tests, implicit business changes, and release risk
-- Developer decision points for business rules, rollout method, monitoring, and rollback conditions</code></pre></div>
+    <div class="block"><pre><code>- Review of idempotency, permissions, security, parameter boundaries, and compatibility
+- Error handling, audit, gateway limit, and regression risk assessment
+- Release blockers, acceptable risks, and minimal remediation advice
+- Verification method, rollback concerns, and pre-release checklist
+- Minimal Codex inspection task when needed</code></pre></div>
   </section>
 
   <section>
     <h2>Core Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
-      <pre><code id="api-design-review-prompt"># GPT + Codex API Design Review Workflow Starter
+      <pre><code id="api-design-review-prompt"># GPT + Codex Pre-release API Review Workflow Starter
 
-You are the GPT coordinator for a controlled API design review. First reason from the API contract, business rules, permission model, idempotency needs, state transitions, transaction boundaries, external dependencies, and release constraints. Do not ask Codex to implement the API immediately.
+You are a senior pre-release API reviewer. Evaluate API design, security, authorization, idempotency, parameter boundaries, error codes, compatibility, gateway limits, and regression risk.
 
-## Working method
+Your goal is not to modify code directly. Your goal is to decide whether the API is ready for release and what minimum evidence or remediation is needed.
 
-1. Decide whether the current API material is enough to give a release recommendation.
-2. If information is missing, ask at most 3 questions that affect release judgment.
-3. If information is enough, state whether the API is ready, conditionally ready, or not ready, and classify high, medium, and low risks.
-4. Always review idempotency, privilege boundaries, parameter validation, state transitions, transaction consistency, external-call failures, and compatibility.
-5. Generate a Codex task only when repository evidence is needed: Controller/Service/Mapper inspection, call-chain search, tests, or a minimal patch.
-6. The Codex task must constrain read and change scope. Do not let Codex refactor the API layer casually or change unconfirmed business semantics.
-7. After Codex reports back, review whether must-fix items are covered, tests hit the risks, and any implicit contract changes appeared.
-8. The developer confirms business rules, rollout timing, gray release, monitoring, and rollback conditions.
+## Materials You Can Accept
 
-## Output structure
+- Endpoint path, method, request parameters, response body, and error codes
+- Business rules, state transitions, idempotency, and transaction boundaries
+- Authentication, authorization, data permissions, signatures, replay protection, and audit needs
+- Compatibility, callers, gateway limits, fallbacks, and rollout plan
+- Related code, configuration, test results, and recent changes
 
-If information is missing, output:
+## Working Rules
 
-### Critical missing information
+1. First decide whether the information is enough; ask at most 3 critical questions if needed.
+2. Separate release blockers, recommended improvements, and acceptable risks.
+3. Cover permissions, security, idempotency, parameter boundaries, error handling, compatibility, and rate-limit risks.
+4. Generate a minimal Codex task only when code, config, or call chains need inspection.
 
-1. Question:
-   - Why it matters:
-2. Question:
-   - Why it matters:
-3. Question:
-   - Why it matters:
+## Output Structure
 
-If information is enough, output:
-
-### 1. Release review conclusion
-
-- Recommendation:
-- Main evidence:
+### 1. Release Judgment
+- Release recommendation:
 - Confidence:
 
-### 2. Risk grading
+### 2. Risk List
+- Blockers:
+- Improvements:
+- Acceptable risks:
 
-- High risks:
-- Medium risks:
-- Low risks:
+### 3. Key Evidence
+- Permissions / security:
+- Idempotency / transaction:
+- Parameters / error codes:
+- Compatibility / rate limits:
 
-### 3. Must-fix items
-
-- Change:
-- Reason:
+### 4. Minimal Remediation and Verification
+- Minimal change:
 - Verification:
+- Rollback concerns:
 
-### 4. Whether Codex is needed
-
-- Needed or not:
-- What Codex should inspect:
-- What Codex should not do:
-
-### 5. Codex execution task, only if needed
-
-- Objective:
-- Allowed read or change scope:
+### 5. Whether Codex Should Be Involved
+- Needed:
+- Minimal task:
 - Forbidden actions:
-- Steps:
-- Test commands:
-- Output requirements:
-
-### 6. Codex result review
-
-- Are release blockers addressed:
-- Are there API contract or business semantic changes:
-- Are idempotency, permission, and state tests covered:
-- Remaining release risks:
-- What the developer must confirm:</code></pre>
+- Evidence to return to GPT for review:</code></pre>
     </div>
   </section>
 
   <section>
     <h2>Why This Is More Controlled</h2>
-    <div class="block"><pre><code>API review becomes risky when code execution starts before permissions, idempotency, state, and transaction boundaries are clear. This workflow makes GPT produce the release-risk judgment first, then lets Codex inspect implementation, add tests, or create a minimal patch within a defined task, with GPT and the developer reviewing release risk afterward.</code></pre></div>
+    <div class="block"><pre><code>API release risk often hides in permissions, idempotency, compatibility, and failure paths. This workflow separates blockers from acceptable risks before asking Codex for narrow inspection.</code></pre></div>
   </section>
 
   <section>
     <h2>Usage Flow</h2>
-    <div class="block"><pre><code>1. Send endpoint path, request and response shape, business rules, permission model, idempotency needs, state transitions, external dependencies, and release constraints to GPT.
-2. GPT decides whether the material is enough and outputs a release recommendation, risk grading, and must-fix items.
-3. If code evidence is needed, GPT writes a Codex execution task.
-4. Codex only inspects Controller/Service/Mapper code, call chains, tests, or creates a minimal patch within that task.
-5. Return Codex file evidence, test results, and change scope to GPT for review.
-6. The developer confirms business rules, rollout strategy, monitoring alerts, and rollback conditions.</code></pre></div>
+    <div class="block"><pre><code>1. Send GPT the API definition, business rules, permissions, idempotency, error codes, and callers.
+2. GPT decides whether information is enough and identifies blockers.
+3. GPT reviews security, permissions, compatibility, rate limits, and regression risks.
+4. GPT outputs minimal remediation and verification.
+5. If code or config must be inspected, GPT creates a minimal Codex task.</code></pre></div>
   </section>
 
   <section>
     <h2>Example Input</h2>
-    <div class="block"><pre><code>Endpoint: POST /api/orders/{orderId}/cancel
+    <div class="block"><pre><code>Endpoint: POST /api/order/cancel cancels unpaid orders.
 
-Caller: mobile app. QPS is low, but users may tap repeatedly. The request body contains cancelReason and refundMethod. Only the order owner can cancel.
-
-The API updates order status, creates a refund request, and calls the payment provider asynchronously.
-
-Use this as a reference, not a form. Send whatever API material you have; GPT should ask for missing details.</code></pre></div>
+Known information: It must verify order ownership, repeated calls should return current state, callers include app and support console, and the gateway has basic limits. Please review release risk.</code></pre></div>
   </section>
 
   <section>
     <h2>Example Output</h2>
-    <div class="block"><pre><code>GPT review conclusion: conditionally ready, but repeated-cancel idempotency and inventory-release failure compensation must be addressed first; Codex should not rewrite the order state machine.
+    <div class="block"><pre><code>Release judgment: Do not release yet. Ownership checks, repeat-call semantics, and support-console permission boundaries need confirmation.
 
-Codex task: inspect only the cancel endpoint permission check, conditional status update, inventory release, MQ dispatch, and tests; add minimal idempotency protection and regression tests if missing.
-
-Review focus: horizontal privilege escalation, duplicate inventory release, external dependency failure after status update, and whether the API contract remains compatible.</code></pre></div>
+Minimal remediation: Define idempotent response, error codes, audit logs, and tests for unauthorized access and duplicate submissions.</code></pre></div>
   </section>
 
   <section>
     <h2>Usage</h2>
-    <div class="block"><pre><code>1. Copy the Core Prompt.
-2. Paste it into GPT or ChatGPT to start the API design review workflow.
-3. Send the real API contract, business rules, permissions, idempotency, state transitions, and release constraints.
-4. Let GPT give the release judgment before deciding whether Codex is needed.
-5. If implementation evidence is needed, send the GPT-generated task to Codex for inspection, tests, or a minimal patch.
-6. Return Codex output to GPT for review, then confirm release risk yourself.</code></pre></div>
+    <div class="block"><pre><code>1. Copy the Workflow Starter Prompt.
+2. Send the API definition, rules, permissions, idempotency, and error codes.
+3. Let GPT identify blockers and evidence gaps.
+4. If code or config needs inspection, let GPT create a minimal Codex task.
+5. Return Codex evidence to GPT for review.</code></pre></div>
   </section>
 
   <section>
     <h2>Do Not</h2>
-    <div class="block"><pre><code>- Do not ask Codex to implement while API boundaries are unclear
-- Do not skip idempotency, permissions, parameter boundaries, state transitions, and transaction consistency
-- Do not flatten all risks into the same severity
-- Do not let Codex casually refactor Controller, Service, or state-machine code
-- Do not change unconfirmed API contracts or error codes
-- Do not omit failure, repeated-submit, and privilege tests
-- Do not delegate release or gray-rollout decisions to AI</code></pre></div>
+    <div class="block"><pre><code>- Do not review only the happy path
+- Do not ignore authorization or data-permission risks
+- Do not delegate idempotency to the frontend
+- Do not release while compatibility is unclear
+- Do not ask Codex to rewrite the API broadly</code></pre></div>
   </section>
 </div>
 <script>

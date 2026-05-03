@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tech Lead Agent Prompt</title>
-  <meta name="description" content="Use a Tech Lead Agent prompt for technical decision-making, complexity control, risk identification, and Codex execution prompt generation.">
+  <title>Tech Lead Technical Judgment Workflow</title>
+  <meta name="description" content="Use this workflow to judge whether a technical solution is reasonable, over-engineered, or risky for data, state, concurrency, consistency, or execution scope.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,8 +28,8 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Tech Lead Agent Prompt</h1>
-  <p class="subtitle">Use a Tech Lead Agent prompt for technical decision-making, complexity control, risk identification, and Codex execution prompt generation.</p>
+  <h1>Tech Lead Technical Judgment Workflow</h1>
+  <p class="subtitle">Use this workflow to judge whether a technical solution is reasonable, over-engineered, or risky for data, state, concurrency, consistency, or execution scope.</p>
 
   <section>
     <h2>Scenario</h2>
@@ -229,6 +229,20 @@ When conflicts occur, use this priority order:
 
 Use the simplest structure to solve the problem correctly.</code></pre>
     </div>
+  </section>
+
+  <section>
+    <h2>Why This Is More Controlled</h2>
+    <div class="block"><pre><code>Tech Lead judgment should control complexity and boundaries before Codex execution. This workflow prevents vague requirements from becoming code-change tasks too early.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage Flow</h2>
+    <div class="block"><pre><code>1. Send the requirement, proposal, constraints, and doubts.
+2. GPT decides whether this is discussion or execution-ready.
+3. GPT reviews complexity, boundaries, data, state, and concurrency risks.
+4. GPT generates a minimal Codex task only when requirements are clear.
+5. Return Codex evidence to GPT for review.</code></pre></div>
   </section>
 
   <section>

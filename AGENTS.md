@@ -588,84 +588,44 @@ Codex 完成任务后，必须输出：
 
 ## 15. 当前已有 Prompt 页面登记表
 
+当前 PromptForge v2 已收口为 **9 个主工作流页面**。
+
+原则：
+
+- 首页只展示 9 个主工作流入口。
+- `data/prompts` 只保留 9 个主工作流 JSON。
+- 旧 Prompt 大全已废弃，不再保留长尾 Prompt 页面作为独立资产。
+- 已合并删除页面不要重复新增，除非重新确认产品方向和页面边界。
+- 新增页面必须非常谨慎，必须先判断是否能并入现有 9 个主工作流，避免重新变成细分 Prompt 大全。
+- 9 个主工作流 JSON 必须包含 `zh.cardTitle`、`zh.cardDescription`、`en.cardTitle`、`en.cardDescription`。
+
 状态说明：
 
-- 已上线：页面已存在，但不代表已符合最新会话启动器标准
-- 待重做：旧式模板或内容不符合当前标准
-- 待改造：内容有价值，但需要迁移为会话启动器结构
-- 已改造：已按“角色 Prompt / 输入参考 / 输出预览 / 使用说明”结构完成
-- 已合并删除：能力已并入更大的工作流，独立 JSON 和页面不再保留，后续不要重复新增
-- 草稿：尚未正式上线
+- 已保留：当前项目保留的主工作流页面。
+- 已合并删除：能力已并入主工作流，独立 JSON 和页面不再保留，后续不要重复新增。
 
 | 页面标题 | slug / 路由 | 类型 | 状态 | 核心场景 | 会话启动器改造 | 备注 |
 |---|---|---|---|---|---|---|
-| 慢SQL优化 Prompt | /slow-sql-optimization/ | 优化类 | 已改造 | MySQL 慢查询、EXPLAIN、索引优化、深分页 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 接口设计评审 Prompt | /api-design-review/ | 评审类 | 已改造 | 后端接口幂等性、安全性、扩展性、事务边界评审 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 灰度发布方案 Prompt | /gray-release-plan/ | 方案类 | 已改造 | 灰度对象、放量策略、监控、回滚、feature flag | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 日志分析 Prompt | /log-analysis/ | 排查类 | 已合并删除 | Java / Spring Boot 日志、堆栈、接口异常分析 | 否 | 已合并进 /problem-cause-analysis/ 线上问题排查工作流；独立 JSON 和页面已删除，后续不要重复新增 |
-| Bug定位 Prompt | /bug-location/ | 排查类 | 已合并删除 | 前后端 Bug 根因定位、复现、接口、日志、最近改动 | 否 | 已合并进 /problem-cause-analysis/ 线上问题排查工作流；独立 JSON 和页面已删除，后续不要重复新增 |
-| Redis使用评审 Prompt | /redis-usage-review/ | 评审类 | 已改造 | Redis key、TTL、数据结构、并发一致性评审 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 分布式事务方案 Prompt | /distributed-transaction-solution/ | 方案类 | 已改造 | 最终一致性、幂等、补偿、重试、对账方案 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| Codex + GPT 开发协作流 | /codex-gpt-workflow/ | 协作流 | 已改造 | GPT 负责收敛审查，Codex 负责执行代码 | 是 | 已改造为开发协作会话启动器，突出 GPT / Codex / 用户职责边界 |
-| API安全设计 Prompt | /api-security-design/ | 评审类 | 已改造 | API 权限、鉴权、参数安全、越权风险 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 接口超时问题排查 Prompt | /api-timeout-analysis/ | 排查类 | 已合并删除 | 接口慢、超时、调用链耗时定位 | 否 | 已合并进 /api-performance-analysis/ 性能与稳定性瓶颈分析工作流；独立 JSON 和页面已删除，后续不要重复新增 |
-| 缓存击穿/雪崩分析 Prompt | /cache-breakdown-avalanche-analysis/ | 排查类 | 已改造 | 缓存击穿、雪崩、热点 key 风险分析 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 数据一致性设计 Prompt | /data-consistency-design/ | 方案类 | 已改造 | 多表、多服务、异步任务、最终一致性设计 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 死锁问题排查 Prompt | /deadlock-troubleshooting/ | 排查类 | 已改造 | MySQL / Java 并发死锁排查 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 网关限流设计 Prompt | /gateway-rate-limit-design/ | 方案类 | 已改造 | 网关限流、降级、保护核心接口 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| GC问题分析 Prompt | /gc-problem-analysis/ | 排查类 | 已改造 | JVM GC 日志、停顿、内存压力分析 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 索引失效分析 Prompt | /index-failure-analysis/ | 优化类 | 已改造 | MySQL 索引失效、执行计划分析 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| JVM参数调优 Prompt | /jvm-parameter-tuning/ | 优化类 | 已改造 | JVM 参数、堆内存、GC 策略调优 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 日志规范设计 Prompt | /logging-standard-design/ | 方案类 | 已改造 | 日志字段、链路追踪、错误日志规范 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 监控报警设计 Prompt | /monitoring-alert-design/ | 方案类 | 已改造 | 指标、告警阈值、异常处理策略 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| MQ重复消费处理 Prompt | /mq-duplicate-consumption-handling/ | 排查类 | 已改造 | MQ 消费幂等、重复消息处理 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| MQ消息丢失排查 Prompt | /mq-message-loss-troubleshooting/ | 排查类 | 已改造 | MQ 生产、投递、消费链路丢失排查 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 权限模型设计 Prompt | /permission-model-design/ | 方案类 | 已改造 | RBAC、角色权限、数据权限设计 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| Redis大Key问题分析 Prompt | /redis-bigkey-analysis/ | 排查类 | 已改造 | Redis big key 识别、风险、拆分方案 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 服务雪崩分析 Prompt | /service-avalanche-analysis/ | 排查类 | 已合并删除 | 依赖故障、超时、线程池耗尽、雪崩定位 | 否 | 已合并进 /api-performance-analysis/ 性能与稳定性瓶颈分析工作流；独立 JSON 和页面已删除，后续不要重复新增 |
-| 系统瓶颈定位 Prompt | /system-bottleneck-analysis/ | 排查类 | 已合并删除 | CPU、内存、DB、Redis、接口瓶颈定位 | 否 | 已合并进 /api-performance-analysis/ 性能与稳定性瓶颈分析工作流；独立 JSON 和页面已删除，后续不要重复新增 |
-| 线程池配置优化 Prompt | /thread-pool-configuration-optimization/ | 优化类 | 已改造 | Java 线程池参数、队列、拒绝策略优化 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 性能与稳定性瓶颈分析工作流 | /api-performance-analysis/ | 优化类 | 已改造 | 接口慢、超时、P95/P99 抖动、资源瓶颈、依赖抖动、重试放大和服务雪崩风险 | 是 | 已升级为性能与稳定性主入口，并合并接口超时、系统瓶颈和服务雪崩能力 |
-| 缓存设计 Prompt | /cache-design/ | 方案类 | 已改造 | 缓存 key、TTL、一致性、穿透击穿雪崩设计 | 是 | 已按会话启动器结构改造，并修复 Prompt 区 HTML 提前闭合问题 |
-| 并发问题分析 Prompt | /concurrency-problem-analysis/ | 排查类 | 已改造 | 并发冲突、重复提交、线程安全、锁问题 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 数据库表设计 Prompt | /database-table-design/ | 方案类 | 已改造 | 表结构、字段、索引、约束、扩展性设计 | 是 | 已按角色 Prompt / 下一条消息示例 / 输出效果预览 / 使用说明结构改造 |
-| 分布式架构设计 Prompt | /distributed-architecture-design/ | 方案类 | 已改造 | 单体拆分、服务边界、调用链路、数据归属、一致性和高可用治理 | 是 | 已按角色 Prompt / 你接下来可以这样输入 / GPT 会这样输出 / 使用说明结构优化；全站审查未发现页面内旧式 {{}} 占位符 |
-| 线上问题排查工作流 | /problem-cause-analysis/ | 排查类 | 已改造 | 线上异常、接口失败、日志报错、数据状态异常、最近发布或配置变更排查 | 是 | 已升级为线上问题排查主入口，并合并 Bug 定位和日志分析能力 |
-| PromptForge English Home | /en/ | 首页 | 已改造 | 英文用户理解 PromptForge、GPT / Codex / Developer 协作模型与英文 MVP 导航 | 是 | 英文 MVP 首页，静态 HTML；未纳入 sitemap，留给后续任务 |
-| Codex + GPT Coding Workflow Prompt | /en/codex-gpt-workflow/ | 协作流 | 已改造 | 英文版 GPT 澄清和审查、Codex 执行代码、开发者控制合并决策 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Bug Investigation Prompt | /en/bug-location/ | 排查类 | 已合并删除 | 英文版生产 Bug 根因定位、复现、接口、日志、数据和最近改动分析 | 否 | 已合并进 /en/problem-cause-analysis/ Online Issue Troubleshooting Workflow；独立 JSON 和页面已删除，后续不要重复新增 |
-| Slow SQL Optimization Prompt | /en/slow-sql-optimization/ | 优化类 | 已改造 | 英文版慢 SQL、EXPLAIN、索引、表结构、数据量和回滚计划分析 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| API Design Review Prompt | /en/api-design-review/ | 评审类 | 已改造 | 英文版 API 幂等性、安全性、扩展性、失败场景和上线阻断项评审 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Redis Usage Review Prompt | /en/redis-usage-review/ | 评审类 | 已改造 | 英文版 Redis key、TTL、数据结构、一致性、热 key 和缓存风险评审 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Monitoring and Alert Design Prompt | /en/monitoring-alert-design/ | 方案类 | 已改造 | 英文版监控目标、关键指标、告警阈值、升级路径、降噪和发布验证设计 | 是 | 英文 MVP 页面，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Log Analysis Prompt for Developers | /en/log-analysis/ | 排查类 | 已合并删除 | 英文版日志、异常堆栈、请求时间线、trace ID、服务链路和最近变更分析 | 否 | 已合并进 /en/problem-cause-analysis/ Online Issue Troubleshooting Workflow；独立 JSON 和页面已删除，后续不要重复新增 |
-| API Timeout Analysis Prompt | /en/api-timeout-analysis/ | 排查类 | 已合并删除 | 英文版接口超时、响应慢、调用链阻塞、下游依赖、数据库、缓存和资源池分析 | 否 | 已合并进 /en/api-performance-analysis/ Performance and Stability Bottleneck Analysis Workflow；独立 JSON 和页面已删除，后续不要重复新增 |
-| GC Problem Analysis Prompt | /en/gc-problem-analysis/ | 排查类 | 已改造 | 英文版 JVM GC 频繁、Full GC、STW、内存增长、OOM 风险和吞吐下降分析 | 是 | 英文版 Prompt 页面，对应中文 /gc-problem-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| JVM Parameter Tuning Prompt | /en/jvm-parameter-tuning/ | 优化类 | 已改造 | 英文版 JVM 参数、GC 日志、服务负载、容器限制、延迟目标和回滚方案评审 | 是 | 英文版 Prompt 页面，对应中文 /jvm-parameter-tuning/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Index Failure Analysis Prompt | /en/index-failure-analysis/ | 优化类 | 已改造 | 英文版 MySQL 索引失效、优化器选错索引、谓词匹配、最左前缀和执行计划分析 | 是 | 英文版 Prompt 页面，对应中文 /index-failure-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Distributed Transaction Solution Prompt | /en/distributed-transaction-solution/ | 方案类 | 已改造 | 英文版分布式事务方案评审、业务边界、一致性模型、补偿、幂等、消息可靠性和回滚风险 | 是 | 英文版 Prompt 页面，对应中文 /distributed-transaction-solution/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Data Consistency Design Prompt | /en/data-consistency-design/ | 方案类 | 已改造 | 英文版跨服务、跨表、缓存、MQ、异步任务和外部回调一致性设计 | 是 | 英文版 Prompt 页面，对应中文 /data-consistency-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| MQ Message Loss Troubleshooting Prompt | /en/mq-message-loss-troubleshooting/ | 排查类 | 已改造 | 英文版 MQ 消息丢失、未投递、未消费、重试失败、死信堆积和业务未生效排查 | 是 | 英文版 Prompt 页面，对应中文 /mq-message-loss-troubleshooting/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| MQ Duplicate Consumption Handling Prompt | /en/mq-duplicate-consumption-handling/ | 排查类 | 已改造 | 英文版 MQ 重复消费处理、业务幂等、去重键、事务边界、重试和副作用控制 | 是 | 英文版 Prompt 页面，对应中文 /mq-duplicate-consumption-handling/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Cache Breakdown and Avalanche Analysis Prompt | /en/cache-breakdown-avalanche-analysis/ | 排查类 | 已改造 | 英文版缓存穿透、击穿、雪崩、热点 key、大 key、TTL 集中失效和数据库压力分析 | 是 | 英文版 Prompt 页面，对应中文 /cache-breakdown-avalanche-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Performance and Stability Bottleneck Analysis Workflow | /en/api-performance-analysis/ | 优化类 | 已改造 | 英文版接口慢、超时、P95/P99 抖动、资源瓶颈、依赖抖动、重试放大和服务雪崩风险 | 是 | 已升级为性能与稳定性主入口，并合并 API timeout、system bottleneck 和 service avalanche 能力 |
-| API Security Design Prompt | /en/api-security-design/ | 评审类 | 已改造 | 英文版 API 鉴权、授权、敏感数据、重放、防刷、签名和审计设计 | 是 | 英文版 Prompt 页面，对应中文 /api-security-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Cache Design Prompt | /en/cache-design/ | 方案类 | 已改造 | 英文版缓存 key、TTL、一致性、穿透、击穿、雪崩、预热和降级设计 | 是 | 英文版 Prompt 页面，对应中文 /cache-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Concurrency Problem Analysis Prompt | /en/concurrency-problem-analysis/ | 排查类 | 已改造 | 英文版并发冲突、重复提交、线程安全、锁、幂等和事务边界分析 | 是 | 英文版 Prompt 页面，对应中文 /concurrency-problem-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Database Table Design Prompt | /en/database-table-design/ | 方案类 | 已改造 | 英文版数据库表结构、字段、索引、约束、查询模式和迁移风险设计 | 是 | 英文版 Prompt 页面，对应中文 /database-table-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Deadlock Troubleshooting Prompt | /en/deadlock-troubleshooting/ | 排查类 | 已改造 | 英文版数据库或应用死锁、锁等待、事务 SQL、索引和隔离级别排查 | 是 | 英文版 Prompt 页面，对应中文 /deadlock-troubleshooting/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Distributed Architecture Design Prompt | /en/distributed-architecture-design/ | 方案类 | 已改造 | 英文版分布式架构、服务边界、数据归属、通信、一致性和可观测性设计 | 是 | 英文版 Prompt 页面，对应中文 /distributed-architecture-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Gateway Rate Limit Design Prompt | /en/gateway-rate-limit-design/ | 方案类 | 已改造 | 英文版网关限流、调用方维度、QPS、突发流量、降级、防刷和监控设计 | 是 | 英文版 Prompt 页面，对应中文 /gateway-rate-limit-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Gray Release Plan Prompt | /en/gray-release-plan/ | 方案类 | 已改造 | 英文版灰度发布、放量节奏、观察窗口、指标、暂停条件、回滚和兼容性计划 | 是 | 英文版 Prompt 页面，对应中文 /gray-release-plan/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Logging Standard Design Prompt | /en/logging-standard-design/ | 方案类 | 已改造 | 英文版日志字段、trace ID、业务 ID、错误码、日志级别、脱敏和审计规范设计 | 是 | 英文版 Prompt 页面，对应中文 /logging-standard-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Permission Model Design Prompt | /en/permission-model-design/ | 方案类 | 已改造 | 英文版权限模型、角色、资源、动作、数据范围、归属、管理员边界和审计设计 | 是 | 英文版 Prompt 页面，对应中文 /permission-model-design/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Online Issue Troubleshooting Workflow | /en/problem-cause-analysis/ | 排查类 | 已改造 | 英文版线上异常、接口失败、日志报错、数据状态异常、最近发布或配置变更排查 | 是 | 已升级为线上问题排查主入口，并合并 Bug investigation 和 log analysis 能力 |
-| Redis Big Key Analysis Prompt | /en/redis-bigkey-analysis/ | 排查类 | 已改造 | 英文版 Redis big key 识别、内存倾斜、命令延迟、拆分、迁移和验证分析 | 是 | 英文版 Prompt 页面，对应中文 /redis-bigkey-analysis/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
-| Service Avalanche Analysis Prompt | /en/service-avalanche-analysis/ | 排查类 | 已合并删除 | 英文版服务雪崩、依赖故障、超时放大、重试风暴、线程池耗尽和隔离分析 | 否 | 已合并进 /en/api-performance-analysis/ Performance and Stability Bottleneck Analysis Workflow；独立 JSON 和页面已删除，后续不要重复新增 |
-| System Bottleneck Analysis Prompt | /en/system-bottleneck-analysis/ | 排查类 | 已合并删除 | 英文版系统瓶颈、CPU、内存、DB、Redis、MQ、线程池、连接池和队列定位 | 否 | 已合并进 /en/api-performance-analysis/ Performance and Stability Bottleneck Analysis Workflow；独立 JSON 和页面已删除，后续不要重复新增 |
-| Thread Pool Configuration Optimization Prompt | /en/thread-pool-configuration-optimization/ | 优化类 | 已改造 | 英文版 Java 线程池参数、队列、拒绝策略、下游容量、监控和回滚评审 | 是 | 英文版 Prompt 页面，对应中文 /thread-pool-configuration-optimization/，按 Role Prompt / What to provide next / Expected output preview / Usage notes 结构新增 |
+| 线上问题排查工作流 | /problem-cause-analysis/ | 排查类 | 已保留 | 线上异常、接口失败、日志报错、表现不一致、Bug 定位、日志分析、最近变更排查 | 是 | 主工作流入口，合并 bug-location、log-analysis、api-timeout-analysis 第一批排查能力中的通用问题排查部分 |
+| 性能与稳定性瓶颈分析工作流 | /api-performance-analysis/ | 优化类 | 已保留 | 接口变慢、超时、P95/P99 抖动、系统瓶颈、服务雪崩、依赖连锁异常 | 是 | 主工作流入口，合并 api-timeout-analysis、system-bottleneck-analysis、service-avalanche-analysis |
+| SQL 与数据库优化工作流 | /slow-sql-optimization/ | 优化类 | 已保留 | 慢 SQL、索引失效、死锁、表结构、事务锁等待、执行计划、数据量和分页 | 是 | 主工作流入口，合并 index-failure-analysis、deadlock-troubleshooting、database-table-design |
+| 缓存与 Redis 稳定性评审工作流 | /redis-usage-review/ | 评审类 | 已保留 | Redis 使用评审、缓存设计、Key、TTL、一致性、大 Key、热点 Key、穿透、击穿、雪崩 | 是 | 主工作流入口，合并 redis-bigkey-analysis、cache-design、cache-breakdown-avalanche-analysis |
+| 接口上线前评审工作流 | /api-design-review/ | 评审类 | 已保留 | 接口设计、API 安全、权限、幂等、参数边界、错误码、兼容性、网关限流风险 | 是 | 主工作流入口，合并 api-security-design、gateway-rate-limit-design、permission-model-design |
+| 分布式方案评审工作流 | /distributed-architecture-design/ | 方案类 | 已保留 | 分布式架构、数据一致性、分布式事务、MQ 丢失、MQ 重复消费、补偿、对账 | 是 | 主工作流入口，合并 distributed-transaction-solution、data-consistency-design、mq-message-loss-troubleshooting、mq-duplicate-consumption-handling |
+| 发布与监控设计工作流 | /monitoring-alert-design/ | 方案类 | 已保留 | 灰度发布、监控报警、日志规范、上线观察、回滚条件、故障处理动作 | 是 | 主工作流入口，合并 gray-release-plan、logging-standard-design |
+| Tech Lead 技术判断工作流 | /tech-lead-agent/ | 协作流 | 已保留 | 技术方案判断、复杂度控制、边界控制、风险识别和 Codex 执行前判断 | 是 | 主工作流入口，保留现有 Tech Lead Agent 能力 |
+| Codex + GPT 开发协作流 | /codex-gpt-workflow/ | 协作流 | 已保留 | GPT 收敛需求和审查证据，Codex 执行代码，开发者控制最终决策 | 是 | 主工作流入口，保留现有 GPT / Codex 协作能力 |
 
----
+已合并删除页面记录：
+
+- `bug-location`、`log-analysis` 已合并进 `problem-cause-analysis`。
+- `api-timeout-analysis`、`system-bottleneck-analysis`、`service-avalanche-analysis` 已合并进 `api-performance-analysis`。
+- `index-failure-analysis`、`deadlock-troubleshooting`、`database-table-design` 已合并进 `slow-sql-optimization`。
+- `redis-bigkey-analysis`、`cache-design`、`cache-breakdown-avalanche-analysis` 已合并进 `redis-usage-review`。
+- `api-security-design`、`gateway-rate-limit-design`、`permission-model-design` 已合并进 `api-design-review`。
+- `distributed-transaction-solution`、`data-consistency-design`、`mq-message-loss-troubleshooting`、`mq-duplicate-consumption-handling` 已合并进 `distributed-architecture-design`。
+- `gray-release-plan`、`logging-standard-design` 已合并进 `monitoring-alert-design`。
+- `concurrency-problem-analysis`、`gc-problem-analysis`、`jvm-parameter-tuning`、`thread-pool-configuration-optimization` 不再作为独立主入口保留；后续如需恢复，必须重新确认是否属于 9 个主工作流之外的新产品边界。
 
 ## 16. 首页与文案调整提醒
 

@@ -13,70 +13,16 @@
     <loc>https://prompt.learnaiwithcode.com/api-performance-analysis/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/api-security-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/cache-breakdown-avalanche-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/cache-design/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/codex-gpt-workflow/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/concurrency-problem-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/data-consistency-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/database-table-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/deadlock-troubleshooting/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/distributed-architecture-design/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/distributed-transaction-solution/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/gateway-rate-limit-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/gc-problem-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/gray-release-plan/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/index-failure-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/jvm-parameter-tuning/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/logging-standard-design/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/monitoring-alert-design/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/mq-duplicate-consumption-handling/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/mq-message-loss-troubleshooting/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/permission-model-design/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/problem-cause-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/redis-bigkey-analysis/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/redis-usage-review/</loc>
@@ -88,79 +34,22 @@
     <loc>https://prompt.learnaiwithcode.com/tech-lead-agent/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/thread-pool-configuration-optimization/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/en/api-design-review/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/en/api-performance-analysis/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/en/api-security-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/cache-breakdown-avalanche-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/cache-design/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/en/codex-gpt-workflow/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/concurrency-problem-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/data-consistency-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/database-table-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/deadlock-troubleshooting/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/en/distributed-architecture-design/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/en/distributed-transaction-solution/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/gateway-rate-limit-design/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/gc-problem-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/gray-release-plan/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/index-failure-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/jvm-parameter-tuning/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/logging-standard-design/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/en/monitoring-alert-design/</loc>
   </url>
   <url>
-    <loc>https://prompt.learnaiwithcode.com/en/mq-duplicate-consumption-handling/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/mq-message-loss-troubleshooting/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/permission-model-design/</loc>
-  </url>
-  <url>
     <loc>https://prompt.learnaiwithcode.com/en/problem-cause-analysis/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/redis-bigkey-analysis/</loc>
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/en/redis-usage-review/</loc>
@@ -170,8 +59,5 @@
   </url>
   <url>
     <loc>https://prompt.learnaiwithcode.com/en/tech-lead-agent/</loc>
-  </url>
-  <url>
-    <loc>https://prompt.learnaiwithcode.com/en/thread-pool-configuration-optimization/</loc>
   </url>
 </urlset>

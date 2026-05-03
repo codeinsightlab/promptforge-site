@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redis Usage Review Workflow</title>
-  <meta name="description" content="Use GPT to review key design, TTL, data structure, consistency, and capacity risks first, then let Codex inspect call chains, configuration, or minimal tests only when needed.">
+  <title>Cache and Redis Stability Review Workflow</title>
+  <meta name="description" content="Review Redis and cache stability risks across key design, TTL, consistency, big keys, hot keys, penetration, breakdown, avalanche, fallback behavior, and origin-load pressure.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,155 +28,128 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Redis Usage Review Workflow</h1>
+  <h1>Cache and Redis Stability Review Workflow</h1>
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this workflow before a Redis design ships when key design, TTL, value size, hot keys, breakdown, penetration, avalanche, consistency, and database fallback still need evidence-based review.</p>
+    <p>Use this for cache design or production Redis risk review. GPT reviews key design, data structures, TTL, expiration strategy, consistency, hot keys, big keys, penetration, breakdown, avalanche, origin-load pressure, fallback plans, memory, and slow commands. Codex is used only when code, configuration, or key usage needs narrow inspection.</p>
   </section>
 
   <section>
     <h2>What You Get</h2>
-    <div class="block"><pre><code>- A review conclusion for Redis keys, TTL, value structure, data volume, and hot-key risk
-- A risk list covering penetration, breakdown, avalanche, big keys, hot keys, blocking commands, and consistency
-- Required changes before release, deferrable improvements, and monitoring metrics
-- A controlled Codex task for call-chain inspection, configuration checks, tests, or a minimal patch
-- Review criteria for Codex output covering implementation scope, monitoring evidence, test coverage, and fallback risk
-- Developer decision points for business consistency, capacity budget, degradation strategy, and release risk</code></pre></div>
+    <div class="block"><pre><code>- Redis usage, cache design, key, TTL, and consistency risk review
+- Big key, hot key, penetration, breakdown, avalanche, and origin-load analysis
+- Data structure, expiration, fallback, and warm-up risk assessment
+- Minimal remediation path, validation metrics, and rollback risk
+- Minimal Codex inspection task when needed</code></pre></div>
   </section>
 
   <section>
     <h2>Core Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
-      <pre><code id="redis-usage-review-prompt"># GPT + Codex Redis Usage Review Workflow Starter
+      <pre><code id="redis-usage-review-prompt"># GPT + Codex Cache and Redis Stability Review Workflow Starter
 
-You are the GPT coordinator for a controlled Redis usage review. First reason from the business scenario, key design, TTL, data structure, read/write frequency, value size, consistency requirement, database fallback, and monitoring signals. Do not ask Codex to change cache code immediately.
+You are a senior cache and Redis stability reviewer. You evaluate key design, TTL, consistency, data structures, big keys, hot keys, penetration, breakdown, avalanche, origin-load pressure, fallback, and warm-up strategies.
 
-## Working method
+Your goal is not to rewrite cache code directly. Your goal is to identify correctness, stability, and capacity risks first, then choose the smallest validation action.
 
-1. Decide whether the current Redis design material is enough to assess release risk.
-2. If information is missing, ask at most 3 critical questions, such as key cardinality, value size, TTL strategy, hot-key QPS, update behavior, or database fallback.
-3. If information is enough, output overall risk level, main risks, trigger conditions, impact scope, and required changes.
-4. Always check penetration, breakdown, avalanche, hot keys, big keys, blocking commands, memory growth, consistency, and degradation path.
-5. Generate a Codex task only when repository evidence is needed: cache call-chain inspection, configuration checks, key construction, TTL settings, tests, or a minimal patch.
-6. The Codex task must constrain read and change scope. Do not turn one Redis review into a cache-framework refactor.
-7. After Codex reports back, review whether the implementation meets the risk-control target, whether tests cover high-risk paths, and whether monitoring is observable.
-8. The developer confirms business consistency, capacity budget, degradation strategy, rollout timing, and rollback conditions.
+## Materials You Can Accept
 
-## Output structure
+- Cache goal, key design, value structure, TTL, and expiration strategy
+- Data update path, consistency model, and origin-load logic
+- Redis commands, data structures, memory, slow commands, and hot access
+- Penetration, breakdown, avalanche, big key, hot key, and fallback evidence
+- Related code, configuration, metrics, and recent changes
 
-If information is missing, output:
+## Working Rules
 
-### Critical missing information
+1. First decide whether the information is enough.
+2. If information is missing, ask at most 3 critical questions.
+3. Separate correctness, capacity, hotspot, and failure-amplification risks.
+4. Cover key design, TTL, consistency, big keys, hot keys, penetration, breakdown, and avalanche.
+5. Recommendations must include validation metrics and rollback risk.
+6. Generate a minimal Codex task only when code, config, key usage, or monitoring commands need inspection.
 
-1. Question:
-   - Why it matters:
-2. Question:
-   - Why it matters:
-3. Question:
-   - Why it matters:
+## Output Structure
 
-If information is enough, output:
-
-### 1. Review conclusion
-
-- Risk level:
-- Main reason:
+### 1. One-Line Review
+- Conclusion:
 - Confidence:
 
-### 2. Risk list
+### 2. Risk Classification
+- Correctness:
+- Capacity:
+- Hotspots:
+- Failure amplification:
 
-- Risk:
-- Trigger condition:
-- Impact scope:
-- Required change:
+### 3. Key Evidence
+- Key / TTL:
+- Consistency:
+- Big keys / hot keys:
+- Penetration / breakdown / avalanche:
 
-### 3. Monitoring and verification
+### 4. Minimal Remediation Path
+- First step:
+- Validation metrics:
+- Rollback risk:
 
-- Metric:
-- Alert signal:
-- Verification:
-
-### 4. Whether Codex is needed
-
-- Needed or not:
-- What Codex should inspect:
-- What Codex should not do:
-
-### 5. Codex execution task, only if needed
-
-- Objective:
-- Allowed read or change scope:
+### 5. Whether Codex Should Be Involved
+- Needed:
+- Minimal task:
 - Forbidden actions:
-- Steps:
-- Test or check commands:
-- Output requirements:
-
-### 6. Codex result review
-
-- Are high-risk items controlled:
-- Are there business semantic changes:
-- Are tests and monitoring covered:
-- Are degradation and rollback clear:
-- What the developer must confirm:</code></pre>
+- Evidence to return to GPT for review:</code></pre>
     </div>
   </section>
 
   <section>
     <h2>Why This Is More Controlled</h2>
-    <div class="block"><pre><code>Redis review becomes risky when AI jumps straight into code and turns key, TTL, or consistency problems into local patches or a cache-framework refactor. This workflow makes GPT assess value, risk, and evidence gaps first, then lets Codex perform controlled call-chain inspection, configuration checks, tests, or a minimal patch before capacity, fallback, and release risks are confirmed.</code></pre></div>
+    <div class="block"><pre><code>Cache failures often mix correctness, capacity, and failure amplification. This workflow separates key, TTL, consistency, hotspot, and origin-load evidence before asking Codex for narrow inspection.</code></pre></div>
   </section>
 
   <section>
     <h2>Usage Flow</h2>
-    <div class="block"><pre><code>1. Send business scenario, key design, value structure, TTL, QPS, data volume, update behavior, consistency needs, and database fallback to GPT.
-2. GPT decides whether the material is enough and outputs risk level, required changes, and monitoring verification.
-3. If code evidence is needed, GPT writes a Codex execution task.
-4. Codex only inspects cache call chains, key construction, TTL configuration, tests, or creates a minimal patch within that task.
-5. Return Codex file evidence, test results, configuration changes, and risks to GPT for review.
-6. The developer confirms business consistency, capacity budget, degradation strategy, rollout timing, and rollback plan.</code></pre></div>
+    <div class="block"><pre><code>1. Send GPT key design, TTL, data structure, consistency strategy, metrics, and symptoms.
+2. GPT decides whether the information is enough and classifies cache risk.
+3. GPT reviews big keys, hot keys, penetration, breakdown, avalanche, and origin-load pressure.
+4. GPT outputs the minimal remediation path and validation metrics.
+5. If code or config needs inspection, GPT creates a minimal Codex task.</code></pre></div>
   </section>
 
   <section>
     <h2>Example Input</h2>
-    <div class="block"><pre><code>Key pattern: product:detail:{productId}
+    <div class="block"><pre><code>Scenario: A product detail page uses Redis cache. Redis memory recently increased and the product service sometimes slows down.
 
-Value: JSON product detail, usually 3 KB but can reach 80 KB for complex products. TTL is 30 minutes. The cache is deleted after product updates.
+Known information: Keys do not use a consistent prefix, some values are large, popular products have high QPS, and TTLs expire around the hour. Database origin load rises sharply at the hour.
 
-Traffic: the top 100 products receive most reads during campaigns. Missing cache falls back to MySQL.
-
-Use this as a reference, not a form. Send whatever Redis material you have; GPT should ask for missing details.</code></pre></div>
+Please review whether this is key design, TTL, hot key, big key, breakdown, or avalanche risk. If code inspection is needed, only check product cache reads, writes, TTL settings, and fallback logic.</code></pre></div>
   </section>
 
   <section>
     <h2>Example Output</h2>
-    <div class="block"><pre><code>GPT review conclusion: product base information can be cached, but price should not be tightly coupled to a 30-minute product-detail JSON; hot-key and breakdown risk are medium-high during campaigns.
+    <div class="block"><pre><code>Conclusion: The main risk is concentrated TTL expiry plus hot-key origin load, with additional big-key and key-standardization risks.
 
-Codex task: inspect only product-detail cache keys, TTL settings, invalidation flow, and related tests; if missing, add minimal TTL jitter or hot-key protection.
+Minimal path: Measure key size, hot keys, expiration distribution, and origin QPS before deciding TTL jitter, hot-key protection, and fallback.
 
-Review focus: avoiding cache-framework refactors, keeping price consistency explicit, and verifying database fallback plus monitoring metrics.</code></pre></div>
+Codex involvement: Optional. Check only product cache reads, writes, TTL settings, and fallback logic. Do not refactor the cache layer.</code></pre></div>
   </section>
 
   <section>
     <h2>Usage</h2>
-    <div class="block"><pre><code>1. Copy the Core Prompt.
-2. Paste it into GPT or ChatGPT to start the Redis usage review workflow.
-3. Send real key design, TTL, data structure, QPS, update behavior, consistency, and monitoring context.
-4. Let GPT decide the risk and whether Codex is needed.
-5. If implementation evidence is needed, send the GPT-generated task to Codex for call-chain checks, configuration checks, tests, or a minimal patch.
-6. Return Codex output to GPT for review, then confirm release risk yourself.</code></pre></div>
+    <div class="block"><pre><code>1. Copy the Workflow Starter Prompt.
+2. Send cache goals, keys, TTL, consistency strategy, and metrics.
+3. Let GPT classify cache risks first.
+4. If code or config inspection is needed, let GPT create a minimal Codex task.
+5. Return Codex evidence to GPT for review.</code></pre></div>
   </section>
 
   <section>
     <h2>Do Not</h2>
-    <div class="block"><pre><code>- Do not assume all data should be cached
-- Do not skip key cardinality, value size, TTL, hot-key, and consistency evidence
-- Do not let Codex turn one review into a cache-framework refactor
-- Do not add complex abstractions for hypothetical future scenarios
-- Do not leave database fallback, degradation, and monitoring as generic advice
-- Do not claim the design is safe without capacity and hit-ratio evidence
-- Do not delegate business consistency tradeoffs or rollout timing to AI</code></pre></div>
+    <div class="block"><pre><code>- Do not inspect Redis commands while ignoring business consistency
+- Do not ignore big keys, hot keys, or origin-load pressure
+- Do not treat TTL changes as the only solution
+- Do not refactor cache code without evidence
+- Do not ask Codex for broad cache-layer changes</code></pre></div>
   </section>
 </div>
 <script>

@@ -22,35 +22,16 @@ const fieldHeadings = {
 };
 
 const categoryBySlug = {
-  "api-design-review": "api",
-  "api-performance-analysis": "api",
-  "api-security-design": "security",
-  "cache-breakdown-avalanche-analysis": "cache",
-  "cache-design": "cache",
-  "codex-gpt-workflow": "dev-workflow",
-  "concurrency-problem-analysis": "java-runtime",
-  "data-consistency-design": "architecture",
-  "database-table-design": "database",
-  "deadlock-troubleshooting": "database",
-  "distributed-architecture-design": "architecture",
-  "distributed-transaction-solution": "architecture",
-  "gateway-rate-limit-design": "api",
-  "gc-problem-analysis": "java-runtime",
-  "gray-release-plan": "architecture",
-  "index-failure-analysis": "database",
-  "jvm-parameter-tuning": "java-runtime",
-  "logging-standard-design": "observability",
-  "monitoring-alert-design": "observability",
-  "mq-duplicate-consumption-handling": "messaging",
-  "mq-message-loss-troubleshooting": "messaging",
-  "permission-model-design": "security",
   "problem-cause-analysis": "bug-troubleshooting",
-  "redis-bigkey-analysis": "cache",
-  "redis-usage-review": "cache",
+  "api-performance-analysis": "api",
   "slow-sql-optimization": "database",
+  "redis-usage-review": "cache",
+  "api-design-review": "api",
+  "distributed-architecture-design": "architecture",
+  "monitoring-alert-design": "observability",
   "tech-lead-agent": "dev-workflow",
-  "thread-pool-configuration-optimization": "java-runtime",
-};
+  "codex-gpt-workflow": "dev-workflow",
+}
 
 function decodeHtml(value) {
   return value
