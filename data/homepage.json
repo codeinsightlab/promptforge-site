@@ -1,0 +1,141 @@
+{
+  "hero": {
+    "zh": {
+      "brand": "PromptForge",
+      "title": "开箱即用的 AI Prompt 工作流库",
+      "subtitle": "沉淀真实场景中反复使用的 Prompt，把技术协作、外包沟通、内容创作和个人效率，做成可以直接复制使用的工作流。",
+      "meta": "PromptForge 是开箱即用的 AI Prompt 工作流库，沉淀技术协作、外包沟通、内容创作和个人效率场景中的可复用 Prompt。",
+      "primaryCta": "查看工作流",
+      "primaryHref": "#technical-collaboration",
+      "secondaryCta": "查看协作方法",
+      "secondaryHref": "#ai-collaboration"
+    },
+    "en": {
+      "brand": "PromptForge",
+      "title": "Ready-to-use AI prompt workflows",
+      "subtitle": "Practical prompts refined from real workflows, covering technical collaboration, freelance communication, content creation, and personal productivity.",
+      "meta": "PromptForge is a ready-to-use AI prompt workflow library for technical collaboration, freelance communication, content creation, and personal productivity.",
+      "primaryCta": "Browse workflows",
+      "primaryHref": "#technical-collaboration",
+      "secondaryCta": "View collaboration methods",
+      "secondaryHref": "#ai-collaboration"
+    }
+  },
+  "featured": {
+    "id": "featured",
+    "zh": {
+      "title": "推荐入口",
+      "description": "先用一个高层判断入口，把需求、风险和执行边界收住。"
+    },
+    "en": {
+      "title": "Featured",
+      "description": "Start with a high-level judgment prompt before turning a request into execution."
+    },
+    "items": [
+      {
+        "slug": "tech-lead-agent",
+        "zh": {
+          "title": "Tech Lead 技术判断",
+          "description": "进入 GPT + Codex 协作前，先判断方案、边界、风险和最小执行路径。",
+          "tags": ["技术判断", "范围控制", "Codex 前置"],
+          "cta": "进入 Tech Lead"
+        },
+        "en": {
+          "title": "Tech Lead Agent",
+          "description": "Before GPT + Codex execution, judge the solution, scope, risks, and smallest implementation path.",
+          "tags": ["Technical judgment", "Scope control", "Before Codex"],
+          "cta": "Enter Tech Lead"
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "technical-collaboration",
+      "hideWhenEmpty": true,
+      "zh": {
+        "title": "技术协作",
+        "description": "用于 Bug 定位、性能优化、数据库、缓存、接口评审、架构和发布监控等技术场景。",
+        "defaultCta": "打开 Prompt"
+      },
+      "en": {
+        "title": "Technical Collaboration",
+        "description": "For debugging, performance, databases, cache, API review, architecture, release, and monitoring.",
+        "defaultCta": "Open prompt"
+      },
+      "items": [
+        { "slug": "problem-cause-analysis", "zh": { "tags": ["排查", "线上问题", "证据链"], "cta": "启动排查" }, "en": { "tags": ["Troubleshooting", "Production", "Evidence"], "cta": "Start troubleshooting" } },
+        { "slug": "api-performance-analysis", "zh": { "tags": ["性能", "稳定性", "瓶颈"], "cta": "分析瓶颈" }, "en": { "tags": ["Performance", "Stability", "Bottlenecks"], "cta": "Analyze bottlenecks" } },
+        { "slug": "slow-sql-optimization", "zh": { "tags": ["SQL", "索引", "数据库"], "cta": "优化数据库" }, "en": { "tags": ["SQL", "Indexes", "Database"], "cta": "Optimize database" } },
+        { "slug": "redis-usage-review", "zh": { "tags": ["Redis", "缓存", "稳定性"], "cta": "评审缓存" }, "en": { "tags": ["Redis", "Cache", "Stability"], "cta": "Review cache" } },
+        { "slug": "api-design-review", "zh": { "tags": ["接口", "上线前", "风险"], "cta": "评审接口" }, "en": { "tags": ["API", "Pre-release", "Risk"], "cta": "Review API" } },
+        { "slug": "distributed-architecture-design", "zh": { "tags": ["架构", "一致性", "MQ"], "cta": "评审方案" }, "en": { "tags": ["Architecture", "Consistency", "MQ"], "cta": "Review design" } },
+        { "slug": "monitoring-alert-design", "zh": { "tags": ["发布", "监控", "回滚"], "cta": "设计发布" }, "en": { "tags": ["Release", "Monitoring", "Rollback"], "cta": "Design release" } }
+      ]
+    },
+    {
+      "id": "freelance-client-work",
+      "hideWhenEmpty": true,
+      "zh": {
+        "title": "外包 / 接单",
+        "description": "用于甲方沟通、需求边界、报价工期、验收售后和范围控制。",
+        "defaultCta": "打开 Prompt"
+      },
+      "en": {
+        "title": "Freelance & Client Work",
+        "description": "For client communication, scope boundaries, pricing, timelines, acceptance, and support.",
+        "defaultCta": "Open prompt"
+      },
+      "items": [
+        { "slug": "freelance-client-communication", "zh": { "tags": ["甲方沟通", "需求边界", "售后风险"], "cta": "开始沟通" }, "en": { "tags": ["Client comms", "Scope", "Support risk"], "cta": "Start advising" } }
+      ]
+    },
+    {
+      "id": "content-creation",
+      "hideWhenEmpty": true,
+      "zh": {
+        "title": "内容创作",
+        "description": "用于选题、标题、短文案、社交平台内容和创作流程。",
+        "defaultCta": "打开 Prompt"
+      },
+      "en": {
+        "title": "Content Creation",
+        "description": "For topics, titles, short copy, social posts, and repeatable content workflows.",
+        "defaultCta": "Open prompt"
+      },
+      "items": []
+    },
+    {
+      "id": "personal-productivity",
+      "hideWhenEmpty": true,
+      "zh": {
+        "title": "个人效率",
+        "description": "用于学习计划、英语聊天、日常决策和个人工作流。",
+        "defaultCta": "打开 Prompt"
+      },
+      "en": {
+        "title": "Personal Productivity",
+        "description": "For learning plans, English practice, daily decisions, and personal workflows.",
+        "defaultCta": "Open prompt"
+      },
+      "items": []
+    },
+    {
+      "id": "ai-collaboration",
+      "hideWhenEmpty": true,
+      "zh": {
+        "title": "AI 协作方法",
+        "description": "用于 GPT 与 Codex 的分工、任务拆分、审查和执行规范。",
+        "defaultCta": "查看方法"
+      },
+      "en": {
+        "title": "AI Collaboration Methods",
+        "description": "For GPT and Codex roles, task framing, review, and execution rules.",
+        "defaultCta": "View method"
+      },
+      "items": [
+        { "slug": "codex-gpt-workflow", "zh": { "tags": ["GPT", "Codex", "执行规范"], "cta": "查看协作方式" }, "en": { "tags": ["GPT", "Codex", "Execution rules"], "cta": "View collaboration method" } }
+      ]
+    }
+  ]
+}

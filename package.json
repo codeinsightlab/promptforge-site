@@ -2,7 +2,7 @@
   "scripts": {
     "validate": "node scripts/validate-prompts.js",
     "generate": "node scripts/generate-prompts.js",
-    "build": "npm run validate && npm run generate && node scripts/build-dist.js",
+    "build": "npm run validate && npm run generate && npm run generate:index && node scripts/build-dist.js",
     "generate:index": "node scripts/generate-index.js"
   }
 }

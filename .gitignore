@@ -1,10 +1,12 @@
 data/*
+!data/homepage.json
 !data/prompts/
 data/prompts/*
 !data/prompts/*.json
 
 scripts/*
 !scripts/extract-prompts.js
+!scripts/generate-index.js
 !scripts/generate-prompts.js
 !scripts/build-dist.js
 !scripts/validate-prompts.js

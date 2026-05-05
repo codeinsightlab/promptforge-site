@@ -588,20 +588,21 @@ Codex 完成任务后，必须输出：
 
 ## 15. 当前已有 Prompt 页面登记表
 
-当前 PromptForge v2 已收口为 **9 个主工作流页面**。
+当前 PromptForge v2 已收口为 **9 个主工作流页面**，并新增 **1 个外包 / 接单场景 Prompt**。
 
 原则：
 
-- 首页只展示 9 个主工作流入口。
-- `data/prompts` 只保留 9 个主工作流 JSON。
+- 首页按开发者工作场景分组展示入口。
+- `data/prompts` 保留 9 个主工作流 JSON，并允许少量经确认的新工作场景 Prompt。
 - 旧 Prompt 大全已废弃，不再保留长尾 Prompt 页面作为独立资产。
 - 已合并删除页面不要重复新增，除非重新确认产品方向和页面边界。
 - 新增页面必须非常谨慎，必须先判断是否能并入现有 9 个主工作流，避免重新变成细分 Prompt 大全。
-- 9 个主工作流 JSON 必须包含 `zh.cardTitle`、`zh.cardDescription`、`en.cardTitle`、`en.cardDescription`。
+- 9 个主工作流 JSON 和新增工作场景 Prompt 必须包含 `zh.cardTitle`、`zh.cardDescription`、`en.cardTitle`、`en.cardDescription`。
 
 状态说明：
 
 - 已保留：当前项目保留的主工作流页面。
+- 已新增：当前项目新增的非主工作流场景 Prompt。
 - 已合并删除：能力已并入主工作流，独立 JSON 和页面不再保留，后续不要重复新增。
 
 | 页面标题 | slug / 路由 | 类型 | 状态 | 核心场景 | 会话启动器改造 | 备注 |
@@ -615,6 +616,7 @@ Codex 完成任务后，必须输出：
 | 发布与监控设计工作流 | /monitoring-alert-design/ | 方案类 | 已保留 | 灰度发布、监控报警、日志规范、上线观察、回滚条件、故障处理动作 | 是 | 主工作流入口，合并 gray-release-plan、logging-standard-design |
 | Tech Lead 技术判断工作流 | /tech-lead-agent/ | 协作流 | 已保留 | 技术方案判断、复杂度控制、边界控制、风险识别和 Codex 执行前判断 | 是 | 主工作流入口，保留现有 Tech Lead Agent 能力 |
 | Codex + GPT 开发协作流 | /codex-gpt-workflow/ | 协作流 | 已保留 | GPT 收敛需求和审查证据，Codex 执行代码，开发者控制最终决策 | 是 | 主工作流入口，保留现有 GPT / Codex 协作能力 |
+| 外包沟通顾问 | /freelance-client-communication/ | 外包 / 接单 | 已新增 | 甲方沟通、需求边界、报价工期、范围蔓延、验收售后和争议降温 | 是 | 已接入首页“外包 / 接单”栏目，作为非主工作流场景 Prompt |
 
 已合并删除页面记录：
 

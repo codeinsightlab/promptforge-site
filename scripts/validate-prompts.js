@@ -3,6 +3,7 @@ const path = require("path");
 
 const rootDir = path.resolve(__dirname, "..");
 const dataDir = path.join(rootDir, "data", "prompts");
+const homepagePath = path.join(rootDir, "data", "homepage.json");
 const sitemapPath = path.join(rootDir, "sitemap.xml");
 const siteUrl = "https://prompt.learnaiwithcode.com";
 
@@ -14,6 +15,7 @@ const allowedCategories = new Set([
   "cache",
   "database",
   "dev-workflow",
+  "freelance-outsourcing",
   "java-runtime",
   "messaging",
   "observability",
@@ -208,6 +210,127 @@ function validateSitemap(records, sitemapUrls, errors) {
   }
 }
 
+function validateHomepage(records, errors) {
+  if (!fs.existsSync(homepagePath)) {
+    addError(errors, "data/homepage.json", "file", "homepage config is missing");
+    return;
+  }
+
+  let homepage;
+  try {
+    homepage = JSON.parse(fs.readFileSync(homepagePath, "utf8"));
+  } catch (error) {
+    addError(errors, "data/homepage.json", "json", `invalid JSON: ${error.message}`);
+    return;
+  }
+
+  const slugs = new Set(records.map(({ record }) => record.slug).filter(Boolean));
+
+  for (const field of [
+    "hero.zh.brand",
+    "hero.zh.title",
+    "hero.zh.subtitle",
+    "hero.zh.meta",
+    "hero.zh.primaryCta",
+    "hero.zh.primaryHref",
+    "hero.zh.secondaryCta",
+    "hero.zh.secondaryHref",
+    "hero.en.brand",
+    "hero.en.title",
+    "hero.en.subtitle",
+    "hero.en.meta",
+    "hero.en.primaryCta",
+    "hero.en.primaryHref",
+    "hero.en.secondaryCta",
+    "hero.en.secondaryHref",
+  ]) {
+    const value = getValue(homepage, field);
+    if (typeof value !== "string" || value.trim() === "") {
+      addError(errors, "data/homepage.json", field, "required string field is missing or empty");
+    }
+  }
+
+  function validateHomepageItem(item, fieldPrefix) {
+    if (typeof item.slug !== "string" || item.slug.trim() === "") {
+      addError(errors, "data/homepage.json", `${fieldPrefix}.slug`, "item slug is required");
+      return;
+    }
+    if (!slugs.has(item.slug)) {
+      addError(errors, "data/homepage.json", `${fieldPrefix}.${item.slug}`, "item slug does not exist in data/prompts");
+    }
+
+    for (const lang of ["zh", "en"]) {
+      const tags = getValue(item, `${lang}.tags`);
+      if (tags !== undefined) {
+        if (!Array.isArray(tags)) {
+          addError(errors, "data/homepage.json", `${fieldPrefix}.${item.slug}.${lang}.tags`, "tags must be an array");
+        } else if (tags.length > 3) {
+          addError(errors, "data/homepage.json", `${fieldPrefix}.${item.slug}.${lang}.tags`, "tags must contain at most 3 items");
+        } else {
+          for (const tag of tags) {
+            if (typeof tag !== "string" || tag.trim() === "") {
+              addError(errors, "data/homepage.json", `${fieldPrefix}.${item.slug}.${lang}.tags`, "tags must be non-empty strings");
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (homepage.featured !== undefined) {
+    const featured = homepage.featured;
+    if (typeof featured.id !== "string" || featured.id.trim() === "") {
+      addError(errors, "data/homepage.json", "featured.id", "featured id is required");
+    }
+    for (const field of ["zh.title", "zh.description", "en.title", "en.description"]) {
+      const value = getValue(featured, field);
+      if (typeof value !== "string" || value.trim() === "") {
+        addError(errors, "data/homepage.json", `featured.${field}`, "required string field is missing or empty");
+      }
+    }
+    if (!Array.isArray(featured.items)) {
+      addError(errors, "data/homepage.json", "featured.items", "items must be an array");
+    } else {
+      for (const item of featured.items) validateHomepageItem(item, "featured.items");
+    }
+  }
+
+  if (!Array.isArray(homepage.sections) || homepage.sections.length === 0) {
+    addError(errors, "data/homepage.json", "sections", "sections must be a non-empty array");
+    return;
+  }
+
+  const sectionIds = new Set();
+  for (const section of homepage.sections) {
+    if (typeof section.id !== "string" || section.id.trim() === "") {
+      addError(errors, "data/homepage.json", "sections.id", "section id is required");
+      continue;
+    }
+    if (sectionIds.has(section.id)) {
+      addError(errors, "data/homepage.json", section.id, "duplicate section id");
+    }
+    sectionIds.add(section.id);
+
+    if (section.hideWhenEmpty !== undefined && typeof section.hideWhenEmpty !== "boolean") {
+      addError(errors, "data/homepage.json", `${section.id}.hideWhenEmpty`, "hideWhenEmpty must be a boolean");
+    }
+
+    for (const field of ["zh.title", "zh.description", "en.title", "en.description"]) {
+      const value = getValue(section, field);
+      if (typeof value !== "string" || value.trim() === "") {
+        addError(errors, "data/homepage.json", `${section.id}.${field}`, "required string field is missing or empty");
+      }
+    }
+
+    if (!Array.isArray(section.items)) {
+      addError(errors, "data/homepage.json", `${section.id}.items`, "items must be an array");
+      continue;
+    }
+
+    for (const item of section.items) validateHomepageItem(item, `${section.id}.items`);
+  }
+}
+
 function summarize(records, sitemapUrls) {
   const typeCounts = {};
   const categoryCounts = {};
@@ -244,6 +367,7 @@ function main() {
   validateGeneratedFiles(records, errors);
   const sitemapUrls = readSitemapUrls(errors);
   validateSitemap(records, sitemapUrls, errors);
+  validateHomepage(records, errors);
 
   if (errors.length > 0) {
     console.error(JSON.stringify({ status: "failed", errors }, null, 2));
