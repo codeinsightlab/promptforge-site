@@ -222,7 +222,7 @@ function renderWorkflowPage(record, lang) {
   const subtitle = content.description && record.slug === "tech-lead-agent"
     ? `\n  <p class="subtitle">${escapeHtml(content.description)}</p>`
     : "";
-  const nav = isEnglish ? '\n  <div class="nav"><a href="/en/">Back to English home</a></div>' : "";
+  const nav = isEnglish ? '\n  <div class="nav"><a href="/en/">Back to English home</a></div>' : '\n  <div class="nav"><a href="/">首页</a></div>';
 
   return `<!DOCTYPE html>
 <html${htmlLang}>
