@@ -367,7 +367,6 @@ function renderPage(homepage, records, lang) {
     </nav>
 
     <section class="hero">
-      <p class="hero-brand">${escapeHtml(hero.brand || "PromptForge")}</p>
       <h1>${escapeHtml(hero.title)}</h1>
       <p class="hero-subtitle">${escapeHtml(hero.subtitle)}</p>
       <div class="hero-actions">
