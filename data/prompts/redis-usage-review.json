@@ -2,6 +2,7 @@
   "slug": "redis-usage-review",
   "type": "workflow-prompt",
   "category": "cache",
+  "validationStatus": "unverified",
   "zh": {
     "title": "缓存与 Redis 稳定性评审工作流",
     "description": "用于评审 Redis 和缓存方案的稳定性风险，覆盖 key 设计、TTL、一致性、大 Key、热点 Key、穿透、击穿、雪崩、降级和回源压力。",

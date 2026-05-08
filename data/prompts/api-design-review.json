@@ -2,6 +2,7 @@
   "slug": "api-design-review",
   "type": "workflow-prompt",
   "category": "api",
+  "validationStatus": "unverified",
   "zh": {
     "title": "接口上线前评审工作流",
     "description": "用于接口上线前检查幂等性、权限、安全、参数边界、错误码、兼容性、网关限流和回归风险，判断是否可以发布。",

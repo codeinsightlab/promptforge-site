@@ -2,6 +2,7 @@
   "slug": "codex-gpt-workflow",
   "type": "workflow-prompt",
   "category": "dev-workflow",
+  "validationStatus": "in_use",
   "zh": {
     "title": "Codex + GPT 开发协作流",
     "description": "用于冻结需求边界、生成 Codex 最小执行任务，并把代码修改证据交回 GPT 审查，避免范围失控和过度设计。",
@@ -14,7 +15,7 @@
     "exampleOutput": "1. 本次目标：\n实现订单超时自动取消\n\n2. 修改范围：\nOrderService\n定时任务模块\n\n3. 不做：\n不引入MQ\n不改数据库结构",
     "usage": "1. 复制“核心 Prompt（GPT + Codex）”。\n2. 先粘贴到 GPT / ChatGPT，启动 AI 工程协作主持人角色。\n3. 再发送真实需求、代码背景、限制条件和验收标准。\n4. GPT 会先判断是否需要追问；信息足够后先输出需求冻结草案。\n5. 用户明确确认冻结需求后，GPT 再生成 Codex 执行 Prompt。\n6. 将 Codex Prompt 交给 Codex 执行代码修改。\n7. 把 Codex 输出的修改文件、命令结果和风险证据交回 GPT 审查。\n8. 用户根据审查结果做最终确认。",
     "doNot": "- 不让 Codex 在需求模糊时直接大范围修改代码\n- 不把 GPT 当成一次性代码生成器\n- 不把用户的业务决策交给 AI 自动决定\n- 不引入未确认的新框架或复杂架构\n- 不为了未来可能需求提前设计复杂抽象\n- 不把快速上线任务扩展成长期架构改造\n- 不顺手重构无关模块\n- 不省略执行证据、检查结果和剩余风险",
-    "cardTitle": "Codex + GPT 开发协作流",
+    "cardTitle": "GPT + Codex 协作",
     "cardDescription": "冻结需求边界，生成 Codex 执行任务，再把执行证据交回 GPT 审查。"
   },
   "en": {
@@ -29,7 +30,7 @@
     "exampleOutput": "1. Objective:\nImplement automatic timeout cancellation for orders\n\n2. Change scope:\nOrderService\nScheduled job module\n\n3. Out of scope:\nDo not introduce MQ\nDo not change the database schema",
     "usage": "1. Copy the Core Prompt (GPT + Codex).\n2. Paste it into GPT or ChatGPT to start the AI Engineering Collaboration Orchestrator role.\n3. Send the real requirement, code context, constraints, and acceptance criteria.\n4. GPT first decides whether follow-up questions are required; when information is enough, it outputs a draft frozen requirement boundary.\n5. After the user explicitly confirms the frozen requirement, GPT generates the Codex execution prompt.\n6. Send the Codex prompt to Codex for code execution.\n7. Return Codex's changed files, command results, and risk evidence to GPT for review.\n8. The user makes the final acceptance decision.",
     "doNot": "- Do not let Codex perform broad code changes while requirements are ambiguous\n- Do not use GPT as a one-shot code generator\n- Do not delegate business decisions to AI\n- Do not introduce unconfirmed frameworks or complex architecture\n- Do not design complex abstractions for possible future requirements\n- Do not expand a fast-release task into a long-term architecture change\n- Do not refactor unrelated modules\n- Do not omit execution evidence, check results, or remaining risks",
-    "cardTitle": "Codex + GPT Development Workflow",
+    "cardTitle": "GPT + Codex Workflow",
     "cardDescription": "Freeze scope, generate a Codex execution task, and return evidence to GPT for review."
   }
 }

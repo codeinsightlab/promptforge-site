@@ -2,6 +2,7 @@
   "slug": "monitoring-alert-design",
   "type": "workflow-prompt",
   "category": "observability",
+  "validationStatus": "unverified",
   "zh": {
     "title": "发布与监控设计工作流",
     "description": "用于设计灰度发布、上线观察、监控指标、报警阈值、日志规范、链路追踪、暂停回滚条件和故障处理动作。",

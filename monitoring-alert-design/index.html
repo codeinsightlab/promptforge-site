@@ -14,6 +14,9 @@
     p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
     .subtitle { color: #334155; margin-top: 4px; }
     section { margin-top: 32px; }
+    .validation-status { border-left: 3px solid #2563eb; padding-left: 14px; }
+    .validation-status h2 { margin-bottom: 6px; }
+    .validation-status p { margin-top: 4px; }
     .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
     pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
     code { font-family: inherit; }
@@ -25,7 +28,14 @@
 </head>
 <body>
 <div class="container">
+  <div class="nav"><a href="/">首页</a></div>
   <h1>发布与监控设计工作流</h1>
+
+
+  <section class="validation-status">
+    <h2>验证状态：待验证</h2>
+    <p>想法成立，但还没有足够实战验证，不建议直接无脑照搬。</p>
+  </section>
 
   <section>
     <h2>场景</h2>

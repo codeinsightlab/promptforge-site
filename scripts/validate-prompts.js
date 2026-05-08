@@ -8,6 +8,7 @@ const sitemapPath = path.join(rootDir, "sitemap.xml");
 const siteUrl = "https://prompt.learnaiwithcode.com";
 
 const allowedTypes = new Set(["standard-prompt", "workflow-prompt"]);
+const allowedValidationStatuses = new Set(["verified", "in_use", "unverified"]);
 const allowedCategories = new Set([
   "api",
   "architecture",
@@ -26,6 +27,7 @@ const requiredFields = [
   "slug",
   "type",
   "category",
+  "validationStatus",
   "zh.title",
   "zh.description",
   "zh.scenario",
@@ -145,6 +147,10 @@ function validateRecord({ file, record }, errors, slugCounts) {
     addError(errors, file, "category", "category is not in the allowed category list");
   }
 
+  if (!allowedValidationStatuses.has(record.validationStatus)) {
+    addError(errors, file, "validationStatus", "validationStatus must be verified, in_use, or unverified");
+  }
+
   if (record.type === "workflow-prompt") {
     const workflowFile = path.join("data", "prompts", file);
 
@@ -243,6 +249,10 @@ function validateHomepage(records, errors) {
     "hero.en.primaryHref",
     "hero.en.secondaryCta",
     "hero.en.secondaryHref",
+    "validationNote.zh.label",
+    "validationNote.zh.text",
+    "validationNote.en.label",
+    "validationNote.en.text",
   ]) {
     const value = getValue(homepage, field);
     if (typeof value !== "string" || value.trim() === "") {

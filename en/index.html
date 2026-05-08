@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PromptForge - Ready-to-use AI prompt workflows</title>
-  <meta name="description" content="PromptForge is a ready-to-use AI prompt workflow library for technical collaboration, freelance communication, content creation, and personal productivity.">
+  <meta name="description" content="PromptForge does not aim to collect prompts in bulk. It focuses on reusable AI workflows from real scenarios, with a validation status clearly shown for each workflow.">
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
@@ -97,6 +97,18 @@
       font-weight: 700;
       text-decoration: none;
     }
+    .validation-note {
+      margin: -28px 0 46px;
+      max-width: 820px;
+      border-left: 3px solid var(--accent);
+      padding-left: 14px;
+    }
+    .validation-note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
     .hero-button.primary {
       border-color: var(--accent);
       background: var(--accent);
@@ -156,9 +168,35 @@
     }
     .prompt-card strong {
       display: block;
-      margin-bottom: 8px;
+      margin: 8px 0;
       font-size: 16px;
       line-height: 1.4;
+    }
+    .validation-badge {
+      align-self: flex-start;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #f8fafc;
+      color: var(--muted);
+      padding: 2px 7px;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 680;
+    }
+    .validation-verified {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
+    }
+    .validation-in_use {
+      border-color: #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .validation-unverified {
+      border-color: #fed7aa;
+      background: #fff7ed;
+      color: #9a3412;
     }
     .prompt-card p {
       margin: 0;
@@ -198,6 +236,7 @@
       .page { padding: 22px 16px 42px; }
       .top-nav { margin-bottom: 44px; }
       .hero { margin-bottom: 42px; }
+      .validation-note { margin: -18px 0 36px; }
       h1 { font-size: 34px; }
       .hero-subtitle { font-size: 17px; }
       .prompt-grid,
@@ -216,11 +255,15 @@
 
     <section class="hero">
       <h1>Ready-to-use AI prompt workflows</h1>
-      <p class="hero-subtitle">Practical prompts refined from real workflows, covering technical collaboration, freelance communication, content creation, and personal productivity.</p>
+      <p class="hero-subtitle">PromptForge does not aim to collect prompts in bulk. It focuses on reusable AI workflows from real scenarios, with a validation status clearly shown for each workflow.</p>
       <div class="hero-actions">
         <a class="hero-button primary" href="#technical-collaboration">Browse workflows</a>
         <a class="hero-button" href="#ai-collaboration">View collaboration methods</a>
       </div>
+    </section>
+
+    <section class="validation-note" aria-label="Validation status note">
+      <p>PromptForge does not aim to collect prompts in bulk. Each workflow is labeled with a validation status: Verified, In Use, or Unverified. Workflows that have not been tested in real scenarios are not presented as mature solutions.</p>
     </section>
 
     <section class="section featured-section" id="featured" aria-labelledby="featured-title">
@@ -230,6 +273,7 @@
       </div>
       <div class="featured-grid">
         <a class="prompt-card" href="/en/tech-lead-agent/">
+          <span class="validation-badge validation-verified">Verified</span>
           <strong>Tech Lead Agent</strong>
           <p>Before GPT + Codex execution, judge the solution, scope, risks, and smallest implementation path.</p>
           <div class="card-tags">
@@ -249,6 +293,7 @@
       </div>
       <div class="prompt-grid">
         <a class="prompt-card" href="/en/problem-cause-analysis/">
+          <span class="validation-badge validation-unverified">Unverified</span>
           <strong>Online Issue Troubleshooting</strong>
           <p>Narrow production issues from impact, evidence, logs, API responses, and recent changes.</p>
           <div class="card-tags">
@@ -259,6 +304,7 @@
           <em>Start troubleshooting &rarr;</em>
         </a>
         <a class="prompt-card" href="/en/api-performance-analysis/">
+          <span class="validation-badge validation-unverified">Unverified</span>
           <strong>Performance and Stability Bottleneck Analysis</strong>
           <p>Break down latency, timeouts, tail spikes, dependencies, resources, and stability risks.</p>
           <div class="card-tags">
@@ -269,6 +315,7 @@
           <em>Analyze bottlenecks &rarr;</em>
         </a>
         <a class="prompt-card" href="/en/slow-sql-optimization/">
+          <span class="validation-badge validation-unverified">Unverified</span>
           <strong>SQL and Database Optimization</strong>
           <p>Optimize slow SQL, invalid indexes, deadlocks, schema design, transactions, and data-volume risks.</p>
           <div class="card-tags">
@@ -279,6 +326,7 @@
           <em>Optimize database &rarr;</em>
         </a>
         <a class="prompt-card" href="/en/redis-usage-review/">
+          <span class="validation-badge validation-unverified">Unverified</span>
           <strong>Cache and Redis Stability Review</strong>
           <p>Review keys, TTL, consistency, hot keys, big keys, penetration, breakdown, and avalanche risks.</p>
           <div class="card-tags">
@@ -289,6 +337,7 @@
           <em>Review cache &rarr;</em>
         </a>
         <a class="prompt-card" href="/en/api-design-review/">
+          <span class="validation-badge validation-unverified">Unverified</span>
           <strong>Pre-release API Review</strong>
           <p>Review idempotency, permissions, security, error handling, compatibility, and regression risks before release.</p>
           <div class="card-tags">
@@ -299,6 +348,7 @@
           <em>Review API &rarr;</em>
         </a>
         <a class="prompt-card" href="/en/distributed-architecture-design/">
+          <span class="validation-badge validation-unverified">Unverified</span>
           <strong>Distributed System Design Review</strong>
           <p>Review architecture boundaries, consistency, transactions, MQ reliability, compensation, and reconciliation.</p>
           <div class="card-tags">
@@ -309,6 +359,7 @@
           <em>Review design &rarr;</em>
         </a>
         <a class="prompt-card" href="/en/monitoring-alert-design/">
+          <span class="validation-badge validation-unverified">Unverified</span>
           <strong>Release and Monitoring Design</strong>
           <p>Design rollout plans, rollback conditions, metrics, alert thresholds, and incident response actions.</p>
           <div class="card-tags">
@@ -328,6 +379,7 @@
       </div>
       <div class="prompt-grid">
         <a class="prompt-card" href="/en/freelance-client-communication/">
+          <span class="validation-badge validation-verified">Verified</span>
           <strong>Freelance Client Communication</strong>
           <p>Helps freelance developers communicate with clients, clarify scope, estimate timelines and pricing, and control delivery risks.</p>
           <div class="card-tags">
@@ -347,7 +399,8 @@
       </div>
       <div class="prompt-grid">
         <a class="prompt-card" href="/en/codex-gpt-workflow/">
-          <strong>Codex + GPT Development Workflow</strong>
+          <span class="validation-badge validation-in_use">In Use</span>
+          <strong>GPT + Codex Workflow</strong>
           <p>Freeze scope, generate a Codex execution task, and return evidence to GPT for review.</p>
           <div class="card-tags">
             <span>GPT</span>

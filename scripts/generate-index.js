@@ -34,6 +34,23 @@ function hrefFor(slug, isEnglish) {
   return isEnglish ? `/en/${slug}/` : `/${slug}/`;
 }
 
+function validationStatusFor(status, lang) {
+  const labels = {
+    zh: {
+      verified: "已验证",
+      in_use: "使用中",
+      unverified: "待验证",
+    },
+    en: {
+      verified: "Verified",
+      in_use: "In Use",
+      unverified: "Unverified",
+    },
+  };
+
+  return labels[lang]?.[status] || labels[lang]?.unverified || status;
+}
+
 function cardFor(item, record, lang) {
   const promptContent = contentFor(record, lang);
   const itemContent = contentFor(item, lang);
@@ -46,6 +63,8 @@ function cardFor(item, record, lang) {
         ? promptContent.tags.slice(0, 3)
         : [],
     cta: itemContent.cta,
+    validationStatus: record.validationStatus,
+    validationLabel: validationStatusFor(record.validationStatus, lang),
   };
 }
 
@@ -63,6 +82,8 @@ function resolveItem(item, records, lang, sectionContent) {
     description: card.description,
     tags: card.tags,
     cta: card.cta || sectionContent.defaultCta || (lang === "en" ? "Open prompt" : "打开 Prompt"),
+    validationStatus: card.validationStatus,
+    validationLabel: card.validationLabel,
   };
 }
 
@@ -74,6 +95,7 @@ ${item.tags.map((tag) => `            <span>${escapeHtml(tag)}</span>`).join("\n
     : "";
 
   return `        <a class="prompt-card" href="${escapeHtml(item.href)}">
+          <span class="validation-badge validation-${escapeHtml(item.validationStatus)}">${escapeHtml(item.validationLabel)}</span>
           <strong>${escapeHtml(item.title)}</strong>
           <p>${escapeHtml(item.description)}</p>
 ${tags}
@@ -128,6 +150,15 @@ function renderSections(homepage, records, lang) {
     .join("\n\n");
 }
 
+function renderValidationNote(homepage, lang) {
+  const note = contentFor(homepage.validationNote, lang);
+  if (typeof note.text !== "string" || note.text.trim() === "") return "";
+
+  return `    <section class="validation-note" aria-label="${escapeHtml(note.label || (lang === "en" ? "Validation status" : "验证状态"))}">
+      <p>${escapeHtml(note.text)}</p>
+    </section>`;
+}
+
 function pageLabels(lang) {
   return lang === "en"
     ? {
@@ -149,6 +180,7 @@ function renderPage(homepage, records, lang) {
   const hero = contentFor(homepage.hero, lang);
   const labels = pageLabels(lang);
   const sections = renderSections(homepage, records, lang);
+  const validationNote = renderValidationNote(homepage, lang);
 
   return `<!DOCTYPE html>
 <html lang="${labels.htmlLang}">
@@ -249,6 +281,18 @@ function renderPage(homepage, records, lang) {
       font-weight: 700;
       text-decoration: none;
     }
+    .validation-note {
+      margin: -28px 0 46px;
+      max-width: 820px;
+      border-left: 3px solid var(--accent);
+      padding-left: 14px;
+    }
+    .validation-note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
     .hero-button.primary {
       border-color: var(--accent);
       background: var(--accent);
@@ -308,9 +352,35 @@ function renderPage(homepage, records, lang) {
     }
     .prompt-card strong {
       display: block;
-      margin-bottom: 8px;
+      margin: 8px 0;
       font-size: 16px;
       line-height: 1.4;
+    }
+    .validation-badge {
+      align-self: flex-start;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #f8fafc;
+      color: var(--muted);
+      padding: 2px 7px;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 680;
+    }
+    .validation-verified {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
+    }
+    .validation-in_use {
+      border-color: #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .validation-unverified {
+      border-color: #fed7aa;
+      background: #fff7ed;
+      color: #9a3412;
     }
     .prompt-card p {
       margin: 0;
@@ -350,6 +420,7 @@ function renderPage(homepage, records, lang) {
       .page { padding: 22px 16px 42px; }
       .top-nav { margin-bottom: 44px; }
       .hero { margin-bottom: 42px; }
+      .validation-note { margin: -18px 0 36px; }
       h1 { font-size: 34px; }
       .hero-subtitle { font-size: 17px; }
       .prompt-grid,
@@ -374,6 +445,8 @@ function renderPage(homepage, records, lang) {
         <a class="hero-button" href="${escapeHtml(hero.secondaryHref || "#ai-collaboration")}">${escapeHtml(hero.secondaryCta || (isEnglish ? "View collaboration methods" : "查看协作方法"))}</a>
       </div>
     </section>
+
+${validationNote}
 
 ${sections}
   </main>

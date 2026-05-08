@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PromptForge - 开箱即用的 AI Prompt 工作流库</title>
-  <meta name="description" content="PromptForge 是开箱即用的 AI Prompt 工作流库，沉淀技术协作、外包沟通、内容创作和个人效率场景中的可复用 Prompt。">
+  <meta name="description" content="PromptForge 不追求批量收录，只沉淀真实场景中有复用价值的 AI 工作流，并为每个工作流标注验证状态。">
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
@@ -97,6 +97,18 @@
       font-weight: 700;
       text-decoration: none;
     }
+    .validation-note {
+      margin: -28px 0 46px;
+      max-width: 820px;
+      border-left: 3px solid var(--accent);
+      padding-left: 14px;
+    }
+    .validation-note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
     .hero-button.primary {
       border-color: var(--accent);
       background: var(--accent);
@@ -156,9 +168,35 @@
     }
     .prompt-card strong {
       display: block;
-      margin-bottom: 8px;
+      margin: 8px 0;
       font-size: 16px;
       line-height: 1.4;
+    }
+    .validation-badge {
+      align-self: flex-start;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #f8fafc;
+      color: var(--muted);
+      padding: 2px 7px;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 680;
+    }
+    .validation-verified {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
+    }
+    .validation-in_use {
+      border-color: #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .validation-unverified {
+      border-color: #fed7aa;
+      background: #fff7ed;
+      color: #9a3412;
     }
     .prompt-card p {
       margin: 0;
@@ -198,6 +236,7 @@
       .page { padding: 22px 16px 42px; }
       .top-nav { margin-bottom: 44px; }
       .hero { margin-bottom: 42px; }
+      .validation-note { margin: -18px 0 36px; }
       h1 { font-size: 34px; }
       .hero-subtitle { font-size: 17px; }
       .prompt-grid,
@@ -216,11 +255,15 @@
 
     <section class="hero">
       <h1>开箱即用的 AI Prompt 工作流库</h1>
-      <p class="hero-subtitle">沉淀真实场景中反复使用的 Prompt，把技术协作、外包沟通、内容创作和个人效率，做成可以直接复制使用的工作流。</p>
+      <p class="hero-subtitle">PromptForge 不追求批量收录，只沉淀真实场景中有复用价值的 AI 工作流，并为每个工作流标注验证状态。</p>
       <div class="hero-actions">
         <a class="hero-button primary" href="#technical-collaboration">查看工作流</a>
         <a class="hero-button" href="#ai-collaboration">查看协作方法</a>
       </div>
+    </section>
+
+    <section class="validation-note" aria-label="验证状态说明">
+      <p>PromptForge 不追求批量收录。每个工作流都会标注验证状态：已验证、使用中、待验证。未经过真实场景验证的内容，不会伪装成成熟方案。</p>
     </section>
 
     <section class="section featured-section" id="featured" aria-labelledby="featured-title">
@@ -230,6 +273,7 @@
       </div>
       <div class="featured-grid">
         <a class="prompt-card" href="/tech-lead-agent/">
+          <span class="validation-badge validation-verified">已验证</span>
           <strong>Tech Lead 技术判断</strong>
           <p>进入 GPT + Codex 协作前，先判断方案、边界、风险和最小执行路径。</p>
           <div class="card-tags">
@@ -249,6 +293,7 @@
       </div>
       <div class="prompt-grid">
         <a class="prompt-card" href="/problem-cause-analysis/">
+          <span class="validation-badge validation-unverified">待验证</span>
           <strong>线上问题排查</strong>
           <p>线上异常、接口失败、日志报错或表现不一致时，先收敛影响范围、证据链和最可能根因。</p>
           <div class="card-tags">
@@ -259,6 +304,7 @@
           <em>启动排查 &rarr;</em>
         </a>
         <a class="prompt-card" href="/api-performance-analysis/">
+          <span class="validation-badge validation-unverified">待验证</span>
           <strong>性能与稳定性瓶颈分析</strong>
           <p>接口变慢、超时、P95/P99 抖动或服务连锁异常时，拆解调用链、依赖、资源和配置瓶颈。</p>
           <div class="card-tags">
@@ -269,6 +315,7 @@
           <em>分析瓶颈 &rarr;</em>
         </a>
         <a class="prompt-card" href="/slow-sql-optimization/">
+          <span class="validation-badge validation-unverified">待验证</span>
           <strong>SQL 与数据库优化</strong>
           <p>慢 SQL、索引失效、死锁或表结构不合理时，结合执行计划、事务和数据量判断优化路径。</p>
           <div class="card-tags">
@@ -279,6 +326,7 @@
           <em>优化数据库 &rarr;</em>
         </a>
         <a class="prompt-card" href="/redis-usage-review/">
+          <span class="validation-badge validation-unverified">待验证</span>
           <strong>缓存与 Redis 稳定性评审</strong>
           <p>评审 key、TTL、一致性、热点、大 Key、穿透、击穿和雪崩风险。</p>
           <div class="card-tags">
@@ -289,6 +337,7 @@
           <em>评审缓存 &rarr;</em>
         </a>
         <a class="prompt-card" href="/api-design-review/">
+          <span class="validation-badge validation-unverified">待验证</span>
           <strong>接口上线前评审</strong>
           <p>上线前检查接口幂等性、权限、安全、异常处理、兼容性和回归风险。</p>
           <div class="card-tags">
@@ -299,6 +348,7 @@
           <em>评审接口 &rarr;</em>
         </a>
         <a class="prompt-card" href="/distributed-architecture-design/">
+          <span class="validation-badge validation-unverified">待验证</span>
           <strong>分布式方案评审</strong>
           <p>评估分布式架构、数据一致性、事务边界、MQ 可靠性和补偿机制。</p>
           <div class="card-tags">
@@ -309,6 +359,7 @@
           <em>评审方案 &rarr;</em>
         </a>
         <a class="prompt-card" href="/monitoring-alert-design/">
+          <span class="validation-badge validation-unverified">待验证</span>
           <strong>发布与监控设计</strong>
           <p>设计灰度发布、回滚策略、监控指标、报警阈值和故障处理动作。</p>
           <div class="card-tags">
@@ -328,6 +379,7 @@
       </div>
       <div class="prompt-grid">
         <a class="prompt-card" href="/freelance-client-communication/">
+          <span class="validation-badge validation-verified">已验证</span>
           <strong>外包沟通</strong>
           <p>帮助个人开发者与甲方沟通，明确需求边界、评估工期价格、控制范围蔓延和售后风险。</p>
           <div class="card-tags">
@@ -347,7 +399,8 @@
       </div>
       <div class="prompt-grid">
         <a class="prompt-card" href="/codex-gpt-workflow/">
-          <strong>Codex + GPT 开发协作流</strong>
+          <span class="validation-badge validation-in_use">使用中</span>
+          <strong>GPT + Codex 协作</strong>
           <p>冻结需求边界，生成 Codex 执行任务，再把执行证据交回 GPT 审查。</p>
           <div class="card-tags">
             <span>GPT</span>

@@ -2,6 +2,7 @@
   "slug": "distributed-architecture-design",
   "type": "workflow-prompt",
   "category": "architecture",
+  "validationStatus": "unverified",
   "zh": {
     "title": "分布式方案评审工作流",
     "description": "用于评估分布式架构、服务边界、数据一致性、事务边界、MQ 可靠性、幂等、重试、补偿和对账机制。",

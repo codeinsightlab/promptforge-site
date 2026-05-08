@@ -49,6 +49,7 @@ function promptHeading(slug, lang) {
 function pageLabels(lang) {
   return lang === "zh"
     ? {
+        validationStatus: "验证状态",
         scenario: "场景",
         exampleInput: "你接下来可以这样输入",
         exampleOutput: "GPT 会这样输出",
@@ -56,6 +57,7 @@ function pageLabels(lang) {
         copied: "已复制",
       }
     : {
+        validationStatus: "Validation Status",
         scenario: "Scenario",
         exampleInput: "What to provide next",
         exampleOutput: "Expected output preview",
@@ -67,6 +69,7 @@ function pageLabels(lang) {
 function workflowLabels(lang) {
   return lang === "zh"
     ? {
+        validationStatus: "验证状态",
         scenario: "场景",
         whatYouGet: "你会得到什么",
         prompt: "核心 Prompt",
@@ -80,6 +83,7 @@ function workflowLabels(lang) {
         copied: "已复制",
       }
     : {
+        validationStatus: "Validation Status",
         scenario: "Scenario",
         whatYouGet: "What You Get",
         prompt: "Core Prompt",
@@ -94,6 +98,38 @@ function workflowLabels(lang) {
       };
 }
 
+function validationStatusFor(status, lang) {
+  const labels = {
+    zh: {
+      verified: "已验证",
+      in_use: "使用中",
+      unverified: "待验证",
+    },
+    en: {
+      verified: "Verified",
+      in_use: "In Use",
+      unverified: "Unverified",
+    },
+  };
+  const descriptions = {
+    zh: {
+      verified: "已在真实项目、工作或长期场景中反复使用，效果稳定，可以推荐别人直接参考。",
+      in_use: "正在真实场景中使用和调整，方向成立，但还不是最终稳定版本。",
+      unverified: "想法成立，但还没有足够实战验证，不建议直接无脑照搬。",
+    },
+    en: {
+      verified: "Used repeatedly in real projects, work, or long-running scenarios. Stable enough to recommend.",
+      in_use: "Currently being used and refined in real scenarios. Useful as a reference, but not final.",
+      unverified: "A promising idea that has not yet been sufficiently tested in real scenarios. Do not copy blindly.",
+    },
+  };
+
+  return {
+    label: labels[lang]?.[status] || labels[lang]?.unverified || status,
+    description: descriptions[lang]?.[status] || descriptions[lang]?.unverified || "",
+  };
+}
+
 function css(includeNav) {
   return `  <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -103,6 +139,9 @@ ${includeNav ? "    .nav { margin-bottom: 24px; }\n    .nav a { color: #2563eb; 
     p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
     .subtitle { color: #334155; margin-top: 4px; }
     section { margin-top: 32px; }
+    .validation-status { border-left: 3px solid #2563eb; padding-left: 14px; }
+    .validation-status h2 { margin-bottom: 6px; }
+    .validation-status p { margin-top: 4px; }
     .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
     pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
     code { font-family: inherit; }
@@ -125,6 +164,17 @@ function optionalCodeSection(heading, text) {
   <section>
     <h2>${escapeHtml(heading)}</h2>
     ${codeBlock(text)}
+  </section>`;
+}
+
+function validationSection(record, lang, heading) {
+  const status = validationStatusFor(record.validationStatus, lang);
+  const separator = lang === "zh" ? "：" : ": ";
+  return `
+
+  <section class="validation-status">
+    <h2>${escapeHtml(`${heading}${separator}${status.label}`)}</h2>
+    <p>${escapeHtml(status.description)}</p>
   </section>`;
 }
 
@@ -176,6 +226,7 @@ ${css(isEnglish)}
 <body>
 <div class="container">${nav}
   <h1>${escapeHtml(content.title)}</h1>${subtitle}
+${validationSection(record, lang, labels.validationStatus)}
 
   <section>
     <h2>${labels.scenario}</h2>
@@ -236,6 +287,7 @@ ${css(isEnglish)}
 <body>
 <div class="container">${nav}
   <h1>${escapeHtml(content.title)}</h1>${subtitle}
+${validationSection(record, lang, labels.validationStatus)}
 
   <section>
     <h2>${labels.scenario}</h2>

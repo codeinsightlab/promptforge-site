@@ -3,8 +3,8 @@
     "zh": {
       "brand": "PromptForge",
       "title": "开箱即用的 AI Prompt 工作流库",
-      "subtitle": "沉淀真实场景中反复使用的 Prompt，把技术协作、外包沟通、内容创作和个人效率，做成可以直接复制使用的工作流。",
-      "meta": "PromptForge 是开箱即用的 AI Prompt 工作流库，沉淀技术协作、外包沟通、内容创作和个人效率场景中的可复用 Prompt。",
+      "subtitle": "PromptForge 不追求批量收录，只沉淀真实场景中有复用价值的 AI 工作流，并为每个工作流标注验证状态。",
+      "meta": "PromptForge 不追求批量收录，只沉淀真实场景中有复用价值的 AI 工作流，并为每个工作流标注验证状态。",
       "primaryCta": "查看工作流",
       "primaryHref": "#technical-collaboration",
       "secondaryCta": "查看协作方法",
@@ -13,12 +13,22 @@
     "en": {
       "brand": "PromptForge",
       "title": "Ready-to-use AI prompt workflows",
-      "subtitle": "Practical prompts refined from real workflows, covering technical collaboration, freelance communication, content creation, and personal productivity.",
-      "meta": "PromptForge is a ready-to-use AI prompt workflow library for technical collaboration, freelance communication, content creation, and personal productivity.",
+      "subtitle": "PromptForge does not aim to collect prompts in bulk. It focuses on reusable AI workflows from real scenarios, with a validation status clearly shown for each workflow.",
+      "meta": "PromptForge does not aim to collect prompts in bulk. It focuses on reusable AI workflows from real scenarios, with a validation status clearly shown for each workflow.",
       "primaryCta": "Browse workflows",
       "primaryHref": "#technical-collaboration",
       "secondaryCta": "View collaboration methods",
       "secondaryHref": "#ai-collaboration"
+    }
+  },
+  "validationNote": {
+    "zh": {
+      "label": "验证状态说明",
+      "text": "PromptForge 不追求批量收录。每个工作流都会标注验证状态：已验证、使用中、待验证。未经过真实场景验证的内容，不会伪装成成熟方案。"
+    },
+    "en": {
+      "label": "Validation status note",
+      "text": "PromptForge does not aim to collect prompts in bulk. Each workflow is labeled with a validation status: Verified, In Use, or Unverified. Workflows that have not been tested in real scenarios are not presented as mature solutions."
     }
   },
   "featured": {

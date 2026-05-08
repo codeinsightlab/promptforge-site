@@ -2,6 +2,7 @@
   "slug": "problem-cause-analysis",
   "type": "workflow-prompt",
   "category": "bug-troubleshooting",
+  "validationStatus": "unverified",
   "zh": {
     "title": "线上问题排查工作流",
     "cardTitle": "线上问题排查",

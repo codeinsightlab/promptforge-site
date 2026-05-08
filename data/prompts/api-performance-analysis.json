@@ -2,6 +2,7 @@
   "slug": "api-performance-analysis",
   "type": "workflow-prompt",
   "category": "api",
+  "validationStatus": "unverified",
   "zh": {
     "title": "性能与稳定性瓶颈分析工作流",
     "cardTitle": "性能与稳定性瓶颈分析",
