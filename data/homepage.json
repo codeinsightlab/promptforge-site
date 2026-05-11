@@ -74,6 +74,17 @@
         "defaultCta": "Open prompt"
       },
       "items": [
+        {
+          "slug": "ai-coding-project-kickoff-workflow",
+          "zh": {
+            "tags": ["开发工作流", "启动准备", "边界控制"],
+            "cta": "启动准备"
+          },
+          "en": {
+            "tags": ["Kickoff", "Readiness", "Scope Control"],
+            "cta": "Start kickoff"
+          }
+        },
         { "slug": "problem-cause-analysis", "zh": { "tags": ["排查", "线上问题", "证据链"], "cta": "启动排查" }, "en": { "tags": ["Troubleshooting", "Production", "Evidence"], "cta": "Start troubleshooting" } },
         { "slug": "api-performance-analysis", "zh": { "tags": ["性能", "稳定性", "瓶颈"], "cta": "分析瓶颈" }, "en": { "tags": ["Performance", "Stability", "Bottlenecks"], "cta": "Analyze bottlenecks" } },
         { "slug": "slow-sql-optimization", "zh": { "tags": ["SQL", "索引", "数据库"], "cta": "优化数据库" }, "en": { "tags": ["SQL", "Indexes", "Database"], "cta": "Optimize database" } },

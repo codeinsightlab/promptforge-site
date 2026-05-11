@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Coding Project Kickoff Workflow</title>
+  <meta name="description" content="Before letting Codex or any AI agent edit code, align scope, repository structure, AGENTS.md rules, docs, prototype index, data model, and execution plan.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    .nav { margin-bottom: 24px; }
+    .nav a { color: #2563eb; font-size: 14px; text-decoration: none; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    .subtitle { color: #334155; margin-top: 4px; }
+    section { margin-top: 32px; }
+    .validation-status { border-left: 3px solid #2563eb; padding-left: 14px; }
+    .validation-status h2 { margin-bottom: 6px; }
+    .validation-status p { margin-top: 4px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="nav"><a href="/en/">Back to English home</a></div>
+  <h1>AI Coding Project Kickoff Workflow</h1>
+
+
+  <section class="validation-status">
+    <h2>Validation Status: Verified</h2>
+    <p>Used repeatedly in real projects, work, or long-running scenarios. Stable enough to recommend.</p>
+  </section>
+
+  <section>
+    <h2>Scenario</h2>
+    <p>Use this workflow when requirements are largely confirmed and the team is ready to start execution planning but not yet ready for code changes. It helps prepare backend, frontend, mobile, database, and deployment work in a controllable sequence.</p>
+  </section>
+
+  <section>
+    <h2>What You Get</h2>
+    <div class="block"><pre><code>- A reusable pre-implementation kickoff prompt
+- Scope, out-of-scope, and boundary checklist
+- AGENTS.md layering and restriction suggestions
+- A compact docs index plan
+- Prototype/archive indexing approach
+- Database draft and SQL review checklist
+- Development, test, and deployment sequencing
+- Codex execution scope and high-reasoning review mapping</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Core Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
+      <pre><code id="ai-coding-project-kickoff-workflow-prompt"># Role: AI Coding Project Kickoff Readiness Lead
+
+You do not write business code directly.
+
+Your task is to help the team complete pre-coding preparation before Codex or AI agents execute changes. Focus on project scope, repository structure, AGENTS.md, docs, prototype indexing, database draft, execution order, test plan, deployment checklist, and model division of labor.
+
+First determine whether the provided information is sufficient.
+
+If information is missing, ask at most 5 key questions and do not move to solution design.
+
+When information is insufficient:
+
+- Do not propose implementation details
+- Do not assign coding tasks
+- Do not expand scope by default
+
+Goal: after information is sufficient, output a practical kickoff plan and identify which tasks can be assigned to Codex and which must be reviewed by high-reasoning models.
+
+You may receive (as available):
+
+- Business goals, phase-1 boundaries, explicit out-of-scope items
+- Team roles, tech stack, repo/module layout, multi-platform scope
+- Existing docs (requirements, interfaces, prototypes, review notes)
+- Access control and ownership assumptions
+- Existing database sketch, key tables, and state definitions
+- Milestones and release windows
+
+Core rules:
+
+1. Do not rush into coding. Confirm boundaries before execution.
+2. AGENTS.md controls coding rules first; docs carry implementation detail.
+3. Draft database assumptions first, then review SQL strategy before finalizing changes.
+4. Index and organize prototypes before coding pages.
+5. Route simple tasks to Codex, but split complex chains and reserve high-reasoning review.
+6. Every implementation step should require docs update after execution.
+
+Please output:
+
+## 1. Current Stage Judgment
+- Whether it is kickoff, alignment, or execution-ready
+
+## 2. Conditions Already Met
+- Confirmed goals, constraints, and non-goals
+- Current document and role readiness
+
+## 3. Missing Information
+- Uncertain points and evidence gaps
+
+## 4. Key Clarification Questions (max 5)
+- For each question, explain why it matters
+
+## 5. Recommended Repository Structure
+- Include minimum directories for service, domain, tests, and operations docs
+
+## 6. AGENTS.md Layering
+- Global rules, subpath rules, forbidden actions, and change confirmation
+
+## 7. Docs Checklist
+- Essential docs and required update rhythm
+
+## 8. Database Draft and SQL Review
+- Data assumptions, key-state modeling, index strategy, review points
+
+## 9. Prototype Index Strategy
+- Archive policy, versioning tags, and mapping to implementation scope
+
+## 10. Development Sequence and Task Split
+- Dependency-aware milestones in 2-4 phases
+
+## 11. Test and Deployment Checklist
+- Pre-acceptance, regression, and release checks
+
+## 12. Model Division of Work
+- Which tasks can go to Codex
+- Which tasks require higher-reasoning review
+
+## 13. Next Executable Step
+
+Do not:
+
+- Output full implementation plans when inputs are incomplete
+- Present uncertain items as confirmed facts
+- Omit state/data/security constraints in plan structure
+- Treat AI as automatic architect for high-impact decisions
+- Generate business code
+
+Writing style:
+
+- Give short conclusions + executable next steps first
+- Keep actions traceable
+- Keep open items explicit</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why This Is More Controlled</h2>
+    <div class="block"><pre><code>When kickoff is rushed, AI often skips boundary checks and starts producing code, which can cause scope creep and documentation drift. This workflow enforces boundary freeze, documentation alignment, and review points before any execution task is assigned.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage Flow</h2>
+    <div class="block"><pre><code>1. Provide project context, scope, module relations, and non-goals.
+2. Let GPT judge stage and information sufficiency.
+3. Receive recommended AGENTS/docs/database/test/deploy plan.
+4. Split tasks into Codex execution tasks and high-reasoning checkpoints.
+5. Fill missing items before the first code task.
+6. Update docs after each milestone before moving on.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Example Input</h2>
+    <div class="block"><pre><code>Requirements are mostly confirmed: we will build an admin dashboard and a mobile frontend.
+
+Confirmed: 2-sprint target, delivery priority is user/auth, order flow, and key reporting.
+
+Unclear: database indexing strategy, permission ownership details, and release rollback criteria.
+
+Judge whether development can start now. If missing, ask key questions first. If enough, output a kickoff plan with AGENTS, docs, database, and task split.
+</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Example Output</h2>
+    <div class="block"><pre><code>Current stage: alignment-ready, but not execution-ready.
+
+Suggested clarifications: non-goals for phase 1, state transition ownership, permission/identity boundaries, deployment environment, rollback strategy, and AI execution scope.
+
+Draft outputs:
+- AGENTS: Define repo root, service-layer, and DB migration rules with explicit no-go actions.
+- docs: Create scope, interfaces, state-transition, testing, and release documents.
+- Database: validate state fields, idempotency keys, key constraints, and index plan before implementation.
+- Sequence: foundation rules -&gt; data and state setup -&gt; core business flow -&gt; reporting and edge cases.
+- Model split: Codex drafts docs and execution tasks for simple preparation; high-reasoning model reviews security boundary, permission logic, and data consistency.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage</h2>
+    <div class="block"><pre><code>Copy the Core Prompt.
+Then send one follow-up message containing real materials: goals, modules, tech stack, confirmed and unconfirmed points.
+Ask GPT to judge readiness first.
+Fill missing answers, then use its kickoff plan as your execution gate.
+Only assign ready tasks to Codex, and route high-risk items to high-reasoning review.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Do Not</h2>
+    <div class="block"><pre><code>- Do not generate business code directly
+- Do not deepen solution design before readiness is confirmed
+- Do not expand scope silently
+- Do not skip database review and test planning
+- Do not convert uncertain assumptions into facts
+- Do not dispatch broad Codex tasks before scope freeze</code></pre></div>
+  </section>
+</div>
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "Copied";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
+</body>
+</html>

@@ -588,7 +588,7 @@ Codex 完成任务后，必须输出：
 
 ## 15. 当前已有 Prompt 页面登记表
 
-当前 PromptForge v2 已收口为 **9 个主工作流页面**，并新增 **1 个外包 / 接单场景 Prompt**。
+当前 PromptForge v2 已收口为 **9 个主工作流页面**，并新增 **2 个场景 Prompt**（其中 1 个为外包 / 接单场景，1 个为 AI 编码前置场景）。
 
 原则：
 
@@ -616,6 +616,7 @@ Codex 完成任务后，必须输出：
 | 发布与监控设计工作流 | /monitoring-alert-design/ | 方案类 | 已保留 | 灰度发布、监控报警、日志规范、上线观察、回滚条件、故障处理动作 | 是 | 主工作流入口，合并 gray-release-plan、logging-standard-design |
 | Tech Lead 技术判断工作流 | /tech-lead-agent/ | 协作流 | 已保留 | 技术方案判断、复杂度控制、边界控制、风险识别和 Codex 执行前判断 | 是 | 主工作流入口，保留现有 Tech Lead Agent 能力 |
 | Codex + GPT 开发协作流 | /codex-gpt-workflow/ | 协作流 | 已保留 | GPT 收敛需求和审查证据，Codex 执行代码，开发者控制最终决策 | 是 | 主工作流入口，保留现有 GPT / Codex 协作能力 |
+| AI 编程项目启动前准备工作流 | /ai-coding-project-kickoff-workflow/ | 开发工作流 | 已新增 | 一期边界确认、目录结构、AGENTS、docs、原型索引、数据库草案、开发计划、测试和部署清单 | 是 | 通用启动前准备能力，适配后端、前端、移动端和通用数据库场景 |
 | 外包沟通顾问 | /freelance-client-communication/ | 外包 / 接单 | 已新增 | 甲方沟通、需求边界、报价工期、范围蔓延、验收售后和争议降温 | 是 | 已接入首页“外包 / 接单”栏目，作为非主工作流场景 Prompt |
 
 已合并删除页面记录：
