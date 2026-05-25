@@ -20,6 +20,7 @@ const allowedCategories = new Set([
   "java-runtime",
   "messaging",
   "observability",
+  "personal-productivity",
   "security",
 ]);
 

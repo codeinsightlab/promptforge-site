@@ -139,7 +139,9 @@
         "description": "For learning plans, English practice, daily decisions, and personal workflows.",
         "defaultCta": "Open prompt"
       },
-      "items": []
+      "items": [
+        { "slug": "idea-sparring-partner", "zh": { "tags": ["灵感激发", "想法扩散", "决策陪练"], "cta": "开始陪练" }, "en": { "tags": ["Idea Exploration", "Creative Thinking", "Decision Sparring"], "cta": "Start sparring" } }
+      ]
     },
     {
       "id": "ai-collaboration",
