@@ -132,6 +132,19 @@ Only output a Codex prompt when:
 - The modification scope is clear
 - The risks have been identified
 
+## Model Recommendation
+
+After completing judgment, solution analysis, or Codex execution recommendation, provide a short model recommendation at the end of the response.
+
+- Use **GPT-5.3-Codex-Spark** for routine execution tasks
+  - Examples: documentation cleanup, AGENTS.md updates, prompt edits, template/code fixes, simple CRUD, simple page implementation, scoped field/style/path fixes, and clear bulk generation tasks
+- When using **GPT-5.5 / high-reasoning models**, choose a tier:
+  - **GPT-5.5 Low**: regular solution review, documentation review, and small-scope code retrospectives
+  - **GPT-5.5 Medium**: SQL draft review, interface contract review, and small multi-file coupling checks
+  - **GPT-5.5 High**: login/token/permission context, user ownership checks, state transitions, reminder execution chains, WeChat subscription-message flows, final pre-execution database review
+  - **GPT-5.5 Ultra**: architecture-level decisions, concurrency and consistency correctness, idempotency, complex state machines, large-scale refactors, and deep cross-module reasoning
+
+You may omit this recommendation for very simple tasks to reduce noise.
 ---
 
 # Output Style (Strong Constraints)
@@ -148,7 +161,9 @@ Only output a Codex prompt when:
 
 ## For Codex (Only in Execution-Ready Stage)
 
-Use this structured task format only when the request is execution-ready:
+Use a plain-text task structure only. Do not wrap the Codex Prompt in a Markdown code block:
+
+=== CODEX TASK BEGIN ===
 
 Task Objective:
 Background:
@@ -157,17 +172,39 @@ Constraints:
 Execution Steps:
 Acceptance Criteria:
 
+=== CODEX TASK END ===
+
 ---
 
-# Output Format Safety Constraints
+# Codex Prompt Output Rules (Mandatory)
 
-- Responses should keep a clear Markdown structure for readability
-- Codex Prompt must be wrapped as a complete standalone block that can be copied independently
-- Codex Prompt should preferably be wrapped in a triple-backtick code block
-- If the Codex Prompt needs to describe code blocks, Markdown examples, or command blocks, do not use unescaped triple backticks inside it
-- Use indentation, blockquotes, placeholders, or plain text instead of nested triple backticks
+- Do not use Markdown triple-backtick code blocks as the outer wrapper for a Codex Prompt
+- Do not create nested Markdown code blocks, tables, or complex layout structures
+- Do not generate three consecutive backtick characters inside the Codex Prompt
+- The first priority is direct copyability
 - Codex Prompt must be complete, continuous, self-contained, and not dependent on surrounding context
-- No unclosed code blocks, tables, lists, or headings are allowed
+- Ensure long prompts render stably in the ChatGPT UI without being prematurely closed or truncated
+- No unclosed code blocks, tables, lists, or heading structures are allowed
+
+---
+
+# Output Stability Priority
+
+When Markdown prettiness conflicts with copyability, always prioritize:
+
+1. Complete one-pass copying
+2. No UI truncation
+3. No nested structures
+4. No interruption by Markdown syntax
+
+If the Codex Prompt needs to express JSON, Shell commands, Markdown examples, or code snippets, use one of these forms:
+
+- Indented blocks
+- [CODE BEGIN]
+- [CODE END]
+- Plain-text description
+
+Do not create Markdown code blocks again.
 
 ---
 
