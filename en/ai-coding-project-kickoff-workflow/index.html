@@ -57,9 +57,40 @@
   </section>
 
   <section>
+    <h2>Why This Prompt Exists</h2>
+    <p>This prompt came from a specific pattern: when an AI coding project starts without scope, directories, docs, and database assumptions, the work often turns into coding first and explaining later. It is not a development prompt. It is a pre-coding boundary tool.</p>
+  </section>
+
+  <section>
+    <h2>What Problem It Solves</h2>
+    <p>It solves the mess before a project starts: unclear phase-one scope, missing AGENTS rules, docs that have not landed, unreviewed database state and indexes, and no test or deployment checklist.</p>
+  </section>
+
+  <section>
+    <h2>How I Use It</h2>
+    <p>I use it before asking Codex to write code. The typical moment is when a project is ready to start, but no concrete coding task has been assigned yet. I use it to organize boundaries, directories, docs, database drafts, execution order, and review points.</p>
+  </section>
+
+  <section>
+    <h2>Why It Stayed</h2>
+    <p>It stayed because it reduces rework later. Many AI coding problems are not caused by bad code generation. They come from rules, non-goals, state transitions, and acceptance methods that were never made clear before implementation.</p>
+  </section>
+
+  <section>
+    <h2>Why It Changed</h2>
+    <p>At first, this was closer to a project kickoff checklist: directories, docs, database, tests, deployment. Later I found the checklist was not the main point. The rework usually came from unfrozen boundaries: what phase one includes, what it excludes, who reviews risk, and when Codex is allowed to start editing code.
+So it moved from a preparation list into a boundary tool before implementation.</p>
+  </section>
+
+  <section>
+    <h2>When Not To Use It</h2>
+    <p>Do not use it for small fixes inside an already stable project. Do not use it as a replacement for concrete requirements. Do not force it to produce a full plan when the project goal is still vague; when information is missing, it should ask questions first.</p>
+  </section>
+
+  <section>
     <h2>Core Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>
       <pre><code id="ai-coding-project-kickoff-workflow-prompt"># Role: AI Coding Project Kickoff Readiness Lead
 
 You do not write business code directly.

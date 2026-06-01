@@ -6,6 +6,7 @@ const distDir = path.join(rootDir, "dist");
 
 const rootFiles = ["index.html", "favicon.png", "sitemap.xml"];
 const excludedDirs = new Set([".git", "data", "dist", "en", "node_modules", "scripts"]);
+const promptDataDir = path.join(rootDir, "data", "prompts");
 
 function copyFile(relativePath) {
   const source = path.join(rootDir, relativePath);
@@ -33,13 +34,14 @@ function copyDirectory(source, target) {
   }
 }
 
-function getRootPageDirs() {
+function getPublicPromptSlugs() {
   return fs
-    .readdirSync(rootDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .filter((name) => !excludedDirs.has(name))
-    .filter((name) => fs.existsSync(path.join(rootDir, name, "index.html")))
+    .readdirSync(promptDataDir)
+    .filter((file) => file.endsWith(".json"))
+    .map((file) => JSON.parse(fs.readFileSync(path.join(promptDataDir, file), "utf8")))
+    .filter((record) => record.status === "keep")
+    .map((record) => record.slug)
+    .filter((slug) => fs.existsSync(path.join(rootDir, slug, "index.html")))
     .sort();
 }
 
@@ -49,11 +51,12 @@ function main() {
 
   const copiedRootFiles = rootFiles.filter(copyFile);
 
-  copyDirectory(path.join(rootDir, "en"), path.join(distDir, "en"));
+  copyFile(path.join("en", "index.html"));
 
-  const pageDirs = getRootPageDirs();
+  const pageDirs = getPublicPromptSlugs();
   for (const dir of pageDirs) {
     copyDirectory(path.join(rootDir, dir), path.join(distDir, dir));
+    copyDirectory(path.join(rootDir, "en", dir), path.join(distDir, "en", dir));
   }
 
   console.log(
@@ -61,8 +64,13 @@ function main() {
       {
         output: "dist",
         rootFiles: copiedRootFiles,
-        copiedEnglishDirectory: true,
+        copiedEnglishHome: true,
         promptPageDirectories: pageDirs.length,
+        archivedPromptPageDirectories: fs
+          .readdirSync(promptDataDir)
+          .filter((file) => file.endsWith(".json"))
+          .map((file) => JSON.parse(fs.readFileSync(path.join(promptDataDir, file), "utf8")))
+          .filter((record) => record.status === "review").length,
         excludedDirectories: Array.from(excludedDirs).sort(),
       },
       null,

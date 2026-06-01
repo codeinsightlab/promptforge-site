@@ -3,6 +3,7 @@
   "type": "workflow-prompt",
   "category": "database",
   "validationStatus": "unverified",
+  "status": "review",
   "zh": {
     "title": "SQL 与数据库优化工作流",
     "description": "用于慢 SQL、索引失效、死锁、事务锁等待、表结构不合理或数据量增长导致的数据库问题，结合执行计划、索引、事务、分页和数据分布判断最小优化路径。",

@@ -9,6 +9,7 @@ const siteUrl = "https://prompt.learnaiwithcode.com";
 
 const allowedTypes = new Set(["standard-prompt", "workflow-prompt"]);
 const allowedValidationStatuses = new Set(["verified", "in_use", "unverified"]);
+const allowedContentStatuses = new Set(["keep", "review"]);
 const allowedCategories = new Set([
   "api",
   "architecture",
@@ -29,6 +30,7 @@ const requiredFields = [
   "type",
   "category",
   "validationStatus",
+  "status",
   "zh.title",
   "zh.description",
   "zh.scenario",
@@ -61,6 +63,21 @@ const workflowRequiredNonEmptyFields = [
   "zh.doNot",
   "en.whatYouGet",
   "en.doNot",
+];
+
+const keepRequiredNoteFields = [
+  "zh.notes.whyExists",
+  "zh.notes.whatProblemItSolves",
+  "zh.notes.howIUseIt",
+  "zh.notes.whyItStayed",
+  "zh.notes.whyItChanged",
+  "zh.notes.whenNotToUseIt",
+  "en.notes.whyExists",
+  "en.notes.whatProblemItSolves",
+  "en.notes.howIUseIt",
+  "en.notes.whyItStayed",
+  "en.notes.whyItChanged",
+  "en.notes.whenNotToUseIt",
 ];
 
 function getValue(record, field) {
@@ -152,6 +169,19 @@ function validateRecord({ file, record }, errors, slugCounts) {
     addError(errors, file, "validationStatus", "validationStatus must be verified, in_use, or unverified");
   }
 
+  if (!allowedContentStatuses.has(record.status)) {
+    addError(errors, file, "status", "status must be keep or review");
+  }
+
+  if (record.status === "keep") {
+    for (const field of keepRequiredNoteFields) {
+      const value = getValue(record, field);
+      if (typeof value !== "string" || value.trim() === "") {
+        addError(errors, file, field, "required for keep content");
+      }
+    }
+  }
+
   if (record.type === "workflow-prompt") {
     const workflowFile = path.join("data", "prompts", file);
 
@@ -201,8 +231,10 @@ function readSitemapUrls(errors) {
 
 function validateSitemap(records, sitemapUrls, errors) {
   const urls = new Set(sitemapUrls);
+  const publicRecords = records.filter(({ record }) => record.status === "keep");
+  const archivedRecords = records.filter(({ record }) => record.status === "review");
 
-  for (const { file, record } of records) {
+  for (const { file, record } of publicRecords) {
     if (!record.slug) continue;
 
     const zhUrl = `${siteUrl}/${record.slug}/`;
@@ -213,6 +245,20 @@ function validateSitemap(records, sitemapUrls, errors) {
     }
     if (!urls.has(enUrl)) {
       addError(errors, file, "sitemap.enUrl", `missing sitemap URL: ${enUrl}; run node scripts/generate-prompts.js`);
+    }
+  }
+
+  for (const { file, record } of archivedRecords) {
+    if (!record.slug) continue;
+
+    const zhUrl = `${siteUrl}/${record.slug}/`;
+    const enUrl = `${siteUrl}/en/${record.slug}/`;
+
+    if (urls.has(zhUrl)) {
+      addError(errors, file, "sitemap.zhUrl", `review content must not appear in sitemap: ${zhUrl}`);
+    }
+    if (urls.has(enUrl)) {
+      addError(errors, file, "sitemap.enUrl", `review content must not appear in sitemap: ${enUrl}`);
     }
   }
 }
@@ -232,6 +278,7 @@ function validateHomepage(records, errors) {
   }
 
   const slugs = new Set(records.map(({ record }) => record.slug).filter(Boolean));
+  const recordsBySlug = new Map(records.map(({ record }) => [record.slug, record]));
 
   for (const field of [
     "hero.zh.brand",
@@ -268,6 +315,8 @@ function validateHomepage(records, errors) {
     }
     if (!slugs.has(item.slug)) {
       addError(errors, "data/homepage.json", `${fieldPrefix}.${item.slug}`, "item slug does not exist in data/prompts");
+    } else if (recordsBySlug.get(item.slug).status !== "keep") {
+      addError(errors, "data/homepage.json", `${fieldPrefix}.${item.slug}`, "review content must not appear on the homepage");
     }
 
     for (const lang of ["zh", "en"]) {
@@ -345,16 +394,22 @@ function validateHomepage(records, errors) {
 function summarize(records, sitemapUrls) {
   const typeCounts = {};
   const categoryCounts = {};
+  const statusCounts = {};
 
   for (const { record } of records) {
     typeCounts[record.type] = (typeCounts[record.type] || 0) + 1;
     categoryCounts[record.category] = (categoryCounts[record.category] || 0) + 1;
+    statusCounts[record.status] = (statusCounts[record.status] || 0) + 1;
   }
 
   return {
     jsonFiles: records.length,
     standardPrompt: typeCounts["standard-prompt"] || 0,
     workflowPrompt: typeCounts["workflow-prompt"] || 0,
+    contentStatusCounts: {
+      keep: statusCounts.keep || 0,
+      review: statusCounts.review || 0,
+    },
     categoryCounts: Object.fromEntries(Object.entries(categoryCounts).sort(([a], [b]) => a.localeCompare(b))),
     sitemapUrls: sitemapUrls.length,
     status: "passed",

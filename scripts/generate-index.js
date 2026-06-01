@@ -73,6 +73,9 @@ function resolveItem(item, records, lang, sectionContent) {
   if (!record) {
     throw new Error(`Homepage item slug does not exist in data/prompts: ${item.slug}`);
   }
+  if (record.status !== "keep") {
+    throw new Error(`Homepage item is not public keep content: ${item.slug}`);
+  }
 
   const card = cardFor(item, record, lang);
   return {

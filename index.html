@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PromptForge - 开箱即用的 AI Prompt 工作流库</title>
-  <meta name="description" content="PromptForge 不追求批量收录，只沉淀真实场景中有复用价值的 AI 工作流，并为每个工作流标注验证状态。">
+  <meta name="description" content="帮助我做技术判断、项目启动、想法整理和外包沟通。这些 Prompt 在真实场景中被反复使用后留下来。">
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
@@ -254,22 +254,22 @@
     </nav>
 
     <section class="hero">
-      <h1>开箱即用的 AI Prompt 工作流库</h1>
-      <p class="hero-subtitle">PromptForge 不追求批量收录，只沉淀真实场景中有复用价值的 AI 工作流，并为每个工作流标注验证状态。</p>
+      <h1>值得留下来的 Prompt</h1>
+      <p class="hero-subtitle">帮助我做技术判断、项目启动、想法整理和外包沟通。这些 Prompt 在真实场景中被反复使用后留下来。</p>
       <div class="hero-actions">
-        <a class="hero-button primary" href="#technical-collaboration">查看工作流</a>
-        <a class="hero-button" href="#ai-collaboration">查看协作方法</a>
+        <a class="hero-button primary" href="#technical-collaboration">查看保留的 Prompt</a>
+        <a class="hero-button" href="#personal-productivity">查看想法陪练</a>
       </div>
     </section>
 
-    <section class="validation-note" aria-label="验证状态说明">
-      <p>PromptForge 不追求批量收录。每个工作流都会标注验证状态：已验证、使用中、待验证。未经过真实场景验证的内容，不会伪装成成熟方案。</p>
+    <section class="validation-note" aria-label="关于 PromptForge">
+      <p>大多数 Prompt 解决一次问题后就会被忘记。这里保留下来的，是那些我仍然会复制、修改并继续使用的 Prompt。目前公开 4 个 Prompt，其余内容仍处于 review 状态。</p>
     </section>
 
     <section class="section featured-section" id="featured" aria-labelledby="featured-title">
       <div class="section-header">
-        <h2 id="featured-title">推荐入口</h2>
-        <p class="section-description">先用一个高层判断入口，把需求、风险和执行边界收住。</p>
+        <h2 id="featured-title">我仍然会使用的 Prompt</h2>
+        <p class="section-description">每个入口对应一个反复出现的真实场景，而不是一个需要覆盖的分类。</p>
       </div>
       <div class="featured-grid">
         <a class="prompt-card" href="/tech-lead-agent/">
@@ -289,7 +289,7 @@
     <section class="section" id="technical-collaboration" aria-labelledby="technical-collaboration-title">
       <div class="section-header">
         <h2 id="technical-collaboration-title">技术协作</h2>
-        <p class="section-description">用于 Bug 定位、性能优化、数据库、缓存、接口评审、架构和发布监控等技术场景。</p>
+        <p class="section-description">用于 AI 编码前的项目边界、目录、文档、数据库、测试和部署准备。</p>
       </div>
       <div class="prompt-grid">
         <a class="prompt-card" href="/ai-coding-project-kickoff-workflow/">
@@ -302,83 +302,6 @@
             <span>边界控制</span>
           </div>
           <em>启动准备 &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/problem-cause-analysis/">
-          <span class="validation-badge validation-unverified">待验证</span>
-          <strong>线上问题排查</strong>
-          <p>线上异常、接口失败、日志报错或表现不一致时，先收敛影响范围、证据链和最可能根因。</p>
-          <div class="card-tags">
-            <span>排查</span>
-            <span>线上问题</span>
-            <span>证据链</span>
-          </div>
-          <em>启动排查 &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/api-performance-analysis/">
-          <span class="validation-badge validation-unverified">待验证</span>
-          <strong>性能与稳定性瓶颈分析</strong>
-          <p>接口变慢、超时、P95/P99 抖动或服务连锁异常时，拆解调用链、依赖、资源和配置瓶颈。</p>
-          <div class="card-tags">
-            <span>性能</span>
-            <span>稳定性</span>
-            <span>瓶颈</span>
-          </div>
-          <em>分析瓶颈 &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/slow-sql-optimization/">
-          <span class="validation-badge validation-unverified">待验证</span>
-          <strong>SQL 与数据库优化</strong>
-          <p>慢 SQL、索引失效、死锁或表结构不合理时，结合执行计划、事务和数据量判断优化路径。</p>
-          <div class="card-tags">
-            <span>SQL</span>
-            <span>索引</span>
-            <span>数据库</span>
-          </div>
-          <em>优化数据库 &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/redis-usage-review/">
-          <span class="validation-badge validation-unverified">待验证</span>
-          <strong>缓存与 Redis 稳定性评审</strong>
-          <p>评审 key、TTL、一致性、热点、大 Key、穿透、击穿和雪崩风险。</p>
-          <div class="card-tags">
-            <span>Redis</span>
-            <span>缓存</span>
-            <span>稳定性</span>
-          </div>
-          <em>评审缓存 &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/api-design-review/">
-          <span class="validation-badge validation-unverified">待验证</span>
-          <strong>接口上线前评审</strong>
-          <p>上线前检查接口幂等性、权限、安全、异常处理、兼容性和回归风险。</p>
-          <div class="card-tags">
-            <span>接口</span>
-            <span>上线前</span>
-            <span>风险</span>
-          </div>
-          <em>评审接口 &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/distributed-architecture-design/">
-          <span class="validation-badge validation-unverified">待验证</span>
-          <strong>分布式方案评审</strong>
-          <p>评估分布式架构、数据一致性、事务边界、MQ 可靠性和补偿机制。</p>
-          <div class="card-tags">
-            <span>架构</span>
-            <span>一致性</span>
-            <span>MQ</span>
-          </div>
-          <em>评审方案 &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/monitoring-alert-design/">
-          <span class="validation-badge validation-unverified">待验证</span>
-          <strong>发布与监控设计</strong>
-          <p>设计灰度发布、回滚策略、监控指标、报警阈值和故障处理动作。</p>
-          <div class="card-tags">
-            <span>发布</span>
-            <span>监控</span>
-            <span>回滚</span>
-          </div>
-          <em>设计发布 &rarr;</em>
         </a>
       </div>
     </section>
@@ -419,26 +342,6 @@
             <span>决策陪练</span>
           </div>
           <em>开始陪练 &rarr;</em>
-        </a>
-      </div>
-    </section>
-
-    <section class="section" id="ai-collaboration" aria-labelledby="ai-collaboration-title">
-      <div class="section-header">
-        <h2 id="ai-collaboration-title">AI 协作方法</h2>
-        <p class="section-description">用于 GPT 与 Codex 的分工、任务拆分、审查和执行规范。</p>
-      </div>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/codex-gpt-workflow/">
-          <span class="validation-badge validation-in_use">使用中</span>
-          <strong>GPT + Codex 协作</strong>
-          <p>冻结需求边界，生成 Codex 执行任务，再把执行证据交回 GPT 审查。</p>
-          <div class="card-tags">
-            <span>GPT</span>
-            <span>Codex</span>
-            <span>执行规范</span>
-          </div>
-          <em>查看协作方式 &rarr;</em>
         </a>
       </div>
     </section>

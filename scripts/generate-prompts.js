@@ -51,6 +51,14 @@ function pageLabels(lang) {
     ? {
         validationStatus: "验证状态",
         scenario: "场景",
+        notes: {
+          whyExists: "为什么这个 Prompt 存在",
+          whatProblemItSolves: "它解决什么问题",
+          howIUseIt: "我如何使用它",
+          whyItStayed: "为什么它被保留下来",
+          whyItChanged: "为什么变成今天这样",
+          whenNotToUseIt: "什么时候不要使用",
+        },
         exampleInput: "你接下来可以这样输入",
         exampleOutput: "GPT 会这样输出",
         usage: "使用说明",
@@ -59,6 +67,14 @@ function pageLabels(lang) {
     : {
         validationStatus: "Validation Status",
         scenario: "Scenario",
+        notes: {
+          whyExists: "Why This Prompt Exists",
+          whatProblemItSolves: "What Problem It Solves",
+          howIUseIt: "How I Use It",
+          whyItStayed: "Why It Stayed",
+          whyItChanged: "Why It Changed",
+          whenNotToUseIt: "When Not To Use It",
+        },
         exampleInput: "What to provide next",
         exampleOutput: "Expected output preview",
         usage: "Usage notes",
@@ -72,6 +88,14 @@ function workflowLabels(lang) {
         validationStatus: "验证状态",
         scenario: "场景",
         whatYouGet: "你会得到什么",
+        notes: {
+          whyExists: "为什么这个 Prompt 存在",
+          whatProblemItSolves: "它解决什么问题",
+          howIUseIt: "我如何使用它",
+          whyItStayed: "为什么它被保留下来",
+          whyItChanged: "为什么变成今天这样",
+          whenNotToUseIt: "什么时候不要使用",
+        },
         prompt: "核心 Prompt",
         whyControlled: "为什么这样更可控",
         usageFlow: "使用流程",
@@ -86,6 +110,14 @@ function workflowLabels(lang) {
         validationStatus: "Validation Status",
         scenario: "Scenario",
         whatYouGet: "What You Get",
+        notes: {
+          whyExists: "Why This Prompt Exists",
+          whatProblemItSolves: "What Problem It Solves",
+          howIUseIt: "How I Use It",
+          whyItStayed: "Why It Stayed",
+          whyItChanged: "Why It Changed",
+          whenNotToUseIt: "When Not To Use It",
+        },
         prompt: "Core Prompt",
         whyControlled: "Why This Is More Controlled",
         usageFlow: "Usage Flow",
@@ -167,6 +199,31 @@ function optionalCodeSection(heading, text) {
   </section>`;
 }
 
+function optionalTextSection(heading, text) {
+  if (typeof text !== "string" || text.trim() === "") return "";
+
+  return `
+
+  <section>
+    <h2>${escapeHtml(heading)}</h2>
+    <p>${escapeHtml(text)}</p>
+  </section>`;
+}
+
+function notesSections(content, labels) {
+  const notes = content.notes || {};
+  return [
+    "whyExists",
+    "whatProblemItSolves",
+    "howIUseIt",
+    "whyItStayed",
+    "whyItChanged",
+    "whenNotToUseIt",
+  ]
+    .map((field) => optionalTextSection(labels.notes[field], notes[field]))
+    .join("");
+}
+
 function validationSection(record, lang, heading) {
   const status = validationStatusFor(record.validationStatus, lang);
   const separator = lang === "zh" ? "：" : ": ";
@@ -231,7 +288,7 @@ ${validationSection(record, lang, labels.validationStatus)}
   <section>
     <h2>${labels.scenario}</h2>
     <p>${escapeHtml(content.scenario)}</p>
-  </section>
+  </section>${notesSections(content, labels)}
 
   <section>
     <h2>${escapeHtml(prompt.heading)}</h2>
@@ -297,7 +354,7 @@ ${validationSection(record, lang, labels.validationStatus)}
   <section>
     <h2>${labels.whatYouGet}</h2>
     ${codeBlock(content.whatYouGet)}
-  </section>
+  </section>${notesSections(content, labels)}
 
   <section>
     <h2>${labels.prompt}</h2>
@@ -341,6 +398,10 @@ function readPrompts() {
     .map((file) => JSON.parse(fs.readFileSync(path.join(dataDir, file), "utf8")));
 }
 
+function publicRecords(records) {
+  return records.filter((record) => record.status === "keep");
+}
+
 function writePrompt(record, render) {
   const zhDir = path.join(rootDir, record.slug);
   const enDir = path.join(rootDir, "en", record.slug);
@@ -376,6 +437,7 @@ function writeSitemap(records) {
 
 function main() {
   const records = readPrompts();
+  const publicPrompts = publicRecords(records);
   const generatedStandard = [];
   const generatedWorkflow = [];
 
@@ -395,17 +457,19 @@ function main() {
     throw new Error(`Unsupported prompt type for ${record.slug}: ${record.type}`);
   }
 
-  writeSitemap(records);
+  writeSitemap(publicPrompts);
 
   console.log(
     JSON.stringify(
       {
         prompts: records.length,
+        publicPrompts: publicPrompts.length,
+        archivedPrompts: records.length - publicPrompts.length,
         generatedStandardPrompt: generatedStandard.length,
         generatedWorkflowPrompt: generatedWorkflow.length,
         zhPages: generatedStandard.length + generatedWorkflow.length,
         enPages: generatedStandard.length + generatedWorkflow.length,
-        sitemapUrls: 2 + records.length * 2,
+        sitemapUrls: 2 + publicPrompts.length * 2,
       },
       null,
       2,

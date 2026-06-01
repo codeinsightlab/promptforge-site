@@ -588,37 +588,41 @@ Codex 完成任务后，必须输出：
 
 ## 15. 当前已有 Prompt 页面登记表
 
-当前 PromptForge v2 已收口为 **9 个主工作流页面**，并新增 **3 个场景 Prompt**（其中 1 个为外包 / 接单场景，1 个为 AI 编码前置场景，1 个为个人效率场景）。
+当前 PromptForge v2 第一阶段已收口为 **4 个 KEEP 内容**，其余现有内容进入 **REVIEW / archive 状态**。
 
 原则：
 
-- 首页按开发者工作场景分组展示入口。
-- `data/prompts` 保留 9 个主工作流 JSON，并允许少量经确认的新工作场景 Prompt。
+- 首页只展示 `status = keep` 的内容。
+- `data/prompts` 保留现有 JSON 文件，但 `status = review` 的内容不进入首页、导航、sitemap 或发布目录。
 - 旧 Prompt 大全已废弃，不再保留长尾 Prompt 页面作为独立资产。
 - 已合并删除页面不要重复新增，除非重新确认产品方向和页面边界。
-- 新增页面必须非常谨慎，必须先判断是否能并入现有 9 个主工作流，避免重新变成细分 Prompt 大全。
-- 9 个主工作流 JSON 和新增工作场景 Prompt 必须包含 `zh.cardTitle`、`zh.cardDescription`、`en.cardTitle`、`en.cardDescription`。
+- 新增页面必须非常谨慎；第一阶段暂不新增 Prompt 或 Case Study。
+- 所有 Prompt JSON 必须包含 `status` 字段，取值只能是 `keep` 或 `review`。
+- KEEP 与 REVIEW JSON 都必须包含 `zh.cardTitle`、`zh.cardDescription`、`en.cardTitle`、`en.cardDescription`。
+- KEEP JSON 必须在 `zh.notes` 和 `en.notes` 内补齐 `whyExists`、`whatProblemItSolves`、`howIUseIt`、`whyItStayed`、`whyItChanged`、`whenNotToUseIt`。
+- KEEP 详情页必须在 Prompt 正文前展示作者笔记，用于说明来源、问题、使用方式、保留原因、变化原因和使用边界。
+- REVIEW 内容可不补 notes，避免为未确认长期使用的内容编造背景。
 
 状态说明：
 
-- 已保留：当前项目保留的主工作流页面。
-- 已新增：当前项目新增的非主工作流场景 Prompt。
+- KEEP：作者真实长期使用、经过验证、持续复用，允许首页展示、导航入口、sitemap 和发布目录。
+- REVIEW：有一定价值但未确认长期使用，暂时作为 archive 内容保留源文件，不进入首页、导航、sitemap 或发布目录。
 - 已合并删除：能力已并入主工作流，独立 JSON 和页面不再保留，后续不要重复新增。
 
 | 页面标题 | slug / 路由 | 类型 | 状态 | 核心场景 | 会话启动器改造 | 备注 |
 |---|---|---|---|---|---|---|
-| 线上问题排查工作流 | /problem-cause-analysis/ | 排查类 | 已保留 | 线上异常、接口失败、日志报错、表现不一致、Bug 定位、日志分析、最近变更排查 | 是 | 主工作流入口，合并 bug-location、log-analysis、api-timeout-analysis 第一批排查能力中的通用问题排查部分 |
-| 性能与稳定性瓶颈分析工作流 | /api-performance-analysis/ | 优化类 | 已保留 | 接口变慢、超时、P95/P99 抖动、系统瓶颈、服务雪崩、依赖连锁异常 | 是 | 主工作流入口，合并 api-timeout-analysis、system-bottleneck-analysis、service-avalanche-analysis |
-| SQL 与数据库优化工作流 | /slow-sql-optimization/ | 优化类 | 已保留 | 慢 SQL、索引失效、死锁、表结构、事务锁等待、执行计划、数据量和分页 | 是 | 主工作流入口，合并 index-failure-analysis、deadlock-troubleshooting、database-table-design |
-| 缓存与 Redis 稳定性评审工作流 | /redis-usage-review/ | 评审类 | 已保留 | Redis 使用评审、缓存设计、Key、TTL、一致性、大 Key、热点 Key、穿透、击穿、雪崩 | 是 | 主工作流入口，合并 redis-bigkey-analysis、cache-design、cache-breakdown-avalanche-analysis |
-| 接口上线前评审工作流 | /api-design-review/ | 评审类 | 已保留 | 接口设计、API 安全、权限、幂等、参数边界、错误码、兼容性、网关限流风险 | 是 | 主工作流入口，合并 api-security-design、gateway-rate-limit-design、permission-model-design |
-| 分布式方案评审工作流 | /distributed-architecture-design/ | 方案类 | 已保留 | 分布式架构、数据一致性、分布式事务、MQ 丢失、MQ 重复消费、补偿、对账 | 是 | 主工作流入口，合并 distributed-transaction-solution、data-consistency-design、mq-message-loss-troubleshooting、mq-duplicate-consumption-handling |
-| 发布与监控设计工作流 | /monitoring-alert-design/ | 方案类 | 已保留 | 灰度发布、监控报警、日志规范、上线观察、回滚条件、故障处理动作 | 是 | 主工作流入口，合并 gray-release-plan、logging-standard-design |
-| Tech Lead 技术判断工作流 | /tech-lead-agent/ | 协作流 | 已保留 | 技术方案判断、复杂度控制、边界控制、风险识别和 Codex 执行前判断 | 是 | 主工作流入口，保留现有 Tech Lead Agent 能力 |
-| Codex + GPT 开发协作流 | /codex-gpt-workflow/ | 协作流 | 已保留 | GPT 收敛需求和审查证据，Codex 执行代码，开发者控制最终决策 | 是 | 主工作流入口，保留现有 GPT / Codex 协作能力 |
-| AI 编程项目启动前准备工作流 | /ai-coding-project-kickoff-workflow/ | 开发工作流 | 已新增 | 一期边界确认、目录结构、AGENTS、docs、原型索引、数据库草案、开发计划、测试和部署清单 | 是 | 通用启动前准备能力，适配后端、前端、移动端和通用数据库场景 |
-| 外包沟通顾问 | /freelance-client-communication/ | 外包 / 接单 | 已新增 | 甲方沟通、需求边界、报价工期、范围蔓延、验收售后和争议降温 | 是 | 已接入首页“外包 / 接单”栏目，作为非主工作流场景 Prompt |
-| 想法陪练官 | /idea-sparring-partner/ | 个人效率 | 已新增 | 陪用户聊模糊 idea，激发灵感、扩散方向、识别价值、提出追问，并在需要收口时整理成可执行思路 | 是 | 已接入首页“个人效率”栏目，作为非执行型想法陪练场景 Prompt |
+| 线上问题排查工作流 | /problem-cause-analysis/ | 排查类 | REVIEW | 线上异常、接口失败、日志报错、表现不一致、Bug 定位、日志分析、最近变更排查 | 是 | archive 内容；暂不展示，不进 sitemap，不进发布目录 |
+| 性能与稳定性瓶颈分析工作流 | /api-performance-analysis/ | 优化类 | REVIEW | 接口变慢、超时、P95/P99 抖动、系统瓶颈、服务雪崩、依赖连锁异常 | 是 | archive 内容；暂不展示，不进 sitemap，不进发布目录 |
+| SQL 与数据库优化工作流 | /slow-sql-optimization/ | 优化类 | REVIEW | 慢 SQL、索引失效、死锁、表结构、事务锁等待、执行计划、数据量和分页 | 是 | archive 内容；暂不展示，不进 sitemap，不进发布目录 |
+| 缓存与 Redis 稳定性评审工作流 | /redis-usage-review/ | 评审类 | REVIEW | Redis 使用评审、缓存设计、Key、TTL、一致性、大 Key、热点 Key、穿透、击穿、雪崩 | 是 | archive 内容；暂不展示，不进 sitemap，不进发布目录 |
+| 接口上线前评审工作流 | /api-design-review/ | 评审类 | REVIEW | 接口设计、API 安全、权限、幂等、参数边界、错误码、兼容性、网关限流风险 | 是 | archive 内容；暂不展示，不进 sitemap，不进发布目录 |
+| 分布式方案评审工作流 | /distributed-architecture-design/ | 方案类 | REVIEW | 分布式架构、数据一致性、分布式事务、MQ 丢失、MQ 重复消费、补偿、对账 | 是 | archive 内容；暂不展示，不进 sitemap，不进发布目录 |
+| 发布与监控设计工作流 | /monitoring-alert-design/ | 方案类 | REVIEW | 灰度发布、监控报警、日志规范、上线观察、回滚条件、故障处理动作 | 是 | archive 内容；暂不展示，不进 sitemap，不进发布目录 |
+| Tech Lead 技术判断工作流 | /tech-lead-agent/ | 协作流 | KEEP | 技术方案判断、复杂度控制、边界控制、风险识别和 Codex 执行前判断 | 是 | 公开保留；首页、导航、sitemap 和发布目录保留 |
+| Codex + GPT 开发协作流 | /codex-gpt-workflow/ | 协作流 | REVIEW | GPT 收敛需求和审查证据，Codex 执行代码，开发者控制最终决策 | 是 | archive 内容；暂不展示，不进 sitemap，不进发布目录 |
+| AI 编程项目启动前准备工作流 | /ai-coding-project-kickoff-workflow/ | 开发工作流 | KEEP | 一期边界确认、目录结构、AGENTS、docs、原型索引、数据库草案、开发计划、测试和部署清单 | 是 | 公开保留；首页、导航、sitemap 和发布目录保留 |
+| 外包沟通顾问 | /freelance-client-communication/ | 外包 / 接单 | KEEP | 甲方沟通、需求边界、报价工期、范围蔓延、验收售后和争议降温 | 是 | 公开保留；首页、导航、sitemap 和发布目录保留 |
+| 想法陪练官 | /idea-sparring-partner/ | 个人效率 | KEEP | 陪用户聊模糊 idea，激发灵感、扩散方向、识别价值、提出追问，并在需要收口时整理成可执行思路 | 是 | 公开保留；首页、导航、sitemap 和发布目录保留 |
 
 已合并删除页面记录：
 

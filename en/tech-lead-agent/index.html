@@ -53,6 +53,37 @@
   </section>
 
   <section>
+    <h2>Why This Prompt Exists</h2>
+    <p>This prompt is not for writing code. It exists to make a judgment before code starts. After working with AI and Codex for a long time, the same problem kept showing up: many failures were not implementation failures. The requirement was unclear, the boundary was loose, the solution was already too heavy, and execution started too early.</p>
+  </section>
+
+  <section>
+    <h2>What Problem It Solves</h2>
+    <p>It solves the question of whether work should start at all: whether the requirement is clear enough, whether the solution is reasonable, whether complexity has already drifted, and whether data, state, concurrency, or responsibility boundaries are risky.</p>
+  </section>
+
+  <section>
+    <h2>How I Use It</h2>
+    <p>I use it before asking Codex to change a system. When a requirement is still uncertain, a solution needs judgment, or a change may touch multiple modules, I first let it decide whether we are still discussing or ready to execute.</p>
+  </section>
+
+  <section>
+    <h2>Why It Stayed</h2>
+    <p>I keep returning to this prompt because it stops the impulse to start immediately. It reminds me to judge direction, boundaries, and risk before creating a Codex task. In AI collaboration, that matters more than writing code faster.</p>
+  </section>
+
+  <section>
+    <h2>Why It Changed</h2>
+    <p>At first, I split this kind of judgment into separate prompts: API review, Redis review, monitoring review, architecture review. Over time, I found that many issues did not belong to one specialty. They happened earlier: unclear requirements, overbuilt solutions, mixed boundaries, or tasks being sent to Codex too soon.
+That is why this prompt became one entry point: judge the stage first, then the solution and risks, and only then decide whether an execution task should exist.</p>
+  </section>
+
+  <section>
+    <h2>When Not To Use It</h2>
+    <p>Do not use it for small changes that are already clear. Do not use it for pure execution tasks. Do not ask it to repeat a review when the solution, scope, and acceptance criteria are already confirmed. It is for judgment, not execution.</p>
+  </section>
+
+  <section>
     <h2>Core Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Core Prompt</span></div>

@@ -55,9 +55,40 @@
   </section>
 
   <section>
+    <h2>为什么这个 Prompt 存在</h2>
+    <p>这个 Prompt 来自一个很具体的经验：AI 编码项目如果一开始没有边界、目录、文档和数据库草案，后面很容易变成边做边补、边改边解释。它不是开发 Prompt，而是开工前的收口工具。</p>
+  </section>
+
+  <section>
+    <h2>它解决什么问题</h2>
+    <p>它解决的是项目启动前的混乱：一期边界不清、AGENTS 规则缺失、docs 没有落位、数据库状态和索引没审查、测试和部署清单还没形成。</p>
+  </section>
+
+  <section>
+    <h2>我如何使用它</h2>
+    <p>我会在正式让 Codex 写代码前使用它。典型场景是一个项目准备启动，但还没有下发具体编码任务；这时先用它整理边界、目录、文档、数据库草案、执行顺序和复核点。</p>
+  </section>
+
+  <section>
+    <h2>为什么它被保留下来</h2>
+    <p>它留下来，是因为它能减少后续返工。很多 AI 编码问题不是代码生成错了，而是开工前没有把规则、非目标、状态流转和验收方式讲清楚。这个 Prompt 能把这些内容提前摆到桌面上。</p>
+  </section>
+
+  <section>
+    <h2>为什么变成今天这样</h2>
+    <p>最早它更像一个项目启动清单：目录、文档、数据库、测试、部署。后来发现清单本身不是重点，真正导致返工的是边界没冻结：一期做什么、不做什么、谁来审查、什么时候允许 Codex 开始写代码。
+所以它后来从“准备事项列表”变成了“开工前边界工具”，先收住范围和规则，再进入执行。</p>
+  </section>
+
+  <section>
+    <h2>什么时候不要使用</h2>
+    <p>不要用于已经进入稳定开发中的小修小补。不要用它替代具体需求文档。不要在项目目标还很模糊时强行产出完整计划；信息不足时，它应该先追问。</p>
+  </section>
+
+  <section>
     <h2>核心 Prompt</h2>
     <div class="block">
-      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制核心 Prompt</span></div>
       <pre><code id="ai-coding-project-kickoff-workflow-prompt"># 角色：AI 编程项目启动前准备负责人
 
 你不是直接写业务代码的程序员。

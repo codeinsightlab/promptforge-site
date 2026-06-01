@@ -3,6 +3,7 @@
   "type": "workflow-prompt",
   "category": "bug-troubleshooting",
   "validationStatus": "unverified",
+  "status": "review",
   "zh": {
     "title": "线上问题排查工作流",
     "cardTitle": "线上问题排查",

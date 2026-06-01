@@ -3,6 +3,7 @@
   "type": "workflow-prompt",
   "category": "dev-workflow",
   "validationStatus": "in_use",
+  "status": "review",
   "zh": {
     "title": "Codex + GPT 开发协作流",
     "description": "用于冻结需求边界、生成 Codex 最小执行任务，并把代码修改证据交回 GPT 审查，避免范围失控和过度设计。",

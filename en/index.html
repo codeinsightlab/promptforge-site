@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PromptForge - Ready-to-use AI prompt workflows</title>
-  <meta name="description" content="PromptForge does not aim to collect prompts in bulk. It focuses on reusable AI workflows from real scenarios, with a validation status clearly shown for each workflow.">
+  <meta name="description" content="Used for technical decisions, project kickoff, idea exploration, and client communication. These are the prompts that survived repeated real-world use.">
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
@@ -254,22 +254,22 @@
     </nav>
 
     <section class="hero">
-      <h1>Ready-to-use AI prompt workflows</h1>
-      <p class="hero-subtitle">PromptForge does not aim to collect prompts in bulk. It focuses on reusable AI workflows from real scenarios, with a validation status clearly shown for each workflow.</p>
+      <h1>Prompts worth keeping.</h1>
+      <p class="hero-subtitle">Used for technical decisions, project kickoff, idea exploration, and client communication. These are the prompts that survived repeated real-world use.</p>
       <div class="hero-actions">
-        <a class="hero-button primary" href="#technical-collaboration">Browse workflows</a>
-        <a class="hero-button" href="#ai-collaboration">View collaboration methods</a>
+        <a class="hero-button primary" href="#technical-collaboration">Browse kept prompts</a>
+        <a class="hero-button" href="#personal-productivity">View idea sparring</a>
       </div>
     </section>
 
-    <section class="validation-note" aria-label="Validation status note">
-      <p>PromptForge does not aim to collect prompts in bulk. Each workflow is labeled with a validation status: Verified, In Use, or Unverified. Workflows that have not been tested in real scenarios are not presented as mature solutions.</p>
+    <section class="validation-note" aria-label="About PromptForge">
+      <p>Most prompts are forgotten after solving a problem once. The ones here are still being copied, adapted, and used today. Four prompts are currently public. The rest remain in review.</p>
     </section>
 
     <section class="section featured-section" id="featured" aria-labelledby="featured-title">
       <div class="section-header">
-        <h2 id="featured-title">Featured</h2>
-        <p class="section-description">Start with a high-level judgment prompt before turning a request into execution.</p>
+        <h2 id="featured-title">The prompts I still return to</h2>
+        <p class="section-description">Each entry maps to a recurring real-world situation, not a category that needed filling.</p>
       </div>
       <div class="featured-grid">
         <a class="prompt-card" href="/en/tech-lead-agent/">
@@ -289,7 +289,7 @@
     <section class="section" id="technical-collaboration" aria-labelledby="technical-collaboration-title">
       <div class="section-header">
         <h2 id="technical-collaboration-title">Technical Collaboration</h2>
-        <p class="section-description">For debugging, performance, databases, cache, API review, architecture, release, and monitoring.</p>
+        <p class="section-description">For project scope, repositories, docs, database assumptions, tests, and deployment readiness before AI coding.</p>
       </div>
       <div class="prompt-grid">
         <a class="prompt-card" href="/en/ai-coding-project-kickoff-workflow/">
@@ -302,83 +302,6 @@
             <span>Scope Control</span>
           </div>
           <em>Start kickoff &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/en/problem-cause-analysis/">
-          <span class="validation-badge validation-unverified">Unverified</span>
-          <strong>Online Issue Troubleshooting</strong>
-          <p>Narrow production issues from impact, evidence, logs, API responses, and recent changes.</p>
-          <div class="card-tags">
-            <span>Troubleshooting</span>
-            <span>Production</span>
-            <span>Evidence</span>
-          </div>
-          <em>Start troubleshooting &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/en/api-performance-analysis/">
-          <span class="validation-badge validation-unverified">Unverified</span>
-          <strong>Performance and Stability Bottleneck Analysis</strong>
-          <p>Break down latency, timeouts, tail spikes, dependencies, resources, and stability risks.</p>
-          <div class="card-tags">
-            <span>Performance</span>
-            <span>Stability</span>
-            <span>Bottlenecks</span>
-          </div>
-          <em>Analyze bottlenecks &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/en/slow-sql-optimization/">
-          <span class="validation-badge validation-unverified">Unverified</span>
-          <strong>SQL and Database Optimization</strong>
-          <p>Optimize slow SQL, invalid indexes, deadlocks, schema design, transactions, and data-volume risks.</p>
-          <div class="card-tags">
-            <span>SQL</span>
-            <span>Indexes</span>
-            <span>Database</span>
-          </div>
-          <em>Optimize database &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/en/redis-usage-review/">
-          <span class="validation-badge validation-unverified">Unverified</span>
-          <strong>Cache and Redis Stability Review</strong>
-          <p>Review keys, TTL, consistency, hot keys, big keys, penetration, breakdown, and avalanche risks.</p>
-          <div class="card-tags">
-            <span>Redis</span>
-            <span>Cache</span>
-            <span>Stability</span>
-          </div>
-          <em>Review cache &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/en/api-design-review/">
-          <span class="validation-badge validation-unverified">Unverified</span>
-          <strong>Pre-release API Review</strong>
-          <p>Review idempotency, permissions, security, error handling, compatibility, and regression risks before release.</p>
-          <div class="card-tags">
-            <span>API</span>
-            <span>Pre-release</span>
-            <span>Risk</span>
-          </div>
-          <em>Review API &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/en/distributed-architecture-design/">
-          <span class="validation-badge validation-unverified">Unverified</span>
-          <strong>Distributed System Design Review</strong>
-          <p>Review architecture boundaries, consistency, transactions, MQ reliability, compensation, and reconciliation.</p>
-          <div class="card-tags">
-            <span>Architecture</span>
-            <span>Consistency</span>
-            <span>MQ</span>
-          </div>
-          <em>Review design &rarr;</em>
-        </a>
-        <a class="prompt-card" href="/en/monitoring-alert-design/">
-          <span class="validation-badge validation-unverified">Unverified</span>
-          <strong>Release and Monitoring Design</strong>
-          <p>Design rollout plans, rollback conditions, metrics, alert thresholds, and incident response actions.</p>
-          <div class="card-tags">
-            <span>Release</span>
-            <span>Monitoring</span>
-            <span>Rollback</span>
-          </div>
-          <em>Design release &rarr;</em>
         </a>
       </div>
     </section>
@@ -419,26 +342,6 @@
             <span>Decision Sparring</span>
           </div>
           <em>Start sparring &rarr;</em>
-        </a>
-      </div>
-    </section>
-
-    <section class="section" id="ai-collaboration" aria-labelledby="ai-collaboration-title">
-      <div class="section-header">
-        <h2 id="ai-collaboration-title">AI Collaboration Methods</h2>
-        <p class="section-description">For GPT and Codex roles, task framing, review, and execution rules.</p>
-      </div>
-      <div class="prompt-grid">
-        <a class="prompt-card" href="/en/codex-gpt-workflow/">
-          <span class="validation-badge validation-in_use">In Use</span>
-          <strong>GPT + Codex Workflow</strong>
-          <p>Freeze scope, generate a Codex execution task, and return evidence to GPT for review.</p>
-          <div class="card-tags">
-            <span>GPT</span>
-            <span>Codex</span>
-            <span>Execution rules</span>
-          </div>
-          <em>View collaboration method &rarr;</em>
         </a>
       </div>
     </section>

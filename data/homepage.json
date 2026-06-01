@@ -2,44 +2,44 @@
   "hero": {
     "zh": {
       "brand": "PromptForge",
-      "title": "开箱即用的 AI Prompt 工作流库",
-      "subtitle": "PromptForge 不追求批量收录，只沉淀真实场景中有复用价值的 AI 工作流，并为每个工作流标注验证状态。",
-      "meta": "PromptForge 不追求批量收录，只沉淀真实场景中有复用价值的 AI 工作流，并为每个工作流标注验证状态。",
-      "primaryCta": "查看工作流",
+      "title": "值得留下来的 Prompt",
+      "subtitle": "帮助我做技术判断、项目启动、想法整理和外包沟通。这些 Prompt 在真实场景中被反复使用后留下来。",
+      "meta": "帮助我做技术判断、项目启动、想法整理和外包沟通。这些 Prompt 在真实场景中被反复使用后留下来。",
+      "primaryCta": "查看保留的 Prompt",
       "primaryHref": "#technical-collaboration",
-      "secondaryCta": "查看协作方法",
-      "secondaryHref": "#ai-collaboration"
+      "secondaryCta": "查看想法陪练",
+      "secondaryHref": "#personal-productivity"
     },
     "en": {
       "brand": "PromptForge",
-      "title": "Ready-to-use AI prompt workflows",
-      "subtitle": "PromptForge does not aim to collect prompts in bulk. It focuses on reusable AI workflows from real scenarios, with a validation status clearly shown for each workflow.",
-      "meta": "PromptForge does not aim to collect prompts in bulk. It focuses on reusable AI workflows from real scenarios, with a validation status clearly shown for each workflow.",
-      "primaryCta": "Browse workflows",
+      "title": "Prompts worth keeping.",
+      "subtitle": "Used for technical decisions, project kickoff, idea exploration, and client communication. These are the prompts that survived repeated real-world use.",
+      "meta": "Used for technical decisions, project kickoff, idea exploration, and client communication. These are the prompts that survived repeated real-world use.",
+      "primaryCta": "Browse kept prompts",
       "primaryHref": "#technical-collaboration",
-      "secondaryCta": "View collaboration methods",
-      "secondaryHref": "#ai-collaboration"
+      "secondaryCta": "View idea sparring",
+      "secondaryHref": "#personal-productivity"
     }
   },
   "validationNote": {
     "zh": {
-      "label": "验证状态说明",
-      "text": "PromptForge 不追求批量收录。每个工作流都会标注验证状态：已验证、使用中、待验证。未经过真实场景验证的内容，不会伪装成成熟方案。"
+      "label": "关于 PromptForge",
+      "text": "大多数 Prompt 解决一次问题后就会被忘记。这里保留下来的，是那些我仍然会复制、修改并继续使用的 Prompt。目前公开 4 个 Prompt，其余内容仍处于 review 状态。"
     },
     "en": {
-      "label": "Validation status note",
-      "text": "PromptForge does not aim to collect prompts in bulk. Each workflow is labeled with a validation status: Verified, In Use, or Unverified. Workflows that have not been tested in real scenarios are not presented as mature solutions."
+      "label": "About PromptForge",
+      "text": "Most prompts are forgotten after solving a problem once. The ones here are still being copied, adapted, and used today. Four prompts are currently public. The rest remain in review."
     }
   },
   "featured": {
     "id": "featured",
     "zh": {
-      "title": "推荐入口",
-      "description": "先用一个高层判断入口，把需求、风险和执行边界收住。"
+      "title": "我仍然会使用的 Prompt",
+      "description": "每个入口对应一个反复出现的真实场景，而不是一个需要覆盖的分类。"
     },
     "en": {
-      "title": "Featured",
-      "description": "Start with a high-level judgment prompt before turning a request into execution."
+      "title": "The prompts I still return to",
+      "description": "Each entry maps to a recurring real-world situation, not a category that needed filling."
     },
     "items": [
       {
@@ -65,12 +65,12 @@
       "hideWhenEmpty": true,
       "zh": {
         "title": "技术协作",
-        "description": "用于 Bug 定位、性能优化、数据库、缓存、接口评审、架构和发布监控等技术场景。",
+        "description": "用于 AI 编码前的项目边界、目录、文档、数据库、测试和部署准备。",
         "defaultCta": "打开 Prompt"
       },
       "en": {
         "title": "Technical Collaboration",
-        "description": "For debugging, performance, databases, cache, API review, architecture, release, and monitoring.",
+        "description": "For project scope, repositories, docs, database assumptions, tests, and deployment readiness before AI coding.",
         "defaultCta": "Open prompt"
       },
       "items": [
@@ -84,14 +84,7 @@
             "tags": ["Kickoff", "Readiness", "Scope Control"],
             "cta": "Start kickoff"
           }
-        },
-        { "slug": "problem-cause-analysis", "zh": { "tags": ["排查", "线上问题", "证据链"], "cta": "启动排查" }, "en": { "tags": ["Troubleshooting", "Production", "Evidence"], "cta": "Start troubleshooting" } },
-        { "slug": "api-performance-analysis", "zh": { "tags": ["性能", "稳定性", "瓶颈"], "cta": "分析瓶颈" }, "en": { "tags": ["Performance", "Stability", "Bottlenecks"], "cta": "Analyze bottlenecks" } },
-        { "slug": "slow-sql-optimization", "zh": { "tags": ["SQL", "索引", "数据库"], "cta": "优化数据库" }, "en": { "tags": ["SQL", "Indexes", "Database"], "cta": "Optimize database" } },
-        { "slug": "redis-usage-review", "zh": { "tags": ["Redis", "缓存", "稳定性"], "cta": "评审缓存" }, "en": { "tags": ["Redis", "Cache", "Stability"], "cta": "Review cache" } },
-        { "slug": "api-design-review", "zh": { "tags": ["接口", "上线前", "风险"], "cta": "评审接口" }, "en": { "tags": ["API", "Pre-release", "Risk"], "cta": "Review API" } },
-        { "slug": "distributed-architecture-design", "zh": { "tags": ["架构", "一致性", "MQ"], "cta": "评审方案" }, "en": { "tags": ["Architecture", "Consistency", "MQ"], "cta": "Review design" } },
-        { "slug": "monitoring-alert-design", "zh": { "tags": ["发布", "监控", "回滚"], "cta": "设计发布" }, "en": { "tags": ["Release", "Monitoring", "Rollback"], "cta": "Design release" } }
+        }
       ]
     },
     {
@@ -157,7 +150,6 @@
         "defaultCta": "View method"
       },
       "items": [
-        { "slug": "codex-gpt-workflow", "zh": { "tags": ["GPT", "Codex", "执行规范"], "cta": "查看协作方式" }, "en": { "tags": ["GPT", "Codex", "Execution rules"], "cta": "View collaboration method" } }
       ]
     }
   ]
