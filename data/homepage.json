@@ -149,15 +149,30 @@
         "description": "For GPT and Codex roles, task framing, review, and execution rules.",
         "defaultCta": "View method"
       },
+      "items": []
+    },
+    {
+      "id": "agent-ai-engineering-methods",
+      "hideWhenEmpty": true,
+      "zh": {
+        "title": "Agent 与 AI 工程方法论",
+        "description": "用于沉淀可复用的 AI 系统工程方法，覆盖方法验证、失败归因与可交付闭环。",
+        "defaultCta": "查看方法"
+      },
+      "en": {
+        "title": "Agent & AI Engineering Methods",
+        "description": "For reusable AI engineering methods focused on verifiable facts, failure attribution, and practical delivery loops.",
+        "defaultCta": "View method"
+      },
       "items": [
         {
           "slug": "code-fact-to-skill-methodology",
           "zh": {
-            "tags": ["代码事实", "Skill 设计", "分层验证"],
+            "tags": ["代码事实", "Skill 设计", "失败归因"],
             "cta": "查看方法"
           },
           "en": {
-            "tags": ["Code facts", "Skill design", "Layered validation"],
+            "tags": ["Code facts", "Skill design", "Failure attribution"],
             "cta": "View method"
           }
         }

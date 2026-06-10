@@ -1,3 +1,29 @@
+### 2026-06-10 09:49 - 修正 Code-Fact-to-Skill 数据驱动与栏目挂载
+
+- 原始目标：确认 `code-fact-to-skill-methodology` 以 JSON/i18n 为源并保持可发布入口完整，新增 `Agent & AI Engineering Methods` 首页栏目挂载该 slug。
+- 本轮轮次：同一任务连续修改中的第 4 轮聚合修正。
+- 上一轮做法：已完成通用化内容修订与 KEEP 纳入，条目仍在 `ai-collaboration` 栏目。
+- 用户反馈 / 否定点：明确要求恢复数据源驱动并按栏目分类承接 AI 工程方法类，不再沿用协作栏目承载语义混合。
+- 本轮调整方向：补齐方法标题与核心描述字段、统一 Reusable Prompt 中英文占位约束、保留 `code-fact-to-skill-methodology` slug，不新增独立静态内容，新增专属首页栏目并将条目移动至该栏目。
+- 涉及文件：`data/prompts/code-fact-to-skill-methodology.json`、`data/homepage.json`、`log/codex-task-log.md`。
+- 沿用内容：`status=keep`、`type=standard-prompt`、slug、KEEP 入口规则与验证框架。
+- 回滚 / 放弃内容：未回滚；不保留 `code-fact-to-skill-methodology` 在 AI 协作栏目中的展示位，仅保留其新栏目入口。
+- 当前状态：已完成源内容与首页栏目结构修改，待执行 `validate -> generate -> build` 验证。
+- 后续注意：检查生成后的 `index.html` 与 `dist/` 首页卡片显示是否与新栏目标题和标签一致。
+
+### 2026-06-10 09:47 - 去业务化修正 Code-Fact-to-Skill Methodology
+
+- 原始目标：把 `code-fact-to-skill-methodology` 条目从订单业务路径里抽离，改成通用“代码事实到 Skill”的方法论文案。
+- 本轮轮次：本轮连续修改中的第 3 轮细化修正。
+- 上一轮做法：完成条目入库为 KEEP，并已完成首页/登记表收口与基础校验。
+- 用户反馈 / 否定点：页面主体、Reusable Prompt、输入示例仍有订单/支付/发货类业务语境，且可复用性边界不够清晰。
+- 本轮调整方向：完全通用化主体验证语言，新增必需占位符变量，替换 `exampleInput` 为通用占位式输入，保留来源案例为“来源说明”而非方法前置条件。
+- 涉及文件：`data/prompts/code-fact-to-skill-methodology.json`、`log/codex-task-log.md`。
+- 沿用内容：KEEP 状态、slug、卡片入口与现有 AGENTS 登记行不变。
+- 回滚 / 放弃内容：移除订单、支付、发货等领域词在主体验证体的出现；移除模型版本标签（如 8B/4B）在 Core Method、Output Sequence、可复用提示中的出现。
+- 当前状态：已完成通用化修订；`npm run validate` 通过，KEEP 数与收敛口径未变化。
+- 后续注意：如后续新增案例细节，不在方法主体中加入具体业务词，仅保留在“来源说明”并明确“非前置条件”。
+
 ### 2026-06-10 09:34 - 将 Code-Fact-to-Skill Methodology 纳入正式 KEEP 内容
 
 - 原始目标：将 Code-Fact-to-Skill Methodology 从实验资产同步到 PromptForge 正式内容库（KEEP），并完成页面登记与首页入口可见性收口。
