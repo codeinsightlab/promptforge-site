@@ -1,3 +1,15 @@
+### 2026-06-10 10:00 - Code-Fact-to-Skill Methodology 可复制 Prompt 边界符移除
+- 原始目标：移除 code-fact-to-skill-methodology 正式内容中的 PROMPT BEGIN / PROMPT END，并保持 JSON/i18n 与生成器链路不变。
+- 本轮轮次：2
+- 上一轮做法：已完成中文内容中文化迭代，未触及复制边界符。
+- 用户反馈 / 否定点：发现中文与英文可复用 Prompt 正文中仍遗留 PROMPT BEGIN / PROMPT END。
+- 本轮调整方向：仅移除 JSON 与生成 HTML 中可复制正文里的边界符，不改方法论核心语义。
+- 涉及文件：data/prompts/code-fact-to-skill-methodology.json；由生成链路覆盖的详情 HTML。
+- 沿用内容：slug、status、字段结构、首页栏目配置、生成方式。
+- 回滚 / 放弃内容：未回滚内容，仅回退边界符文本。
+- 当前状态：PROMPT BEGIN / PROMPT END 已从源码与生成内容中移除，继续等待验证。
+- 后续注意：按要求执行 validate / generate / build 并核验首页栏目与复制内容。
+
 ### 2026-06-10 09:55 - 迭代 Code-Fact-to-Skill 中文可读性
 
 - 原始目标：减少中文页非必要英文方法论术语，让中文内容更易读、贴近中文表述。
