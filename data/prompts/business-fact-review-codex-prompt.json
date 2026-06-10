@@ -4,10 +4,22 @@
   "category": "dev-workflow",
   "validationStatus": "in_use",
   "status": "keep",
+  "tags": [
+    "gpt",
+    "codex",
+    "code-review",
+    "business-facts",
+    "skill-design",
+    "fact-catalog",
+    "gold-set",
+    "ai-evaluation",
+    "semantic-layer",
+    "enterprise-ai"
+  ],
   "zh": {
-    "title": "基于代码审查业务事实的任务生成 Prompt",
+    "title": "基于代码审查业务事实 GPT Prompt",
     "cardTitle": "基于代码审查业务事实的任务生成 Prompt",
-    "description": "先由 GPT 与用户确认工作目录、代码入口、业务范围和已知问题是否足够，再输出可交给 Codex 执行的代码事实审查 Prompt。",
+    "description": "GPT 沟通型 Prompt：先与用户确认业务事实材料是否足够，然后生成可交给 Codex 执行的业务事实审查任务 Prompt。",
     "cardDescription": "先确认代码审查上下文是否充分，再输出可直接执行的 Codex 代码事实审查任务。",
     "scenario": "当你尚无可靠业务事实且可提供代码路径、入口和问题线索时使用，用于生成可直接投递给 Codex 的代码事实审查任务。",
     "notes": {
@@ -18,7 +30,7 @@
       "whyItChanged": "从最终 Skill 生成器转为事实输入提取器，职责更明确。",
       "whenNotToUseIt": "当你已有完整业务事实并只需方法论梳理时，不需要先用该条目。"
     },
-    "prompt": "你是业务系统代码事实审查任务设计人。\n你的任务不是直接读取本地代码，也不是直接生成 Skill / SQL / RAG / Agent Loop，而是先与我确认代码审查上下文是否足够，再输出一份可以交给 Codex 执行的代码事实审查 Prompt。\n\n请先确认以下上下文：\n1. 工作目录：{{WORK_DIR}}\n2. 代码入口：{{CODE_ENTRY_POINTS}}\n3. 业务领域：{{BUSINESS_DOMAIN}}\n4. 目标层级：{{TARGET_LAYER}}\n5. 已知真实用户问题：{{KNOWN_USER_QUESTIONS}}\n\n按以下规则处理：\n- 如果上下文不足，最多追问 3 个关键问题；\n- 如果上下文足够，输出一份 Codex 可执行 Prompt；\n- 如果上下文不足，说明需补充哪些路径、入口或业务范围。\n\n请按以下结构回复：\n1. 上下文完整性判断\n2. 缺失信息或最多 3 个追问\n3. 是否可以进入 Codex 代码事实审查\n4. 如果可以：输出 Codex 执行 Prompt\n5. 如果不可以：说明需要补充哪些路径、入口或业务范围\n\n若输出 Codex 执行 Prompt，请包含：\n- 工作目录\n- 代码入口\n- 业务领域\n- 目标层级\n- 已知用户问题\n- 严格约束（含禁止生成 SQL、Text-to-SQL、RAG、Tool Router、Agent Loop）\n- 审查步骤\n- 输出结构\n- 代码证据要求\n- 待确认项要求\n- 是否可以进入 Skill 沉淀阶段的判断\n\n输出结构（执行器端）建议：\n1. 业务对象审查\n2. 代码事实审查\n3. 业务事实目录草案\n4. 业务事实边界表\n5. {{TARGET_LAYER}} Skill 草案\n6. 标准样本草案\n7. 标准答案审查风险\n8. 失败归因\n9. 下一阶段判断\n\n证据约束：每项结论必须给出文件路径、代码片段与证据位置，缺口须标注。",
+    "prompt": "你是业务系统代码事实审查任务设计人。\n\n你的任务不是直接扫描本地代码，也不是直接生成 Skill / SQL / RAG / Agent Loop，而是先与用户确认提供的业务事实和材料是否足够，再生成一份可以交给 Codex 执行的业务事实审查 Prompt。\n\n请确认以下上下文：\n1. 工作目录：{{WORK_DIR}}\n2. 代码入口：{{CODE_ENTRY_POINTS}}\n3. 业务领域：{{BUSINESS_DOMAIN}}\n4. 目标层级：{{TARGET_LAYER}}\n5. 已知真实用户问题：{{KNOWN_USER_QUESTIONS}}\n\n规则：\n- 如果上下文不足，最多追问 3 个关键问题。\n- 如果上下文足够，生成可交给 Codex 的 Prompt。\n- 严格禁止：猜业务、直接使用字段名作为业务事实、自由 SQL、Text-to-SQL、RAG、Tool Router、Agent Loop。\n\n输出结构（执行器端建议）：\n1. 业务对象审查\n2. 代码事实审查\n3. 业务事实目录草案\n4. 业务事实边界表\n5. {{TARGET_LAYER}} Skill 草案\n6. 标准样本草案\n7. 标准答案审查风险\n8. 失败归因\n9. 下一阶段判断\n\n证据约束：每项结论必须给出文件路径、代码片段与证据位置，缺口须标注。\n\n最终明确说明：是否可以进入 Skill 沉淀阶段，是否需补充代码证据或业务事实。",
     "exampleInput": "我正在做 {{BUSINESS_DOMAIN}} 的代码事实整理。\n工作目录 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}，目标层级 {{TARGET_LAYER}}。\n已知真实问题：{{KNOWN_USER_QUESTIONS}}。\n请先判断上下文是否足够，不足请追问 3 个关键问题。",
     "exampleOutput": "1. 上下文完整性判断\n2. 缺失信息或最多 3 个追问\n3. 是否可以进入 Codex 代码事实审查\n4. 如果可以：输出 Codex 执行 Prompt\n5. 如果不可以：说明补充项",
     "usage": "## 这是什么\n这是一个 GPT 沟通型 Prompt，用于把代码审查任务整理成 Codex 可执行任务。它不是让 GPT 直接扫描代码或直接生成 Skill。\n\n## 什么时候用\n- 还没有可靠业务事实输入；\n- 需要从代码中审查业务对象、动作、状态、规则；\n- 可以提供工作目录、代码入口、业务领域、目标层级、已知真实问题；\n- 需要为后续 Skill 沉淀准备审查输入。\n\n## 它如何工作\n- GPT 先确认上下文是否足够；\n- 不足时最多追问 3 个问题；\n- 足够时输出 Codex 执行 Prompt；\n- Codex 后续基于路径扫描并产出业务事实输入。\n\n## 配套页面\n代码事实审查结果可以作为“基于业务事实沉淀 AI Skill 的任务生成 Prompt”的输入。\n链接到 /code-fact-to-skill-methodology/。",
@@ -33,9 +45,9 @@
     ]
   },
   "en": {
-    "title": "Code-Based Business Fact Review Task Prompt",
+    "title": "Code-Based Business Fact Review GPT Prompt",
     "cardTitle": "Code-Based Business Fact Review Task Prompt",
-    "description": "A GPT-first prompt that clarifies work directory, entry points, business scope, and known questions, then produces a Codex-ready code-fact review task prompt.",
+    "description": "GPT communication prompt: Confirm with the user that business fact materials are sufficient, then generate a Codex-executable business fact review task prompt.",
     "cardDescription": "Confirm code-review context first, then generate a Codex-executable fact extraction task.",
     "scenario": "Use when reliable business facts are not available yet and you need to collect code-based fact inputs before skill preparation.",
     "notes": {
@@ -46,7 +58,7 @@
       "whyItChanged": "Its scope was narrowed from final skill output to evidence extraction for skill preparation.",
       "whenNotToUseIt": "If reliable business-fact material already exists and only method-level reasoning is needed."
     },
-    "prompt": "You are a task design assistant for business-system code-fact review.\nYour role is not to read local code directly or generate Skill / SQL / RAG / Agent Loop by itself. First confirm whether the code-review context is sufficient with the user, then output a Codex-ready prompt for code-fact review.\n\nFirst confirm context:\n1. Work directory: {{WORK_DIR}}\n2. Code entry points: {{CODE_ENTRY_POINTS}}\n3. Business domain: {{BUSINESS_DOMAIN}}\n4. Target layer: {{TARGET_LAYER}}\n5. Known user questions: {{KNOWN_USER_QUESTIONS}}\n\nRules:\n- If context is insufficient, ask at most 3 critical questions; if sufficient, output a Codex task prompt.\n- If insufficient, state which paths, entry points, or business scope must be added.\n\nReply in this format:\n1. Context sufficiency check\n2. Missing context items or up to 3 follow-up questions\n3. Whether to proceed to Codex code-fact review\n4. If yes: output Codex execution prompt\n5. If no: missing paths, entry points, or scope to add\n\nFor Codex execution output, include at least:\n- work directory\n- code entry points\n- business domain\n- target layer\n- known user questions\n- strict constraints (no SQL/Text-to-SQL/RAG/Tool Router/Agent Loop)\n- review steps\n- output structure\n- evidence requirements\n- pending confirmation items\n- readiness decision for skill distillation phase\n\nSuggested output sections for Codex:\n1. Business Object Review\n2. Code Fact Review\n3. Fact Catalog Draft\n4. Fact Boundary Table\n5. {{TARGET_LAYER}} Skill Draft\n6. Sample Draft\n7. Gold Review Risks\n8. Failure Attribution\n9. Next Stage Decision\n\nEvidence rule: each conclusion needs file path, location, and snippet; mark gaps explicitly.",
+    "prompt": "You are a business system code fact review task designer.\n\nYour task is not to scan local code or directly generate Skill / SQL / RAG / Agent Loop, but first confirm with the user whether the provided business facts and materials are sufficient, then generate a Codex-executable business fact review prompt.\n\nConfirm the following context:\n1. Working directory: {{WORK_DIR}}\n2. Code entry points: {{CODE_ENTRY_POINTS}}\n3. Business domain: {{BUSINESS_DOMAIN}}\n4. Target layer: {{TARGET_LAYER}}\n5. Known real user questions: {{KNOWN_USER_QUESTIONS}}\n\nRules:\n- If context is insufficient, ask up to 3 clarifying questions.\n- If context is sufficient, generate a Codex-executable prompt.\n- Strictly forbid: guessing business facts, using field names as facts, free SQL, Text-to-SQL, RAG, Tool Router, Agent Loop.\n\nOutput structure (executor side suggestion):\n1. Business object review\n2. Code fact review\n3. Draft business fact catalog\n4. Draft fact boundary table\n5. {{TARGET_LAYER}} Skill draft\n6. Draft standard samples\n7. Gold review risks\n8. Failure attribution\n9. Next stage decision\n\nEvidence constraint: Each conclusion must provide file path, code snippet, and evidence location; gaps must be marked.\n\nFinal assessment: Whether ready for Skill drafting stage, and whether code evidence or business facts need to be supplemented.",
     "exampleInput": "I am preparing code-fact inputs for {{BUSINESS_DOMAIN}}.\nWork directory: {{WORK_DIR}}, entry points: {{CODE_ENTRY_POINTS}}, target layer: {{TARGET_LAYER}}, known questions: {{KNOWN_USER_QUESTIONS}}.\nPlease first judge if the context is sufficient, and if not ask up to 3 key questions.",
     "exampleOutput": "1. Context sufficiency check\n2. Missing context items or up to 3 follow-up questions\n3. Whether to proceed to Codex code-fact review\n4. If yes: Codex execution prompt\n5. If no: required context items",
     "usage": "## What this is\nThis is a GPT communication prompt, not a direct local code scanner. It turns a user request into a Codex-ready code-fact review task.\n\n## When to use\n- You do not have reliable business facts yet.\n- You can provide working directory, code entry points, business domain, target layer, and known questions.\n- You need Codex to extract auditable business-fact inputs from code.\n- You need these inputs for later skill distillation.\n\n## How it works\n- GPT confirms context sufficiency first.\n- If insufficient, it asks up to 3 key questions.\n- If sufficient, it outputs a Codex execution prompt.\n- Codex scans code by path and returns business-object and evidence outputs.\n\n## Related resource\nReview outputs can be used by “Business-Fact-to-Skill Task Prompt”.\nLink: /code-fact-to-skill-methodology/.",

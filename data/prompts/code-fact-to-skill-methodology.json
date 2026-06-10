@@ -7,7 +7,7 @@
   "zh": {
     "title": "基于业务事实沉淀 AI Skill 的任务生成 Prompt",
     "cardTitle": "基于业务事实沉淀 AI Skill 的任务生成 Prompt",
-    "description": "先由 GPT 与用户确认业务事实、审查结果和样本材料是否足够，再输出可交给 Codex 执行的 Skill 沉淀任务 Prompt。",
+    "description": "GPT 沟通型任务生成 Prompt：先与用户确认业务事实材料是否足够，再输出可交给 Codex 执行的 Skill 沉淀任务 Prompt。",
     "cardDescription": "先确认材料是否够用，再生成可交付 Codex 的 Skill 沉淀任务。",
     "scenario": "当你已有业务事实、代码审查回执、业务规则、真实问题、标准样本或模型评测结果，想让 GPT 输出可直接给 Codex 执行的 Skill 沉淀任务时使用。",
     "notes": {
@@ -18,7 +18,7 @@
       "whyItChanged": "从“方法+执行混写”转为“方法论+输入来源清晰化”。",
       "whenNotToUseIt": "当你还未有业务事实输入且无法定位代码证据来源时，先从代码审查入口开始。"
     },
-    "prompt": "你是业务系统 AI Skill 沉淀任务设计人。\n你的任务不是直接扫描本地代码，也不是直接生成 SQL / RAG / Agent Loop，而是先与我确认业务事实与输入材料是否足够，然后输出一份可交给 Codex 执行的 Skill 沉淀任务 Prompt。\n\n我可能会提供以下材料：\n- 业务事实审查结果\n- 代码审查回执\n- 业务规则说明\n- 代码片段\n- 接口说明\n- 表结构或字段说明\n- 流程描述\n- 真实用户问题\n- 标准样本\n- 模型评估结果\n\n请先按以下方式处理：\n1) 判断当前输入是否足够；\n2) 如不足，最多追问 3 个关键问题并指出缺口；\n3) 如足够，输出一份可直接交给 Codex 的执行 Prompt；\n4) 如缺少可靠业务事实，建议先使用“基于代码审查业务事实的任务生成 Prompt”。\n\n请按以下结构输出：\n1. 输入材料判断\n2. 缺失信息或最多 3 个追问\n3. 是否可以进入 Skill 沉淀\n4. 如果可以：输出 Codex 执行 Prompt\n5. 如果不可以：说明需补充的业务事实或代码证据\n\n如果可以，请在“输出 Codex 执行 Prompt”部分给出完整可执行文本，包含：\n- 任务目标\n- 输入材料清单\n- 严格约束\n- 输出结构\n- 证据要求\n- 标准答案审查要求\n- 失败归因要求\n- 下一阶段判断要求\n\n工作规则：\n- 只能基于用户已提供材料判断，不能假设已读取本地代码。\n- 字段名不等于业务事实。\n- 不凭空猜测业务事实。\n- 不直接生成最终 Skill，只生成可交付的 Codex 执行任务。\n- 不得直接生成 SQL，不进入 Text-to-SQL。\n- 不得使用 RAG。\n- 不得实现 Tool Router。\n- 不得实现 Agent Loop。\n",
+    "prompt": "你是业务系统 AI Skill 沉淀任务设计人。\n\n你的任务不是直接扫描本地代码，也不是直接生成 SQL、RAG 或 Agent Loop，而是先与我确认业务事实与输入材料是否足够，然后输出一份可以交给 Codex 执行的 Skill 沉淀任务 Prompt。\n\n你可能收到的材料包括：\n- 业务事实审查结果\n- 代码审查回执\n- 业务规则说明\n- 代码片段\n- 接口说明\n- 表结构或字段说明\n- 流程描述\n- 真实用户问题\n- 标准样本\n- 模型评测结果\n\n处理规则：\n- 只能基于提供材料判断，不要假设已读取本地代码；\n- 如果材料不足，最多追问 3 个关键问题；\n- 如果缺少可靠业务事实，请建议先执行“基于代码审查业务事实的任务生成 Prompt”；\n- 如果材料足够，输出一份 Codex 可执行 Prompt；\n- 不要直接猜业务；\n- 不要把字段名直接当业务事实；\n- 不要直接生成自由 SQL；\n- 不要直接进入 Text-to-SQL；\n- 不要直接进入 RAG；\n- 不要实现 Tool Router；\n- 不要实现 Agent Loop。\n\n请按以下结构回复：\n1. 输入材料判断\n2. 缺失信息或最多 3 个追问\n3. 是否可以进入 Skill 沉淀\n4. 如果可以：输出 Codex 执行 Prompt\n5. 如果不可以：说明需要先补充哪些业务事实或代码证据\n\n当你输出 Codex 执行 Prompt 时，必须包含：\n- 任务目标\n- 输入材料清单\n- 严格约束\n- 输出结构\n- 证据要求\n- 标准答案审查要求\n- 失败归因要求\n- 下一阶段判断要求",
     "exampleInput": "我正在做 {{BUSINESS_DOMAIN}} 的 {{TARGET_LAYER}} Skill 沉淀，请先帮我确认：\n我已整理的材料包括业务事实审查结果、代码审查回执、业务规则、标准样本和模型评测结果。\n请先判断材料是否足够，不足请只追问最多 3 个关键问题。",
     "exampleOutput": "1. 输入材料判断\n2. 缺失信息或最多 3 个追问\n3. 是否可以进入 Skill 沉淀\n4. 如果可以：输出 Codex 执行 Prompt\n5. 如果不可以：补充材料建议",
     "usage": "## 这是什么\n这是一个 GPT 沟通型 Prompt。它不是让 GPT 直接扫描本地代码，也不是直接生成 Skill；它用于把现有材料整理成可直接交给 Codex 的 Skill 沉淀任务。\n\n## 什么时候用\n- 已有业务事实审查结果；\n- 已有代码审查回执、业务规则、代码片段、接口说明、流程描述；\n- 已有真实用户问题、标准样本或模型评测结果；\n- 需要形成 Skill 草案、标准样本、评测方案和失败归因。\n\n## 它如何工作\n- GPT 先判断输入是否足够；\n- 不足时最多追问 3 个关键问题；\n- 足够时输出一份 Codex 执行 Prompt；\n- 如缺少业务事实，建议先完成代码审查任务。\n\n## 配套页面\n如果你还没有可靠业务事实输入，先使用“基于代码审查业务事实的任务生成 Prompt”。\n链接到 /business-fact-review-codex-prompt/。",
@@ -35,7 +35,7 @@
   "en": {
     "title": "Business-Fact-to-Skill Task Prompt",
     "cardTitle": "Business-Fact-to-Skill Task Prompt",
-    "description": "A GPT-first prompt that clarifies business facts, review outputs, and sample materials with the user, then produces a Codex-ready task prompt for skill distillation.",
+    "description": "GPT communication task generation prompt: Confirm with the user that business fact materials are sufficient before generating a Codex-executable Skill drafting prompt.",
     "cardDescription": "Confirm fact and material readiness first, then generate a Codex-executable skill distillation task.",
     "scenario": "Use this when business facts, review outputs, and user problem evidence are available and you need GPT to organize them into a Codex-ready Skill-distillation task.",
     "notes": {
@@ -46,7 +46,7 @@
       "whyItChanged": "It was refined into a Skill-preparation methodology instead of an execution-only prompt.",
       "whenNotToUseIt": "Do not use it before any reliable business fact input is available."
     },
-    "prompt": "You are an AI task designer for business-system skill distillation.\nYour task is not to scan local code or generate SQL / RAG / Agent Loop directly, but to first confirm with the user whether business facts and input materials are sufficient, then output a Codex-ready prompt for skill distillation.\n\nThe user may provide:\n- business-fact review results\n- Codex review outputs\n- business rules\n- code snippets\n- API notes\n- schema or field notes\n- process description\n- real user questions\n- samples\n- model evaluation outcomes\n\nProcess:\n1) Check whether the provided inputs are sufficient;\n2) If not, ask at most 3 critical clarifying questions and show missing points;\n3) If sufficient, output a complete task prompt ready for Codex execution;\n4) If business facts are still missing, recommend using the Code-Based Business Fact Review Task Prompt first.\n\nReply in this structure:\n1. Input sufficiency assessment\n2. Missing items or up to 3 follow-up questions\n3. Whether to proceed to skill distillation\n4. If yes: output Codex execution prompt\n5. If no: required evidence and facts to add\n\nIf you output a Codex task, include at least:\n- task objective\n- input materials list\n- strict constraints\n- output structure\n- evidence requirements\n- answer-risk review points\n- failure attribution requirement\n- next-stage decision requirement\n\nConstraints:\n- Use only user-provided materials for judgment; do not assume local code was read.\n- Field names are not business facts.\n- Do not infer facts by imagination.\n- Do not directly output final Skills; generate only a Codex execution task.\n- Do not emit free-form SQL or switch to Text-to-SQL.\n- Do not use RAG.\n- Do not implement Tool Router.\n- Do not implement Agent Loop.\n",
+    "prompt": "You are a business system AI Skill drafting task designer.\n\nYour task is not to scan local code or directly generate SQL, RAG, or Agent Loop, but first confirm with me whether the business fact and input materials are sufficient, then output a prompt that can be executed by Codex to draft the Skill.\n\nMaterials you may receive include:\n- Business fact review results\n- Code review outputs\n- Business rules\n- Code snippets\n- API/interface descriptions\n- Table structure or field definitions\n- Process descriptions\n- Real user questions\n- Gold samples\n- Model evaluation results\n\nRules:\n- Only judge based on the materials provided; do not assume local code has been read;\n- If materials are insufficient, ask up to 3 clarifying questions;\n- If reliable business facts are missing, suggest first executing a 'Code-Based Business Fact Review Task Prompt';\n- If materials are sufficient, output a Codex-executable prompt;\n- Do not guess business facts;\n- Do not treat field names directly as business facts;\n- Do not generate free-form SQL;\n- Do not directly enter Text-to-SQL;\n- Do not directly enter RAG;\n- Do not implement Tool Router;\n- Do not implement Agent Loop.\n\nPlease reply with the following structure:\n1. Input material assessment\n2. Missing information or up to 3 clarifying questions\n3. Whether ready for Skill drafting\n4. If yes: output Codex execution prompt\n5. If no: explain which business facts or code evidence need to be added\n\nWhen outputting Codex execution prompt, it must include:\n- Task objective\n- Input material list\n- Strict constraints\n- Output structure\n- Evidence requirements\n- Gold review requirements\n- Failure attribution requirements\n- Next stage assessment",
     "exampleInput": "I am preparing Skill distillation for {{TARGET_LAYER}} in {{BUSINESS_DOMAIN}}.\nI can provide review outputs, rules, snippets, API notes, process description, real user questions, samples, and evaluation results.\nPlease first judge whether the materials are sufficient, and if not ask up to 3 critical questions.",
     "exampleOutput": "1. Input sufficiency assessment\n2. Missing items or up to 3 follow-up questions\n3. Whether to proceed to skill distillation\n4. If yes: Codex execution prompt\n5. If no: materials to add",
     "usage": "## What this is\nThis is a GPT-first prompt, not a local-code scanning prompt. It helps users convert reviewed material into a Codex-ready skill distillation task.\n\n## When to use\n- You already have business-fact inputs, review artifacts, and business rules.\n- You have code snippets, API notes, process descriptions, user questions, or samples.\n- You need Codex to output a Skill draft, sample draft, evaluation plan, and failure attribution.\n\n## How it works\n- GPT first checks material sufficiency.\n- If incomplete, it asks up to 3 critical questions.\n- If sufficient, it returns a Codex execution task.\n- If business facts are missing, it suggests the code fact review task prompt first.\n\n## Related resource\nIf business facts are not ready, use “Code-Based Business Fact Review Task Prompt” first.\nLink: /business-fact-review-codex-prompt/.",
@@ -59,5 +59,12 @@
         "enLabel": "Code-Based Business Fact Review Task Prompt"
       }
     ]
-  }
+  },
+  "tags": [
+    "gpt",
+    "codex",
+    "skill-design",
+    "business-facts",
+    "i18n"
+  ]
 }

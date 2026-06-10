@@ -1,3 +1,21 @@
+### 2026-06-10 14:20 - Code-Fact-to-Skill 系列内容替换
+
+- 原始目标：
+- 本轮轮次：
+- 上一轮做法：已对 code-fact-to-skill-methodology 和 business-fact-review-codex-prompt 进行提示词内容更新与结构保持。
+- 用户反馈 / 否定点：
+- 本轮调整方向：执行你提供的 business-fact-review-codex-prompt 内容替换，保持原 JSON 结构与字段体系不变。
+- 涉及文件：
+  - data/prompts/business-fact-review-codex-prompt.json
+- 沿用内容：
+  - 保持 slug、status、type、category、卡片/场景/notes 等现有结构字段。
+- 回滚 / 放弃内容：
+  - 无
+- 当前状态：
+  - 中文/英文 title、description、prompt 已替换为你提供版本；同时修正该条目 JSON 语法。
+- 后续注意：
+  - 未新增 SQL / Tool Router / RAG / Agent Loop，不修改其他文件。
+
 ### 2026-06-10 14:06 - 统一 code-fact-to-skill 与 business-fact-review 为 GPT 沟通任务生成 Prompt
 
 - 原始目标：将两个条目统一为“GPT 沟通确认 → 输出 Codex 执行 Prompt”结构，明确职责边界，移除可复制区中的执行器正文。
