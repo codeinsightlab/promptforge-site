@@ -1,3 +1,16 @@
+### 2026-06-10 12:00 - 优化 business-fact-review-codex-prompt 为纯 Codex 扫码执行 Prompt
+
+- 原始目标：清除 business-fact-review-codex-prompt 可复用正文中的解释性叙事与示例化文案，仅保留可执行指令、约束与固定输出顺序。
+- 本轮轮次：针对现有 Prompt 主体做可执行性收口，保持与方法论关系不变。
+- 上一轮做法：已完成方法论与 Codex 执行页职责分离，但执行条目正文仍混入了“是什么/何时用/可复制 Prompt”说明段。
+- 用户反馈 / 否定点：用户要求只输出可直接投递给 Codex 的执行指令，不再混入 GPT 交互式解释。
+- 本轮调整方向：重写 `zh.prompt` 与 `en.prompt`，仅保留上下文确认、硬约束、执行流程、9 项固定输出项及输出协议；保留 `slug`、`status` 和字段结构不变。
+- 涉及文件：`data/prompts/business-fact-review-codex-prompt.json`；`log/codex-task-log.md`。
+- 沿用内容：`type`、`status=keep`、JSON/i18n 驱动、Related 链接关系、首页/栏目/生成逻辑。
+- 回滚 / 放弃内容：未改业务方法论页、未移除占位符、未重构 schema、未改首页。
+- 当前状态：执行 Prompt 已收口为 Codex 扫码场景，不再在正文输出混入可复制说明；已通过 validate / generate / build 命令校验。
+- 后续注意：如需再减化页面体验，可继续清理 `exampleInput/exampleOutput` 的示例文案与占位方式，但本轮不动这两项。
+
 ### 2026-06-10 11:40 - 重构 Code-Fact-to-Skill 关系为“Skill 沉淀方法论”与“代码事实输入提取”
 - 原始目标：清晰区分两个条目的职责边界，避免方法论页既承接 Skill 沉淀又承接代码扫描。
 - 本轮轮次：基于最近反馈，重新定义能力结构。
