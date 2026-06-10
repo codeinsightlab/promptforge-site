@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Business Fact Review Codex Prompt</title>
-  <meta name="description" content="A Codex execution prompt for reviewing business-system code, extracting business facts, defining fact boundaries, and drafting AI skills and gold sets.">
+  <meta name="description" content="Execution prompt for Codex that scans business code by path and emits business object reviews, fact catalogs, boundaries, skill drafts, and failure attribution.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -41,48 +41,50 @@
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this entry when the fact-extraction path is already decided and you need a direct, copy-ready prompt for Codex execution.</p>
+    <p>Use this entry when code-execution tracing is confirmed and you need a ready Codex prompt for factual extraction.</p>
   </section>
 
   <section>
     <h2>Why This Prompt Exists</h2>
-    <p>It provides a ready-to-run execution prompt so the methodology can be executed directly by Codex without rewriting the task structure each time.</p>
+    <p>It provides a ready-to-run Codex execution text so the method can be executed directly without rebuilding task structure every time.</p>
   </section>
 
   <section>
     <h2>What Problem It Solves</h2>
-    <p>It bridges the gap between method explanation and practical execution, reducing prompt rebuild and missing-output risk.</p>
+    <p>It closes the gap between method explanation and actionable execution, reducing missing-output risk and repeated task recreation.</p>
   </section>
 
   <section>
     <h2>How I Use It</h2>
-    <p>I pass code entry points, domain, layer, protocol, baseline, samples, and known questions, then drive Codex through review, boundary, draft, and attribution outputs in one pass.</p>
+    <p>I provide entry points, domain, layer, protocol, baseline, samples, and known questions, then let Codex produce object review, boundaries, drafts, and attribution in one pass.</p>
   </section>
 
   <section>
     <h2>Why It Stayed</h2>
-    <p>After splitting, this entry has a clear purpose and is now stable in repeated use.</p>
-  </section>
-
-  <section>
-    <h2>Why It Changed</h2>
-    <p>Execution content was moved out of the methodology page to remove role-and-task mixing.
+    <p>After splitting method and execution responsibilities, this entry became clearly reusable and stable.
 </p>
   </section>
 
   <section>
+    <h2>Why It Changed</h2>
+    <p>Execution content was explicitly aligned to local-code scanning so it is no longer mixed into the review method page.</p>
+  </section>
+
+  <section>
     <h2>When Not To Use It</h2>
-    <p>Do not use it when you are still in method framing or scope definition before deciding to run an execution pass.</p>
+    <p>Do not use this prompt when you are still in review framing or need GPT-based material analysis only.</p>
   </section>
 
   <section>
     <h2>Role Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="business-fact-review-codex-prompt-prompt">You are a business-system code reviewer and AI Skill designer.
-Your goal is to review real code for the required business facts of {{TARGET_LAYER}} and draft the skill for that layer.
+      <pre><code id="business-fact-review-codex-prompt-prompt">You are a business-system code reviewer and AI Skill execution specialist.
 
-Please confirm the context needed by me:
+This prompt is for Codex.
+Your goal is to inspect the provided code context and produce a review package for {{TARGET_LAYER}}.
+
+Please confirm the context I provide:
 
 1. Work directory: {{WORK_DIR}}
 2. Code entry points: {{CODE_ENTRY_POINTS}}
@@ -105,18 +107,6 @@ Hard constraints:
 - Do not tune samples only to chase score.
 - Do not define business facts without code evidence.
 
-Working steps:
-
-1. Review code entry points first and identify business objects.
-2. Extract code facts from Controller, Service, DTO, VO, Enum, Mapper, SQL, state transitions, and validation logic.
-3. Abstract those facts into queryable or judgeable business facts.
-4. Define boundaries for each fact: what it represents, what it does not represent, and likely confusion points.
-5. Draft the {{TARGET_LAYER}} Skill based on the fact boundaries.
-6. Draft the gold set based on the skill draft.
-7. Review gold-set risk and classify stable, temporarily acceptable, and controversial samples.
-8. Perform failure attribution across model, protocol, engineering, gold answer, and fact-definition issues.
-9. Decide whether to move to the next stage.
-
 Please output in order:
 
 1. Business Object Review
@@ -127,39 +117,41 @@ Please output in order:
 6. Gold Set Draft
 7. Gold Review Risks
 8. Failure Attribution
-9. Next Stage Decision
+9. Next Stage Decision</code></pre>
+    </div>
+  </section>
 
-Output requirements:
 
-- Every business fact must include code evidence.
-- If evidence is insufficient, mark as pending confirmation and avoid forcing fact inclusion.
-- If user needs cannot be represented by current business facts, mark a fact-definition gap.
-- If the discussion shifts to business definition, do not continue suggesting model tuning.
-- Final line must explicitly state: whether Skill experimentation can start, whether more code evidence is needed, and whether business intent sampling is needed.</code></pre>
+  <section>
+    <h2>Companion prompt</h2>
+    <div class="block">
+      <ul>    <li><p>If you need review alignment first, use<a href="/en/code-fact-to-skill-methodology/">Code-Fact-to-Skill Methodology</a></p></li>
+      </ul>
     </div>
   </section>
 
   <section>
     <h2>What to provide next</h2>
     <div class="block"><pre><code>I am building a {{TARGET_LAYER}} skill for {{BUSINESS_DOMAIN}}.
-Work directory is {{WORK_DIR}}, and the code entry points are {{CODE_ENTRY_POINTS}}.
+Work directory is {{WORK_DIR}}, and entry points are {{CODE_ENTRY_POINTS}}.
 Known real user questions are {{KNOWN_USER_QUESTIONS}}.
-Please produce Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table first, then move to skill and gold set drafting only when evidence is sufficient.</code></pre></div>
+
+Please produce Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table first, then proceed only when evidence is sufficient.</code></pre></div>
   </section>
 
   <section>
     <h2>Expected output preview</h2>
-    <div class="block"><pre><code>Start with code evidence. First output Business Object Review and Code Fact Review, then validate Fact Catalog and Boundary definitions.
-Only move to {{TARGET_LAYER}} Skill Draft and Gold Set Draft when both facts and protocol are stable.
-If attribution points to fact-definition gaps, enrich facts before any model tuning.</code></pre></div>
+    <div class="block"><pre><code>First confirm code evidence and object extraction, then validate catalog and boundaries.
+Only move to {{TARGET_LAYER}} Skill Draft and Gold Set Draft when evidence and protocol are stable.
+If attribution indicates fact-definition gaps, collect more evidence before model tuning.</code></pre></div>
   </section>
 
   <section>
     <h2>Usage notes</h2>
     <div class="block"><pre><code>1. Copy this role prompt.
-2. In the next message, provide code entry points, domain, target layer, protocol, samples, and known questions.
-3. Request output in the nine ordered items above.
-4. Use failure attribution to decide go/no-go for Skill experimentation and whether more evidence is needed.</code></pre></div>
+2. In the next message, provide all execution context: work dir, entry points, domain, target layer, protocol, samples, and known questions.
+3. Require output in the nine ordered items.
+4. Use failure attribution to decide go/no-go and whether more code evidence is needed.</code></pre></div>
   </section>
 </div>
 <script>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>业务事实审查 Codex Prompt</title>
-  <meta name="description" content="让 Codex 基于真实业务代码审查业务对象、业务事实、事实边界，并生成 AI Skill 与标准样本草案的执行 Prompt。">
+  <meta name="description" content="Codex 执行型 Prompt：在指定路径扫描业务代码，产出业务对象审查、业务事实、事实边界、Skill 草案与标准样本风险。">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -38,37 +38,37 @@
 
   <section>
     <h2>场景</h2>
-    <p>当你已确定要从代码中抽取业务事实，并需要给 Codex 下达可执行的审查任务时使用该条目。</p>
+    <p>当你已明确要从代码中抽取业务事实，并希望让 Codex 直接执行审查时使用。</p>
   </section>
 
   <section>
     <h2>为什么这个 Prompt 存在</h2>
-    <p>该页提供可复制、可落地的 Codex 执行文本，用于将方法论转为可执行任务。</p>
+    <p>该条目提供可直接执行的 Codex Prompt，承接方法论页的审查判断，避免重复改写任务结构。</p>
   </section>
 
   <section>
     <h2>它解决什么问题</h2>
-    <p>它解决了“方法讲清了但没有可直接执行文本”的断层，减少重复整理输入、遗漏关键输出项的问题。</p>
+    <p>解决了方法解释与可执行任务混在一起的问题，保证执行输入稳定且可复用。</p>
   </section>
 
   <section>
     <h2>我如何使用它</h2>
-    <p>我会先给出代码入口、业务领域、目标层级、输出协议和已知问题，再直接使用该 Prompt 要求 Codex 输出对象审查到下一阶段判断。</p>
+    <p>我先提供代码入口、业务领域、目标层级、输出协议、样本与问题，再要求 Codex 按既定顺序输出审查项并给出下一步判断。</p>
   </section>
 
   <section>
     <h2>为什么它被保留下来</h2>
-    <p>该条目承担明确的执行入口，形成“方法论—执行 Prompt”分层结构后，复用更稳定。</p>
+    <p>该条目在“方法论 + 执行”分层后职责更清晰，复用稳定。</p>
   </section>
 
   <section>
     <h2>为什么变成今天这样</h2>
-    <p>将完整的 Codex 执行内容从方法论条目拆出，避免页面职责混淆。</p>
+    <p>将本地扫描与审查判断从同页剥离后，方法论页保留定位、执行页保持可直接运行。</p>
   </section>
 
   <section>
     <h2>什么时候不要使用</h2>
-    <p>当你还在做方法论讨论或范围评估，不需要立刻生成机器可执行任务时，不建议先使用该条目。</p>
+    <p>当你还在做方法讨论或没有本地代码扫描目标时，不建议先使用该条目。</p>
   </section>
 
   <section>
@@ -76,9 +76,11 @@
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
       <pre><code id="business-fact-review-codex-prompt-prompt">你是业务系统代码审查与 AI Skill 设计执行人。
-你的目标是基于 {{BUSINESS_DOMAIN}} 的真实代码，审查 {{TARGET_LAYER}} 所需的业务事实，并生成该层 Skill。
 
-请先确认我需要的上下文：
+该 Prompt 专供 Codex 使用。
+你的目标是基于本地代码上下文，完成指定层级的业务事实审查，并产出可复用输出。
+
+我会在下一条消息补充：
 
 1. 工作目录：{{WORK_DIR}}
 2. 代码入口：{{CODE_ENTRY_POINTS}}
@@ -95,25 +97,13 @@
 * 不允许把数据库字段名直接当业务事实。
 * 不允许直接生成自由 SQL。
 * 不允许直接进入 Text-to-SQL。
-* 不允许直接进入 RAG。
+* 不允许直接引入 RAG。
 * 不允许实现 Tool Router。
 * 不允许实现 Agent Loop。
 * 不允许为了提高得分而改样本。
-* 不允许缺少代码证据就定义业务事实。
+* 不允许没有代码证据就定义业务事实。
 
-工作步骤：
-
-1. 先审查代码入口，识别业务对象。
-2. 从 Controller、Service、DTO、VO、Enum、Mapper、SQL、状态流转、校验逻辑中抽取代码事实。
-3. 将代码事实抽象为可查询或可判断的业务事实。
-4. 为每个业务事实定义边界：它表示什么、不表示什么、容易和谁混淆。
-5. 根据业务事实边界生成 {{TARGET_LAYER}} Skill 草案。
-6. 基于 Skill 草案生成标准样本草案。
-7. 审查标准答案风险，判断哪些样本稳定、哪些只是阶段性可接受、哪些存在争议。
-8. 做失败归因，区分模型问题、协议问题、工程问题、标准答案问题和业务事实定义问题。
-9. 判断是否可以进入下一阶段。
-
-请按顺序输出：
+请按以下顺序输出：
 
 1. 业务对象审查
 2. 代码事实审查
@@ -123,15 +113,16 @@
 6. 标准样本草案
 7. 标准答案审查风险
 8. 失败归因
-9. 下一阶段判断
+9. 下一阶段判断</code></pre>
+    </div>
+  </section>
 
-输出要求：
 
-* 每个业务事实必须给出代码证据。
-* 如果证据不足，标记为待确认，不要强行加入业务事实目录。
-* 如果用户问题无法被现有业务事实表达，标记为业务事实缺口。
-* 如果当前问题已经转向业务定义，不要继续建议调模型。
-* 最终明确说明：是否可以进入 Skill 实验、是否需要补代码证据、是否需要真实业务意图采样。</code></pre>
+  <section>
+    <h2>配套使用</h2>
+    <div class="block">
+      <ul>    <li><p>如需先做方法判定，请先看<a href="/code-fact-to-skill-methodology/">基于代码事实生成 AI Skill 的分层验证方法</a></p></li>
+      </ul>
     </div>
   </section>
 
@@ -140,14 +131,15 @@
     <div class="block"><pre><code>我正在为 {{BUSINESS_DOMAIN}} 系统沉淀 {{TARGET_LAYER}} Skill。
 工作目录为 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}。
 当前已知真实问题为 {{KNOWN_USER_QUESTIONS}}。
-请先输出业务对象审查、代码事实审查、业务事实目录草案与业务事实边界表，并给出下一阶段判断。</code></pre></div>
+请先输出对象审查、代码事实、事实目录与边界定义，再给出是否进入下一阶段的判断。</code></pre></div>
   </section>
 
   <section>
     <h2>GPT 会这样输出</h2>
-    <div class="block"><pre><code>先做代码事实确认与对象抽取；
-再输出业务事实目录草案和边界表。
-只有证据充分且协议边界稳定后，才进入 {{TARGET_LAYER}} Skill 草案与标准样本草案；若失败归因为事实定义缺口，先补事实定义与真实场景采样。</code></pre></div>
+    <div class="block"><pre><code>先输出代码层面的业务对象与代码事实核验；
+再给出事实目录草案与边界表；
+只有证据充分并且边界稳定时，才产出 {{TARGET_LAYER}} Skill 草案与标准样本草案；
+若失败归因为事实定义缺口，请回到业务意图采样。</code></pre></div>
   </section>
 
   <section>
@@ -155,7 +147,7 @@
     <div class="block"><pre><code>1. 复制该 Prompt。
 2. 下一条消息补充：工作目录、代码入口、业务领域、目标层级、输出协议、模型基线、样本文件、已知问题。
 3. 要求按顺序输出 9 个结果项。
-4. 按失败归因决定是否进入 Skill 试点、补证据或返回业务意图采样。</code></pre></div>
+4. 用失败归因决定是否进入 Skill 试点、补代码证据或返回业务定义采样。</code></pre></div>
   </section>
 </div>
 <script>

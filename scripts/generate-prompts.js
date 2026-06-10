@@ -51,6 +51,7 @@ function pageLabels(lang) {
     ? {
         validationStatus: "验证状态",
         scenario: "场景",
+        relatedPrompts: "配套使用",
         notes: {
           whyExists: "为什么这个 Prompt 存在",
           whatProblemItSolves: "它解决什么问题",
@@ -67,6 +68,7 @@ function pageLabels(lang) {
     : {
         validationStatus: "Validation Status",
         scenario: "Scenario",
+        relatedPrompts: "Companion prompt",
         notes: {
           whyExists: "Why This Prompt Exists",
           whatProblemItSolves: "What Problem It Solves",
@@ -188,6 +190,33 @@ function codeBlock(text) {
   return `<div class="block"><pre><code>${escapeHtml(text)}</code></pre></div>`;
 }
 
+function localizedPromptUrl(slug, isEnglish) {
+  return isEnglish ? `/en/${slug}/` : `/${slug}/`;
+}
+
+function renderRelatedPrompts(content, labels, isEnglish) {
+  const items = Array.isArray(content.relatedPrompts) ? content.relatedPrompts : [];
+  if (!items.length) return "";
+
+  const htmlItems = items
+    .map((item) => {
+      const slug = typeof item.slug === "string" ? item.slug.trim() : "";
+      const label = (isEnglish ? item.enLabel : item.zhLabel) || item.label || "";
+      const prefix = (isEnglish ? item.enPrefix : item.zhPrefix) || "";
+      if (!slug || !label) return "";
+
+      const url = localizedPromptUrl(slug, isEnglish);
+      const labelHtml = `${escapeHtml(prefix)}<a href="${escapeHtml(url)}">${escapeHtml(label)}</a>`;
+      return `    <li><p>${labelHtml}</p></li>`;
+    })
+    .filter(Boolean)
+    .join("");
+
+  if (!htmlItems) return "";
+
+  return `\n\n  <section>\n    <h2>${escapeHtml(labels.relatedPrompts)}</h2>\n    <div class="block">\n      <ul>${htmlItems}\n      </ul>\n    </div>\n  </section>`;
+}
+
 function optionalCodeSection(heading, text) {
   if (typeof text !== "string" || text.trim() === "") return "";
 
@@ -297,6 +326,7 @@ ${validationSection(record, lang, labels.validationStatus)}
       <pre><code id="${escapeHtml(record.slug)}-prompt">${escapeHtml(content.prompt)}</code></pre>
     </div>
   </section>
+${renderRelatedPrompts(content, labels, isEnglish)}
 
   <section>
     <h2>${labels.exampleInput}</h2>

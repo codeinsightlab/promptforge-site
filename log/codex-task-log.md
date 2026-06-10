@@ -1,3 +1,25 @@
+### 2026-06-10 11:20 - 明确 Code-Fact-to-Skill 双场景定位
+- 原始目标：区分 `code-fact-to-skill-methodology` 与 `business-fact-review-codex-prompt` 的使用对象，避免混淆 GPT 审查与 Codex 扫描。
+- 本轮轮次：同一任务继续收敛，聚焦定位与说明。
+- 上一轮做法：已完成方法论与执行条目分离，并用相关链接替换正文中的配套说明。
+- 用户反馈 / 否定点：该条目定位仍可能被误读为纯方法论或纯 Codex 执行。
+- 本轮调整方向：将方法论页定为审查/判断型 Prompt（GPT / Tech Lead），将 Codex 页定为执行型 Prompt，并在页面说明中明确两种使用方式。
+- 涉及文件：`data/prompts/code-fact-to-skill-methodology.json`；`data/prompts/business-fact-review-codex-prompt.json`；`log/codex-task-log.md`。
+- 沿用内容：`slug` 不变，`status=keep` 不变，JSON / i18n 驱动与生成器链路不变。
+- 回滚 / 放弃内容：未回滚历史内容；未改 Object-Fact Parse；仅重写 `zh/en` 的定位与使用说明文案。
+- 当前状态：方法论页强化了 GPT / ChatGPT 审查模式与 Codex 模式区分，Codex 页明确为本地代码扫描执行 Prompt，且链接不在可复制正文。
+- 后续注意：待再次确认是否需要补齐 `cardTitle/cardDescription` 的中英语义对齐（当前已保持并已更新为区别场景）。
+
+### 2026-06-10 10:26 - 方法论页与 Codex 执行 Prompt 关联改为相关资源链接
+- 原始目标：将配套执行 Prompt 说明从方法论页 Prompt 正文移除，并通过页面可点击相关资源展示。
+- 本轮轮次：进一步清理方法论与执行 Prompt 的内容职责边界。
+- 上一轮做法：已完成方法论与执行 Prompt 的条目拆分，正文仍保留了“配套执行 Prompt”描述。
+- 用户反馈 / 否定点：要求不再在方法论正文里出现可复制说明和裸路径。
+- 本轮调整方向：新增 relatedPrompts 字段（最小 schema 扩展），在生成器添加相关资源区渲染，支持语言文本+链接展示。
+- 涉及文件：data/prompts/code-fact-to-skill-methodology.json；data/prompts/business-fact-review-codex-prompt.json；scripts/generate-prompts.js。
+- 沿用内容：slug、status、homepage栏目、JSON/i18n/生成器驱动、手写 HTML 输出链路不变。
+- 当前状态：方法论正文不再包含配套执行说明；相关提示链接已放入相关资源区，中文/英文路径均可点击。
+
 ### 2026-06-10 10:10 - 拆分 Code-Fact-to-Skill Methodology 与 Codex 执行 Prompt
 - 原始目标：把 code-fact-to-skill-methodology 从“方法论 + 可执行 Prompt 混合”拆分为方法论条目与配套 Codex 执行条目。
 - 本轮轮次：新增内容结构拆分与栏目挂载同步。

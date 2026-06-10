@@ -7,40 +7,57 @@
   "zh": {
     "title": "业务事实审查 Codex Prompt",
     "cardTitle": "业务事实审查 Codex Prompt",
-    "description": "让 Codex 基于真实业务代码审查业务对象、业务事实、事实边界，并生成 AI Skill 与标准样本草案的执行 Prompt。",
-    "cardDescription": "输入代码上下文后，输出业务对象、事实目录、边界、Skill 与标准样本草案，并给出失败归因。",
-    "scenario": "当你已确定要从代码中抽取业务事实，并需要给 Codex 下达可执行的审查任务时使用该条目。",
+    "description": "Codex 执行型 Prompt：在指定路径扫描业务代码，产出业务对象审查、业务事实、事实边界、Skill 草案与标准样本风险。",
+    "cardDescription": "用于本地代码扫描，输出对象识别、事实目录、边界表、Skill 草案与失败归因。",
+    "scenario": "当你已明确要从代码中抽取业务事实，并希望让 Codex 直接执行审查时使用。",
     "notes": {
-      "whyExists": "该页提供可复制、可落地的 Codex 执行文本，用于将方法论转为可执行任务。",
-      "whatProblemItSolves": "它解决了“方法讲清了但没有可直接执行文本”的断层，减少重复整理输入、遗漏关键输出项的问题。",
-      "howIUseIt": "我会先给出代码入口、业务领域、目标层级、输出协议和已知问题，再直接使用该 Prompt 要求 Codex 输出对象审查到下一阶段判断。",
-      "whyItStayed": "该条目承担明确的执行入口，形成“方法论—执行 Prompt”分层结构后，复用更稳定。",
-      "whyItChanged": "将完整的 Codex 执行内容从方法论条目拆出，避免页面职责混淆。",
-      "whenNotToUseIt": "当你还在做方法论讨论或范围评估，不需要立刻生成机器可执行任务时，不建议先使用该条目。"
+      "whyExists": "该条目提供可直接执行的 Codex Prompt，承接方法论页的审查判断，避免重复改写任务结构。",
+      "whatProblemItSolves": "解决了方法解释与可执行任务混在一起的问题，保证执行输入稳定且可复用。",
+      "howIUseIt": "我先提供代码入口、业务领域、目标层级、输出协议、样本与问题，再要求 Codex 按既定顺序输出审查项并给出下一步判断。",
+      "whyItStayed": "该条目在“方法论 + 执行”分层后职责更清晰，复用稳定。",
+      "whyItChanged": "将本地扫描与审查判断从同页剥离后，方法论页保留定位、执行页保持可直接运行。",
+      "whenNotToUseIt": "当你还在做方法讨论或没有本地代码扫描目标时，不建议先使用该条目。"
     },
-    "prompt": "你是业务系统代码审查与 AI Skill 设计执行人。\n你的目标是基于 {{BUSINESS_DOMAIN}} 的真实代码，审查 {{TARGET_LAYER}} 所需的业务事实，并生成该层 Skill。\n\n请先确认我需要的上下文：\n\n1. 工作目录：{{WORK_DIR}}\n2. 代码入口：{{CODE_ENTRY_POINTS}}\n3. 业务领域：{{BUSINESS_DOMAIN}}\n4. 目标层级：{{TARGET_LAYER}}\n5. 输出协议：{{OUTPUT_PROTOCOL}}\n6. 模型基线：{{MODEL_BASELINE}}\n7. 样本文件：{{SAMPLE_FILE}}\n8. 已知真实用户问题：{{KNOWN_USER_QUESTIONS}}\n\n严格约束：\n\n* 不允许直接猜业务。\n* 不允许把数据库字段名直接当业务事实。\n* 不允许直接生成自由 SQL。\n* 不允许直接进入 Text-to-SQL。\n* 不允许直接进入 RAG。\n* 不允许实现 Tool Router。\n* 不允许实现 Agent Loop。\n* 不允许为了提高得分而改样本。\n* 不允许缺少代码证据就定义业务事实。\n\n工作步骤：\n\n1. 先审查代码入口，识别业务对象。\n2. 从 Controller、Service、DTO、VO、Enum、Mapper、SQL、状态流转、校验逻辑中抽取代码事实。\n3. 将代码事实抽象为可查询或可判断的业务事实。\n4. 为每个业务事实定义边界：它表示什么、不表示什么、容易和谁混淆。\n5. 根据业务事实边界生成 {{TARGET_LAYER}} Skill 草案。\n6. 基于 Skill 草案生成标准样本草案。\n7. 审查标准答案风险，判断哪些样本稳定、哪些只是阶段性可接受、哪些存在争议。\n8. 做失败归因，区分模型问题、协议问题、工程问题、标准答案问题和业务事实定义问题。\n9. 判断是否可以进入下一阶段。\n\n请按顺序输出：\n\n1. 业务对象审查\n2. 代码事实审查\n3. 业务事实目录草案\n4. 业务事实边界表\n5. {{TARGET_LAYER}} Skill 草案\n6. 标准样本草案\n7. 标准答案审查风险\n8. 失败归因\n9. 下一阶段判断\n\n输出要求：\n\n* 每个业务事实必须给出代码证据。\n* 如果证据不足，标记为待确认，不要强行加入业务事实目录。\n* 如果用户问题无法被现有业务事实表达，标记为业务事实缺口。\n* 如果当前问题已经转向业务定义，不要继续建议调模型。\n* 最终明确说明：是否可以进入 Skill 实验、是否需要补代码证据、是否需要真实业务意图采样。",
-    "exampleInput": "我正在为 {{BUSINESS_DOMAIN}} 系统沉淀 {{TARGET_LAYER}} Skill。\n工作目录为 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}。\n当前已知真实问题为 {{KNOWN_USER_QUESTIONS}}。\n请先输出业务对象审查、代码事实审查、业务事实目录草案与业务事实边界表，并给出下一阶段判断。",
-    "exampleOutput": "先做代码事实确认与对象抽取；\n再输出业务事实目录草案和边界表。\n只有证据充分且协议边界稳定后，才进入 {{TARGET_LAYER}} Skill 草案与标准样本草案；若失败归因为事实定义缺口，先补事实定义与真实场景采样。",
-    "usage": "1. 复制该 Prompt。\n2. 下一条消息补充：工作目录、代码入口、业务领域、目标层级、输出协议、模型基线、样本文件、已知问题。\n3. 要求按顺序输出 9 个结果项。\n4. 按失败归因决定是否进入 Skill 试点、补证据或返回业务意图采样。"
+    "prompt": "你是业务系统代码审查与 AI Skill 设计执行人。\n\n该 Prompt 专供 Codex 使用。\n你的目标是基于本地代码上下文，完成指定层级的业务事实审查，并产出可复用输出。\n\n我会在下一条消息补充：\n\n1. 工作目录：{{WORK_DIR}}\n2. 代码入口：{{CODE_ENTRY_POINTS}}\n3. 业务领域：{{BUSINESS_DOMAIN}}\n4. 目标层级：{{TARGET_LAYER}}\n5. 输出协议：{{OUTPUT_PROTOCOL}}\n6. 模型基线：{{MODEL_BASELINE}}\n7. 样本文件：{{SAMPLE_FILE}}\n8. 已知真实用户问题：{{KNOWN_USER_QUESTIONS}}\n\n严格约束：\n\n* 不允许直接猜业务。\n* 不允许把数据库字段名直接当业务事实。\n* 不允许直接生成自由 SQL。\n* 不允许直接进入 Text-to-SQL。\n* 不允许直接引入 RAG。\n* 不允许实现 Tool Router。\n* 不允许实现 Agent Loop。\n* 不允许为了提高得分而改样本。\n* 不允许没有代码证据就定义业务事实。\n\n请按以下顺序输出：\n\n1. 业务对象审查\n2. 代码事实审查\n3. 业务事实目录草案\n4. 业务事实边界表\n5. {{TARGET_LAYER}} Skill 草案\n6. 标准样本草案\n7. 标准答案审查风险\n8. 失败归因\n9. 下一阶段判断",
+    "exampleInput": "我正在为 {{BUSINESS_DOMAIN}} 系统沉淀 {{TARGET_LAYER}} Skill。\n工作目录为 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}。\n当前已知真实问题为 {{KNOWN_USER_QUESTIONS}}。\n请先输出对象审查、代码事实、事实目录与边界定义，再给出是否进入下一阶段的判断。",
+    "exampleOutput": "先输出代码层面的业务对象与代码事实核验；\n再给出事实目录草案与边界表；\n只有证据充分并且边界稳定时，才产出 {{TARGET_LAYER}} Skill 草案与标准样本草案；\n若失败归因为事实定义缺口，请回到业务意图采样。",
+    "usage": "1. 复制该 Prompt。\n2. 下一条消息补充：工作目录、代码入口、业务领域、目标层级、输出协议、模型基线、样本文件、已知问题。\n3. 要求按顺序输出 9 个结果项。\n4. 用失败归因决定是否进入 Skill 试点、补代码证据或返回业务定义采样。",
+    "relatedPrompts": [
+      {
+        "slug": "code-fact-to-skill-methodology",
+        "zhPrefix": "如需先做方法判定，请先看",
+        "zhLabel": "基于代码事实生成 AI Skill 的分层验证方法",
+        "enPrefix": "If you need review method alignment first, use",
+        "enLabel": "Code-Fact-to-Skill Methodology"
+      }
+    ]
   },
   "en": {
     "title": "Business Fact Review Codex Prompt",
     "cardTitle": "Business Fact Review Codex Prompt",
-    "description": "A Codex execution prompt for reviewing business-system code, extracting business facts, defining fact boundaries, and drafting AI skills and gold sets.",
-    "cardDescription": "Given code context, ask Codex to output reviews, fact boundaries, skill draft, and gold set draft with clear failure attribution.",
-    "scenario": "Use this entry when the fact-extraction path is already decided and you need a direct, copy-ready prompt for Codex execution.",
+    "description": "Execution prompt for Codex that scans business code by path and emits business object reviews, fact catalogs, boundaries, skill drafts, and failure attribution.",
+    "cardDescription": "Use when you need local code scan execution with structured evidence outputs.",
+    "scenario": "Use this entry when code-execution tracing is confirmed and you need a ready Codex prompt for factual extraction.",
     "notes": {
-      "whyExists": "It provides a ready-to-run execution prompt so the methodology can be executed directly by Codex without rewriting the task structure each time.",
-      "whatProblemItSolves": "It bridges the gap between method explanation and practical execution, reducing prompt rebuild and missing-output risk.",
-      "howIUseIt": "I pass code entry points, domain, layer, protocol, baseline, samples, and known questions, then drive Codex through review, boundary, draft, and attribution outputs in one pass.",
-      "whyItStayed": "After splitting, this entry has a clear purpose and is now stable in repeated use."
-,
-      "whyItChanged": "Execution content was moved out of the methodology page to remove role-and-task mixing.\n",
-      "whenNotToUseIt": "Do not use it when you are still in method framing or scope definition before deciding to run an execution pass."
+      "whyExists": "It provides a ready-to-run Codex execution text so the method can be executed directly without rebuilding task structure every time.",
+      "whatProblemItSolves": "It closes the gap between method explanation and actionable execution, reducing missing-output risk and repeated task recreation.",
+      "howIUseIt": "I provide entry points, domain, layer, protocol, baseline, samples, and known questions, then let Codex produce object review, boundaries, drafts, and attribution in one pass.",
+      "whyItStayed": "After splitting method and execution responsibilities, this entry became clearly reusable and stable.\n",
+      "whyItChanged": "Execution content was explicitly aligned to local-code scanning so it is no longer mixed into the review method page.",
+      "whenNotToUseIt": "Do not use this prompt when you are still in review framing or need GPT-based material analysis only."
     },
-    "prompt": "You are a business-system code reviewer and AI Skill designer.\nYour goal is to review real code for the required business facts of {{TARGET_LAYER}} and draft the skill for that layer.\n\nPlease confirm the context needed by me:\n\n1. Work directory: {{WORK_DIR}}\n2. Code entry points: {{CODE_ENTRY_POINTS}}\n3. Business domain: {{BUSINESS_DOMAIN}}\n4. Target layer: {{TARGET_LAYER}}\n5. Output protocol: {{OUTPUT_PROTOCOL}}\n6. Model baseline: {{MODEL_BASELINE}}\n7. Sample file: {{SAMPLE_FILE}}\n8. Known real user questions: {{KNOWN_USER_QUESTIONS}}\n\nHard constraints:\n\n- Do not guess business facts.\n- Do not treat database field names as business facts.\n- Do not generate free SQL.\n- Do not move directly to Text-to-SQL.\n- Do not use RAG.\n- Do not implement Tool Router.\n- Do not implement Agent Loop.\n- Do not tune samples only to chase score.\n- Do not define business facts without code evidence.\n\nWorking steps:\n\n1. Review code entry points first and identify business objects.\n2. Extract code facts from Controller, Service, DTO, VO, Enum, Mapper, SQL, state transitions, and validation logic.\n3. Abstract those facts into queryable or judgeable business facts.\n4. Define boundaries for each fact: what it represents, what it does not represent, and likely confusion points.\n5. Draft the {{TARGET_LAYER}} Skill based on the fact boundaries.\n6. Draft the gold set based on the skill draft.\n7. Review gold-set risk and classify stable, temporarily acceptable, and controversial samples.\n8. Perform failure attribution across model, protocol, engineering, gold answer, and fact-definition issues.\n9. Decide whether to move to the next stage.\n\nPlease output in order:\n\n1. Business Object Review\n2. Code Fact Review\n3. Fact Catalog Draft\n4. Fact Boundary Table\n5. {{TARGET_LAYER}} Skill Draft\n6. Gold Set Draft\n7. Gold Review Risks\n8. Failure Attribution\n9. Next Stage Decision\n\nOutput requirements:\n\n- Every business fact must include code evidence.\n- If evidence is insufficient, mark as pending confirmation and avoid forcing fact inclusion.\n- If user needs cannot be represented by current business facts, mark a fact-definition gap.\n- If the discussion shifts to business definition, do not continue suggesting model tuning.\n- Final line must explicitly state: whether Skill experimentation can start, whether more code evidence is needed, and whether business intent sampling is needed.",
-    "exampleInput": "I am building a {{TARGET_LAYER}} skill for {{BUSINESS_DOMAIN}}.\nWork directory is {{WORK_DIR}}, and the code entry points are {{CODE_ENTRY_POINTS}}.\nKnown real user questions are {{KNOWN_USER_QUESTIONS}}.\nPlease produce Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table first, then move to skill and gold set drafting only when evidence is sufficient.",
-    "exampleOutput": "Start with code evidence. First output Business Object Review and Code Fact Review, then validate Fact Catalog and Boundary definitions.\nOnly move to {{TARGET_LAYER}} Skill Draft and Gold Set Draft when both facts and protocol are stable.\nIf attribution points to fact-definition gaps, enrich facts before any model tuning.",
-    "usage": "1. Copy this role prompt.\n2. In the next message, provide code entry points, domain, target layer, protocol, samples, and known questions.\n3. Request output in the nine ordered items above.\n4. Use failure attribution to decide go/no-go for Skill experimentation and whether more evidence is needed."
+    "prompt": "You are a business-system code reviewer and AI Skill execution specialist.\n\nThis prompt is for Codex.\nYour goal is to inspect the provided code context and produce a review package for {{TARGET_LAYER}}.\n\nPlease confirm the context I provide:\n\n1. Work directory: {{WORK_DIR}}\n2. Code entry points: {{CODE_ENTRY_POINTS}}\n3. Business domain: {{BUSINESS_DOMAIN}}\n4. Target layer: {{TARGET_LAYER}}\n5. Output protocol: {{OUTPUT_PROTOCOL}}\n6. Model baseline: {{MODEL_BASELINE}}\n7. Sample file: {{SAMPLE_FILE}}\n8. Known real user questions: {{KNOWN_USER_QUESTIONS}}\n\nHard constraints:\n\n- Do not guess business facts.\n- Do not treat database field names as business facts.\n- Do not generate free SQL.\n- Do not move directly to Text-to-SQL.\n- Do not use RAG.\n- Do not implement Tool Router.\n- Do not implement Agent Loop.\n- Do not tune samples only to chase score.\n- Do not define business facts without code evidence.\n\nPlease output in order:\n\n1. Business Object Review\n2. Code Fact Review\n3. Fact Catalog Draft\n4. Fact Boundary Table\n5. {{TARGET_LAYER}} Skill Draft\n6. Gold Set Draft\n7. Gold Review Risks\n8. Failure Attribution\n9. Next Stage Decision",
+    "exampleInput": "I am building a {{TARGET_LAYER}} skill for {{BUSINESS_DOMAIN}}.\nWork directory is {{WORK_DIR}}, and entry points are {{CODE_ENTRY_POINTS}}.\nKnown real user questions are {{KNOWN_USER_QUESTIONS}}.\n\nPlease produce Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table first, then proceed only when evidence is sufficient.",
+    "exampleOutput": "First confirm code evidence and object extraction, then validate catalog and boundaries.\nOnly move to {{TARGET_LAYER}} Skill Draft and Gold Set Draft when evidence and protocol are stable.\nIf attribution indicates fact-definition gaps, collect more evidence before model tuning.",
+    "usage": "1. Copy this role prompt.\n2. In the next message, provide all execution context: work dir, entry points, domain, target layer, protocol, samples, and known questions.\n3. Require output in the nine ordered items.\n4. Use failure attribution to decide go/no-go and whether more code evidence is needed.",
+    "relatedPrompts": [
+      {
+        "slug": "code-fact-to-skill-methodology",
+        "zhPrefix": "If you need methodology alignment first, use",
+        "zhLabel": "Code-Fact-to-Skill Methodology",
+        "enPrefix": "If you need review alignment first, use",
+        "enLabel": "Code-Fact-to-Skill Methodology"
+      }
+    ]
   }
 }

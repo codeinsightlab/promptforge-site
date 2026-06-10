@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Code-Fact-to-Skill Methodology</title>
-  <meta name="description" content="A methodology for extracting verifiable code facts, defining fact boundaries, and building AI Skills in a layered, auditable way before model-level changes.">
+  <meta name="description" content="Review-oriented prompt for GPT/ChatGPT and Tech Leads to validate provided materials before moving to code execution prompts.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -41,119 +41,135 @@
 
   <section>
     <h2>Scenario</h2>
-    <p>Useful when an existing business system already has code context and the team needs a disciplined fact-first path before any model optimization.</p>
+    <p>Useful when users provide business materials and need a structured review before deciding whether a Skill experiment can proceed.</p>
   </section>
 
   <section>
     <h2>Why This Prompt Exists</h2>
-    <p>Most projects start with prompts and models, then discover instability because facts were never defined. This method restores a fact-first sequence and keeps decisions auditable.</p>
+    <p>Many AI workflows optimize prompts too early while business facts are still unclear. This method anchors decisions on verifiable material first.</p>
   </section>
 
   <section>
     <h2>What Problem It Solves</h2>
-    <p>It separates model, protocol, engineering, gold-set, and fact-definition failures, so teams stop confusing score tuning with missing business facts.</p>
+    <p>It separates model, protocol, engineering, answer-risk, and fact-definition issues so teams stop confusing scoring with missing business facts.</p>
   </section>
 
   <section>
     <h2>How I Use It</h2>
-    <p>I confirm entry points, target layer, key objects, known questions, and output protocol, then move through business object review, fact extraction, fact catalog and boundary checks, and then draft Skill and gold set.</p>
+    <p>I check whether the provided materials are complete, review object and fact boundaries, and output risks and next-stage judgment. If gaps remain, I ask up to three questions before moving forward.</p>
   </section>
 
   <section>
     <h2>Why It Stayed</h2>
-    <p>In repeated use cases, it keeps discussions anchored to evidence and reduces speculative model-level tuning before foundation facts are stable.</p>
+    <p>As a review method it remains stable for continuous use in GPT + Codex workflows where facts must be validated before execution prompts.</p>
   </section>
 
   <section>
     <h2>Why It Changed</h2>
-    <p>The flow is now stage-gated around fact and protocol boundaries, replacing direct prompt or score optimization as the default first step.</p>
+    <p>The method and execution prompts were separated to avoid one page mixing planning and local scan tasks.</p>
   </section>
 
   <section>
     <h2>When Not To Use It</h2>
-    <p>Do not use it for one-off creative drafting when there is no shared code-grounded context and no need for fact-governed Skill design.</p>
+    <p>Do not use it for purely creative drafting or when no business-fact traceability is needed.</p>
   </section>
 
   <section>
     <h2>Role Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="code-fact-to-skill-methodology-prompt">## What this is
+      <pre><code id="code-fact-to-skill-methodology-prompt">You are an AI Skill review specialist for business systems.
 
-This is a methodology for building AI Skills from code facts. It is for Tech Leads and engineering decision makers to judge whether a layer skill can be grounded on real business facts before model optimization.
+## Positioning
 
-## When to use
+This is a review-oriented prompt for GPT/ChatGPT and Tech Leads.
+Do not assume local repository access or scan code.
+Use only the materials explicitly provided by the user.
 
-1. The business system already has code context and AI capability plans.
-2. You need a semantic layer before Text-to-SQL.
-3. You need to extract business facts from code and define fact boundaries.
-4. You need outputs for Fact Catalog, Fact Boundary, Skill draft, and Gold Set draft.
-5. You want to separate model, engineering, gold-set, and fact-definition issues.
+## Two ways to use it
 
-## Core principles
+1. GPT / ChatGPT mode
 
-1. Do not ask first how to make the model more precise; ask what real business facts are proven by code.
-2. A field name is not the same as a business fact.
-3. A Skill is a semantic wrapper of code facts, not a generic Prompt trick.
-4. High hit rate of samples does not automatically mean business correctness.
+User will provide business rules, code snippets, API notes, workflow description, samples, or known questions.
+Judge whether these materials contain sufficient, traceable business facts for Skill design.
 
-## Method flow
+If material is insufficient, ask at most 3 key clarification questions.
 
-1. Code review
-2. Business object identification
-3. Extraction of business actions, states, and rules
-4. Abstraction of queryable or judgeable facts
-5. Draft of fact catalog
-6. Fact boundary table
-7. Skill draft
-8. Draft Gold Set
-9. Model and execution-path evaluation
-10. Gold review
-11. Failure Attribution
-12. Close or move to next stage
+2. Codex mode
 
-## Failure attribution
+If local code must be inspected, do not use this prompt directly.
+Use the companion &quot;Business Fact Review Codex Prompt&quot; so Codex can inspect the project by entry points and output business object review, code fact review, fact catalog draft, and fact boundary table.
 
-- JSON pass rate is low: check protocol control and response structure first.
-- Protocol validity is low: check schema consistency, field names, and types.
-- Control drift is high: no-think / JSON-only behavior is unstable.
-- Semantic direction is off: fact boundaries or skill goals are drifting.
-- Gold set hits but business is not right: gold answers may have issues.
-- Too much ambiguity: this may come from fact-definition gaps, not model reasoning.
-- SQL or field leakage: layer boundary was not cleanly separated.
+## Core constraints
 
-## Paired execution prompt
+1. Do not assume facts outside the provided materials.
+2. A field name is not a business fact.
+3. A Skill is a semantic wrapper of business facts, not a generic Prompt trick.
+4. High sample hit rate does not equal business correctness.
+5. Ambiguity may come from fact-definition gaps, not only model reasoning.
 
-The executable Codex prompt for this method is maintained separately: 
-- Chinese: /business-fact-review-codex-prompt/ (Business Fact Review Codex Prompt)
-- English: /en/business-fact-review-codex-prompt/ (Business Fact Review Codex Prompt)
+## Required output
 
-## Origin notes
+1. Business Object Review
+2. Code Fact Review
+3. Fact Catalog Draft
+4. Fact Boundary Table
+5. {{TARGET_LAYER}} Skill Draft
+6. Gold Review Risks
+7. Failure Attribution
+8. Next Stage Decision
 
-This method comes from enterprise AI Q&amp;A practice. Model comparisons and benchmark settings are historical context only; the reusable part is the fact-first sequence and failure attribution closure.</code></pre>
+## Rules
+
+- Do not invent facts.
+- Mark unsupported claims as pending confirmation.
+- If discussion moves to business definition, stop model-tuning suggestions.
+- When full code evidence is required, direct users to the Codex execution prompt.</code></pre>
+    </div>
+  </section>
+
+
+  <section>
+    <h2>Companion prompt</h2>
+    <div class="block">
+      <ul>    <li><p>When local code scan is needed, use<a href="/en/business-fact-review-codex-prompt/">Business Fact Review Codex Prompt</a></p></li>
+      </ul>
     </div>
   </section>
 
   <section>
     <h2>What to provide next</h2>
-    <div class="block"><pre><code>Context: target layer is {{TARGET_LAYER}}, code entry points are {{CODE_ENTRY_POINTS}}, and we need to prepare a reusable AI Skill.
-Please first define business object review, fact review, catalog draft, and boundary checks before moving on.
-</code></pre></div>
+    <div class="block"><pre><code>I am reviewing a {{TARGET_LAYER}} skill for {{BUSINESS_DOMAIN}}.
+I will provide:
+1. Business rules and exceptions
+2. Code snippets or API notes
+3. Workflow and state descriptions
+4. Sample boundaries and QA outcomes
+5. Known business questions
+
+If incomplete, please ask up to 3 key questions first.</code></pre></div>
   </section>
 
   <section>
     <h2>Expected output preview</h2>
-    <div class="block"><pre><code>Start by confirming business objects and code evidence.
-Then produce fact catalog and fact boundary definitions.
-Only proceed to Skill draft and Gold Set draft after fact and protocol boundaries are stable.</code></pre></div>
+    <div class="block"><pre><code>Output in order:
+1. Business Object Review
+2. Code Fact Review
+3. Fact Catalog Draft
+4. Fact Boundary Table
+5. {{TARGET_LAYER}} Skill Draft
+6. Gold Review Risks
+7. Failure Attribution
+8. Next Stage Decision</code></pre></div>
   </section>
 
   <section>
     <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Use this as a design method page, not as a direct execution prompt.
-2. Clarify the input objects, layer boundaries, and protocol constraints first.
-3. Run the paired executable entry Business Fact Review Codex Prompt only after the fact boundary is stable.
-4. Make next-stage decisions based on failure attribution categories (model, protocol, engineering, answer quality, or fact definition).</code></pre></div>
+    <div class="block"><pre><code>1. Use this prompt in GPT / ChatGPT review mode, with materials provided in the next message.
+2. The model should only reason over provided context and should not assume codebase access.
+3. If context is sufficient, return all review items directly.
+4. If incomplete, ask up to 3 key questions before concluding.
+5. After fact boundaries are stable, use the companion execution prompt for codebase scanning.</code></pre></div>
   </section>
 </div>
 <script>

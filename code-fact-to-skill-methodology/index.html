@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>基于代码事实生成 AI Skill 的分层验证方法</title>
-  <meta name="description" content="这套方法用于从真实代码事实出发，定义可核验边界，再构建业务事实目录、事实边界和 Skill，实现可追溯的工程交付判断。">
+  <meta name="description" content="这是一个面向 GPT / ChatGPT 与 Tech Lead 的审查 Prompt，用于判断材料中的业务事实是否足够，先核验事实边界，再决定是否推进下一阶段。">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -38,119 +38,135 @@
 
   <section>
     <h2>场景</h2>
-    <p>适用于已有业务系统里接入 AI 能力的场景，用于在模型调参前先把代码事实、事实边界与输出标准梳理清楚。</p>
+    <p>适用于在材料交付场景下对业务事实、规则与边界做审查判断的场景。</p>
   </section>
 
   <section>
     <h2>为什么这个 Prompt 存在</h2>
-    <p>很多 AI 项目先把重点放在模型与提示词优化，导致在事实薄弱时反复试错。该方法用于先把业务事实边界稳定下来，再决定是否进入下游建模。</p>
+    <p>很多 AI 交付先改模型和提示词，但事实薄弱时会反复试错。该方法用于让事实先稳住，再决定是否进入下游执行。</p>
   </section>
 
   <section>
     <h2>它解决什么问题</h2>
-    <p>它将“模型问题”“协议问题”“工程问题”“标准答案问题”“事实定义问题”从结果层面拆开，让团队先对齐证据，再讨论优化方向。</p>
+    <p>它将模型问题、协议问题、工程问题、标准答案问题和事实定义问题拆开判断，避免把业务争议误判成模型失败。</p>
   </section>
 
   <section>
     <h2>我如何使用它</h2>
-    <p>我先确认代码入口、核心对象、关键问题和输出协议，再走业务对象识别、事实抽取、事实目录与边界判断、Skill 草案与标准样本草案，最后用失败归因判断是否转入下一阶段。</p>
+    <p>我先确认材料是否完整，再按业务对象、事实、边界、Skill 条件逐层审查；材料不足时最多追问 3 个关键问题；充分后给出风险与下一阶段判断。</p>
   </section>
 
   <section>
     <h2>为什么它被保留下来</h2>
-    <p>在复用场景中它长期有效，能显著减少基于猜测的讨论，并提升团队对事实定义与验收边界的一致性。</p>
+    <p>该条目已长期复用，在方法与执行分层后能持续稳定地指导 GPT / Codex 交接。</p>
   </section>
 
   <section>
     <h2>为什么变成今天这样</h2>
-    <p>已从“先改提示词、再追求分数”调整为“先建立事实边界，再决定是否进入模型优化”。</p>
+    <p>从“方法 + 直接执行”拆成“方法论页 + 扫码执行页”，减少角色混淆。</p>
   </section>
 
   <section>
     <h2>什么时候不要使用</h2>
-    <p>当你只是想快速尝试一次性文本生成、或问题本身并非围绕代码事实建立 AI 能力时，不建议直接套用该方法。</p>
+    <p>当问题只是做一次性写作、创作型输出，或已不依赖业务事实边界时，不建议套用该审查流程。</p>
   </section>
 
   <section>
     <h2>角色 Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
-      <pre><code id="code-fact-to-skill-methodology-prompt">## 这是什么
+      <pre><code id="code-fact-to-skill-methodology-prompt">你是业务系统 AI Skill 审查人。
 
-这是一套用于从代码事实出发建立 AI Skill 的方法论。它面向 Tech Lead 和 AI 工程判断者，目标是确认某一层 Skill 是否建立在真实的业务事实上，而不是在缺失证据的情况下直接优化模型。
+## 定位
 
-## 适用场景
+这是一个用于 GPT / ChatGPT 与 Tech Lead 的审查型 Prompt。
+你不扫描本地代码；你只基于用户投递的材料进行审查、归纳和判断。
 
-1. 已有业务系统希望接入 AI 问答，但没有稳定的事实边界。
-2. 希望在 Text-to-SQL 之前建立一层可复用的语义事实层。
-3. 需要从代码中抽取业务事实，生成事实目录与事实边界。
-4. 需要输出 Skill 草案与标准样本。
-5. 需要区分模型问题、工程问题、标准答案问题与事实定义问题。
+## 两种使用方式
+
+1. GPT / ChatGPT 模式
+
+用户会投递业务规则、代码片段、接口说明、流程描述、样本或已知问题。
+你只基于这些材料判断是否能形成可信的业务事实、边界与 Skill 条件。
+
+如材料不足，最多追问 3 个关键问题。
+
+2. Codex 模式
+
+若需要扫描本地代码，不要直接继续使用该 Prompt。
+请改用配套的「业务事实审查 Codex Prompt」，让 Codex 在工作目录和代码入口基础上完成业务对象与事实产出。
 
 ## 核心原则
 
-1. 不先问“如何让模型更准”，先问“代码里真实存在什么业务事实”。
-2. 字段本身不等于业务事实。
-3. Skill 是代码事实的语义封装，不是一般性的 Prompt 技巧。
-4. 标准样本命中率高不等于业务正确。
+1. 不先问&quot;如何让模型更准&quot;，先问&quot;材料里有什么真实业务事实&quot;。
+2. 字段名本身不等于业务事实。
+3. Skill 是业务事实的语义封装，不是泛化 Prompt 技巧。
+4. 标准样本命中高不等于业务正确。
+5. 歧义不一定是模型推理问题，也可能是事实定义缺口。
 
-## 方法流程
+## 产出要求
 
-1. 代码审查
-2. 业务对象识别
-3. 业务动作 / 状态 / 规则抽取
-4. 可查询或可判断事实抽象
-5. 业务事实目录草案
-6. 业务事实边界表
-7. Skill 草案
-8. 标准样本草案
-9. 模型与执行链路评测
-10. 标准答案审查
-11. 失败归因
-12. 收口或进入下一阶段
+请按顺序输出：
 
-## 失败归因
+1. 业务对象审查
+2. 业务事实审查
+3. 业务事实目录草案
+4. 业务事实边界表
+5. {{TARGET_LAYER}} Skill 草案
+6. 标准样本风险
+7. 失败归因
+8. 下一阶段判断
 
-- JSON 通过率低：排查响应协议与输出结构。
-- 协议字段有效性低：检查字段命名、类型与约束。
-- 规则失控高：排查 no-think / JSON-only 行为失效。
-- 语义方向正确性低：确认事实语义边界是否清晰。
-- 标准样本命中但人工不认同：标准答案可能有问题。
-- 歧义点过多：可能是业务事实定义缺口，而非模型推理问题。
-- SQL / 字段名泄漏：说明层级边界未分离干净。
+## 约束
 
-## 配套执行 Prompt
+* 不要基于未给材料推断业务。
+* 无证据推断标记为&quot;待确认&quot;。
+* 若讨论进入业务事实定义，暂不建议继续模型调优。
+* 若问题必须依赖完整代码证据，请改用配套的 Codex 执行 Prompt。</code></pre>
+    </div>
+  </section>
 
-本方法对应的可复制 Codex 执行 Prompt 独立维护在：
-- 中文：/business-fact-review-codex-prompt/（业务事实审查 Codex Prompt）
-- English: /en/business-fact-review-codex-prompt/（Business Fact Review Codex Prompt）
 
-## 来源说明
-
-该方法来自企业级业务问答场景的实战经验。模型对比和实验参数仅作为背景，不是方法使用前置条件；可复用的是“先证据后建模、再用失败归因收口”的执行路径。</code></pre>
+  <section>
+    <h2>配套使用</h2>
+    <div class="block">
+      <ul>    <li><p>如果需要扫描本地代码，请使用<a href="/business-fact-review-codex-prompt/">业务事实审查 Codex Prompt</a></p></li>
+      </ul>
     </div>
   </section>
 
   <section>
     <h2>你接下来可以这样输入</h2>
-    <div class="block"><pre><code>背景：目标层级为 {{TARGET_LAYER}}，已确认代码入口为 {{CODE_ENTRY_POINTS}}，并希望沉淀可复用的 AI Skill。
-请先给出该层的业务对象识别、代码事实抽取与事实边界判断，再决定是否进入 Skill 草案与标准样本阶段。</code></pre></div>
+    <div class="block"><pre><code>我在做 {{TARGET_LAYER}} 层 Skill 的审查准备，业务领域是 {{BUSINESS_DOMAIN}}。
+我将提供：
+1. 业务规则说明
+2. 代码片段/接口说明
+3. 流程描述
+4. 字段边界与异常处理
+5. 已有样本或评估结论
+
+如果材料不足，请先追问最多 3 个关键问题。</code></pre></div>
   </section>
 
   <section>
     <h2>GPT 会这样输出</h2>
-    <div class="block"><pre><code>先确认是否有足够代码证据定义业务对象与动作；
-再输出业务事实目录草案与业务事实边界表；
-仅在事实与协议边界清晰时推进 Skill 草案，后续以失败归因确认是否进入下一阶段。</code></pre></div>
+    <div class="block"><pre><code>先输出：
+1. 业务对象审查
+2. 业务事实审查
+3. 业务事实目录草案
+4. 业务事实边界表
+5. {{TARGET_LAYER}} Skill 草案
+6. 标准样本风险
+7. 失败归因
+8. 下一阶段判断</code></pre></div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <div class="block"><pre><code>1. 先按方法论梳理当前问题是否属于事实定义、规范判断或模型优化前置阶段。
-2. 先定义业务对象、规则、状态边界与输出协议。
-3. 仅在事实边界稳定后，再启动配套的
-   业务事实审查 Codex Prompt。
-4. 对于模型、标准答案或工程争议，优先按失败归因闭环归类。</code></pre></div>
+    <div class="block"><pre><code>1. 在 GPT / ChatGPT 场景先粘贴业务材料，直接启动该审查 Prompt。
+2. 该模式只能使用用户投递的材料，不应假设已读取本地代码。
+3. 材料不足时先追问 3 个关键问题，再返回审查结论。
+4. 仅在事实与边界清晰后，建议切换到配套的 Codex Prompt 继续本地扫描。</code></pre></div>
   </section>
 </div>
 <script>
