@@ -1,3 +1,16 @@
+### 2026-06-10 09:55 - 迭代 Code-Fact-to-Skill 中文可读性
+
+- 原始目标：减少中文页非必要英文方法论术语，让中文内容更易读、贴近中文表述。
+- 本轮轮次：同一任务中文本地化迭代中的第 5 轮细化。
+- 上一轮做法：已完成生成体系回归与首页栏目挂载，中文术语未完全中文化。
+- 用户反馈 / 否定点：中文页面仍有过多英文方法论标签（例如 Fact Catalog、Gold Set、Failure Attribution 等）影响可读性。
+- 本轮调整方向：保留核心方法语义和固定技术词，系统性中文化 `zh` 字段里的方法步骤、失败归因、输出要求与示例输入/输出/使用说明。
+- 涉及文件：`data/prompts/code-fact-to-skill-methodology.json`、`log/codex-task-log.md`。
+- 沿用内容：`slug=code-fact-to-skill-methodology`、`status=keep`、`type=standard-prompt`、首页 `agent-ai-engineering-methods` 栏目挂载关系。
+- 回滚 / 放弃内容：未回滚；未改变英文页面结构；未修改 Object-Fact Parse 实验代码。
+- 当前状态：中文可复用 Prompt 输出项已中文化，英文端保留；待执行 validate / generate / build 收口。
+- 后续注意：如需统一全局术语，可同步评估其他页面的中文提示文本，但本轮不扩展到其他条目。
+
 ### 2026-06-10 09:49 - 修正 Code-Fact-to-Skill 数据驱动与栏目挂载
 
 - 原始目标：确认 `code-fact-to-skill-methodology` 以 JSON/i18n 为源并保持可发布入口完整，新增 `Agent & AI Engineering Methods` 首页栏目挂载该 slug。

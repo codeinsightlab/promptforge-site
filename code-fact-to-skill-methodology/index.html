@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>基于代码事实生成 AI Skill 的分层验证方法</title>
-  <meta name="description" content="从代码事实出发，先定义可验证边界，再生成 Fact Catalog、Fact Boundary、Skill 与 Gold Set，并用失败归因收口。">
+  <meta name="description" content="从代码事实出发，先定义可验证边界，再生成业务事实目录、业务事实边界、Skill 与标准样本，并通过失败归因收口。">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -38,7 +38,7 @@
 
   <section>
     <h2>场景</h2>
-    <p>用于已有业务系统中从代码证据出发构建 AI 能力：先确认对象、动作、状态、规则和边界，再进入 Fact Catalog、Fact Boundary、Skill 与 Gold Set 设计，避免在事实未定义前进入模型讨论。</p>
+    <p>用于已有业务系统中从代码证据出发构建 AI 能力：先确认对象、动作、状态、规则和边界，再进入业务事实目录、业务事实边界、Skill 与标准样本设计，避免在事实未定义前进入模型讨论。</p>
   </section>
 
   <section>
@@ -48,12 +48,12 @@
 
   <section>
     <h2>它解决什么问题</h2>
-    <p>它把失败归因拆开为模型、协议、工程链路、Gold Set 与事实定义五类问题，避免“模型不好”与“事实没定义”之间相互指责。</p>
+    <p>它把失败归因拆开为模型、协议、工程链路、标准答案与事实定义五类问题，避免“模型不好”与“事实没定义”相互指责。</p>
   </section>
 
   <section>
     <h2>我如何使用它</h2>
-    <p>我会先给出代码入口、关键对象、关键问题与输出协议，要求先输出 Business Object Review、Code Fact Review、Fact Catalog Draft、Fact Boundary Table，再判断是否进入 {{TARGET_LAYER}} Skill 与 Gold Set。</p>
+    <p>我会先给出代码入口、关键对象、关键问题与输出协议，要求先输出业务对象审查、代码事实审查、业务事实目录草案、业务事实边界表，再判断是否进入 {{TARGET_LAYER}} Skill 草案与标准样本。</p>
   </section>
 
   <section>
@@ -93,28 +93,28 @@
 2. 业务对象识别
 3. 业务动作 / 状态 / 规则抽取
 4. 可查询或可判断事实抽象
-5. 输出 Fact Catalog Draft
-6. 输出 Fact Boundary Table
-7. 输出 {{TARGET_LAYER}} Skill Draft
-8. 构建 Gold Set
+5. 输出业务事实目录草案
+6. 输出业务事实边界表
+7. 输出 {{TARGET_LAYER}} Skill 草案
+8. 构建标准样本
 9. 运行模型与执行链路评测
-10. Gold Review 与风险排查
+10. 标准答案审查与风险排查
 11. 失败归因
 12. 收口或进入下一阶段
 
 ## 失败归因
-- jsonValid 低：先检视协议服从与响应控制。
-- protocolValid 低：检查输出字段、类型和协议一致性。
-- thinkingDetected 高：no-think / JSON-only 失效。
-- semanticDirectionCorrect 低：事实语义边界不清或 Skill 目标偏移。
-- 事实边界不完整：Catalog 与实体关系未覆盖关键路径。
-- ambiguous 过多：可能是事实定义缺口或输入语义不全。
-- candidateFacts 异常：fact 命名与边界混淆。
+- JSON 通过率低：先检视协议服从与响应控制。
+- 协议字段有效性低：检查输出字段、类型和协议一致性。
+- 规则失控高：no-think / 仅 JSON 输出失效。
+- 语义方向正确性低：事实语义边界不清或 Skill 目标偏移。
+- 事实边界不完整：业务事实目录与实体关系未覆盖关键路径。
+- 歧义点过多：可能是事实定义缺口或输入语义不全。
+- 候选事实异常：事实命名与边界混淆。
 - SQL / 字段名泄漏：技能边界失守。
 
-## Gold Review Risks
+## 标准答案审查风险
 - 业务对象与系统真实语义是否一致。
-- Fact Catalog 是否可复用、可复核。
+- 业务事实目录 是否可复用、可复核。
 - Skill 覆盖面是否与真实问题匹配。
 - 是否需要先补代码级证据而非继续模型优化。
 
@@ -146,15 +146,15 @@ PROMPT BEGIN
 - 不允许为了提高得分而改样本。
 
 请按顺序输出：
-1) Business Object Review
-2) Code Fact Review
-3) Fact Catalog Draft
-4) Fact Boundary Table
-5) {{TARGET_LAYER}} Skill Draft
-6) Gold Set Draft
-7) Gold Review Risks
-8) Failure Attribution
-9) Next Stage Decision
+1) 业务对象审查
+2) 代码事实审查
+3) 业务事实目录草案
+4) 业务事实边界表
+5) {{TARGET_LAYER}} Skill 草案
+6) 标准样本草案
+7) 标准答案审查风险
+8) 失败归因
+9) 下一阶段判断
 PROMPT END</code></pre>
     </div>
   </section>
@@ -164,24 +164,24 @@ PROMPT END</code></pre>
     <div class="block"><pre><code>我正在为 {{BUSINESS_DOMAIN}} 系统沉淀 {{TARGET_LAYER}} Skill。代码入口包括 {{CODE_ENTRY_POINTS}}。
 当前已知真实问题有：{{KNOWN_USER_QUESTIONS}}。
 
-请先基于代码事实输出 Business Object Review、Code Fact Review、Fact Catalog Draft 与 Fact Boundary Table，再决定是否进入 {{TARGET_LAYER}} Skill Draft 与 Gold Set。若仍有事实缺口，请先收敛事实定义。</code></pre></div>
+请先基于代码事实输出业务对象审查、代码事实审查、业务事实目录草案与业务事实边界表，再决定是否进入 {{TARGET_LAYER}} Skill 草案与标准样本草案。若仍有事实缺口，请先收敛事实定义。</code></pre></div>
   </section>
 
   <section>
     <h2>GPT 会这样输出</h2>
     <div class="block"><pre><code>问题定位：先走事实层。
 
-先输出 Business Object Review、Code Fact Review、Fact Catalog 与 Fact Boundary。
-只有在事实与协议边界稳定时，才进入 {{TARGET_LAYER}} Skill Draft 与 Gold Set。
-若归因为 catalog gap，先补事实定义，不直接开始模型重调。</code></pre></div>
+先输出业务对象审查、代码事实审查、业务事实目录草案与业务事实边界表。
+只有在事实与协议边界稳定时，才进入 {{TARGET_LAYER}} Skill 草案与标准样本草案。
+若归因为业务事实目录缺口，先补事实定义，不直接开始模型优化。</code></pre></div>
   </section>
 
   <section>
     <h2>使用说明</h2>
     <div class="block"><pre><code>1. 复制该角色 Prompt。
 2. 下一条消息补充代码范围、关键对象、代码入口、输出协议和真实问题样本。
-3. 要求先输出 Business Object Review、Code Fact Review、Fact Catalog Draft 与 Fact Boundary Table。
-4. 再看 Gold Review Risks、Failure Attribution 后决定下一步。
+3. 要求先输出业务对象审查、代码事实审查、业务事实目录草案与业务事实边界表。
+4. 再看标准答案审查风险、失败归因后决定下一步。
 5. 只有在事实与协议都稳定时，再评估是否需要模型调整。</code></pre></div>
   </section>
 </div>
