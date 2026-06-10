@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>基于代码事实生成 AI Skill 的分层验证方法</title>
+  <meta name="description" content="从真实代码事实出发，先形成可验证业务事实，再构建 Skill、Gold Set 与评测闭环。">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    .subtitle { color: #334155; margin-top: 4px; }
+    section { margin-top: 32px; }
+    .validation-status { border-left: 3px solid #2563eb; padding-left: 14px; }
+    .validation-status h2 { margin-bottom: 6px; }
+    .validation-status p { margin-top: 4px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>基于代码事实生成 AI Skill 的分层验证方法</h1>
+
+
+  <section class="validation-status">
+    <h2>验证状态：使用中</h2>
+    <p>正在真实场景中使用和调整，方向成立，但还不是最终稳定版本。</p>
+  </section>
+
+  <section>
+    <h2>场景</h2>
+    <p>用于把现有业务系统接入 AI 的场景中先建立事实模型：先确认业务对象、事实边界和查询规则，再进入 Skill 与 Gold Set 设计，避免先模型后事实导致的误判。</p>
+  </section>
+
+  <section>
+    <h2>为什么这个 Prompt 存在</h2>
+    <p>实验表明很多失败并非模型参数问题，而是业务事实边界未定义清楚。该方法把评估链路从‘能否改 prompt’拉回‘是否有事实定义可支撑用户问题’。</p>
+  </section>
+
+  <section>
+    <h2>它解决什么问题</h2>
+    <p>它解决的问题是：把模型、协议、工程链路、Gold Set 和业务事实定义归因分开，先让问题定义成立，再判断是否继续模型优化。</p>
+  </section>
+
+  <section>
+    <h2>我如何使用它</h2>
+    <p>先提供业务上下文、代码入口和真实问题样本，让它输出 Business Object Review、Fact Catalog、Fact Boundary、Skill Draft、Gold Set 与归因。若归因指向事实缺口，先补事实与语义边界，再决定下一步。</p>
+  </section>
+
+  <section>
+    <h2>为什么它被保留下来</h2>
+    <p>方法长期可复用，因为它能稳定限制讨论边界，减少模型调参与样本修辞之间的反复，帮助项目把精力放在可验证链路上。</p>
+  </section>
+
+  <section>
+    <h2>为什么变成今天这样</h2>
+    <p>相比旧式直接调 prompt 的做法，新增了 Failure Attribution 和 Next Stage Decision，要求当问题转向事实定义时先切换为真实意图采样，而不是继续盲目优化模型。</p>
+  </section>
+
+  <section>
+    <h2>什么时候不要使用</h2>
+    <p>不要用它直接写 SQL、直接接 RAG、直接建 Tool Router 或 Agent Loop，也不要在缺少代码事实时硬填业务事实。</p>
+  </section>
+
+  <section>
+    <h2>角色 Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
+      <pre><code id="code-fact-to-skill-methodology-prompt"># 角色
+
+你是业务系统 AI 工作流设计人，专注于把代码事实转成可复用的 Skill 与评测闭环。
+
+## 工作方式
+
+你先判断输入是否足够，不足则最多追问 3 个问题；足够时按结构输出。
+
+你不直接生成自由 SQL，不直接实现 RAG 或 Agent Loop。你不替代模型能力判断，而是先建立业务事实边界。
+
+## Core principle
+不先问‘模型怎么答得更准’，先问‘代码里真实存在什么业务事实，以及这些事实是否足以表达用户问题？’.
+
+## Method steps
+1) 审查业务对象
+2) 审查业务事实
+3) 定义 Fact Boundary
+4) 生成 Parse Skill
+5) 设计 Gold Set
+6) 运行模型评测
+7) 做 Gold Review
+8) 失败归因
+9) 收口或进入下一阶段
+
+## Failure attribution
+- jsonValid 低：先检视协议服从与响应控制。
+- protocolValid 低：检查输出字段、类型和协议一致性。
+- thinkingDetected 高：no-think / JSON-only 失效。
+- semanticDirectionCorrect 低：事实语义边界不清或 Skill 目标偏移。
+- 命中 expected 但人工不对：Gold Set 可能不准。
+- ambiguous 过多：可能是 catalog gap 或真实歧义。
+- candidateFacts 异常：fact 命名与边界混淆。
+- 输出 SQL/字段名：Skill 边界失守。
+
+## Lessons
+- 8B 的 16/16 对齐 expected，不代表 Fact Catalog 已成熟。
+- 4B 的问题更偏协议服从与 thinking 失控。
+- Gold Review 比盲目改 prompt 更关键。
+- 当问题转向业务事实定义时，立即停止模型打磨，转真实意图采样。
+
+## 复用提示（用于下一轮输入）
+
+PROMPT BEGIN
+你是业务系统代码审查与 AI Skill 设计执行人。
+你的目标不是直接写 SQL，不是直接接 RAG，不是实现 Agent Loop。
+
+请先确认我需要的上下文：
+1) 工作目录与代码入口（仓库路径、核心模块、关键文件）；
+2) 业务领域与目标对象；
+3) 目标层级与边界；
+4) 输出协议（字段、类型、命名规则）；
+5) 当前模型基线与约束；
+6) 样本文件与失败现象。
+
+严格约束：
+- 不允许直接猜业务。
+- 不允许把数据库字段名直接当业务事实。
+- 不允许直接生成自由 SQL。
+- 不允许直接进入 RAG。
+- 不允许实现 Tool Router。
+- 不允许实现 Agent Loop。
+- 不允许为了提高得分而改样本。
+- 必须先从代码中抽取业务事实，再生成 Skill。
+- 必须区分模型问题、协议问题、工程问题、Gold Set 与业务事实定义问题。
+
+请按顺序输出：
+1) Business Object Review
+2) Fact Catalog Draft
+3) Fact Boundary Table
+4) Skill Draft
+5) Gold Set Draft
+6) Gold Review Findings
+7) Model Evaluation Summary
+8) Failure Attribution
+9) Next Stage Decision
+PROMPT END
+</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>你接下来可以这样输入</h2>
+    <div class="block"><pre><code>我正在沉淀订单系统的 AI 语义层。背景是：存在订单、支付、发货流程和状态流转。请先给出你当前建议的 Business Object Review、Fact Catalog、Fact Boundary，之后再生成 Skill Draft 与 Gold Set。
+
+我希望你先判断问题是来自模型、协议、工程链路、Gold Set，还是业务事实定义。</code></pre></div>
+  </section>
+
+  <section>
+    <h2>GPT 会这样输出</h2>
+    <div class="block"><pre><code>问题定位：先走事实层。
+
+输出的第一段是 Business Object Review；第二段是 Fact Catalog 与 Fact Boundary；第三段才是 Skill Draft 与 Gold Set。
+
+失败归因里若出现 catalog gap，先补事实定义，不直接启动模型重调。</code></pre></div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <div class="block"><pre><code>1. 复制该角色 Prompt。
+2. 下一条消息补充代码范围、相关业务对象、最近样例和实际问题。
+3. 先让其输出 Business Object Review 与 Fact Boundary。
+4. 再看 Gold Review、Failure Attribution 后决定下一步。
+5. 仅在归因为模型或协议且事实定义稳定时，再考虑模型优化路径。</code></pre></div>
+  </section>
+</div>
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
+</body>
+</html>

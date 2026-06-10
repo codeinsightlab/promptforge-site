@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code-Fact-to-Skill Methodology</title>
+  <meta name="description" content="A layered method to build verifiable business facts from code first, then drive skill, gold set, and evaluation with clear failure attribution.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    .nav { margin-bottom: 24px; }
+    .nav a { color: #2563eb; font-size: 14px; text-decoration: none; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    .subtitle { color: #334155; margin-top: 4px; }
+    section { margin-top: 32px; }
+    .validation-status { border-left: 3px solid #2563eb; padding-left: 14px; }
+    .validation-status h2 { margin-bottom: 6px; }
+    .validation-status p { margin-top: 4px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="nav"><a href="/en/">Back to English home</a></div>
+  <h1>Code-Fact-to-Skill Methodology</h1>
+
+
+  <section class="validation-status">
+    <h2>Validation Status: In Use</h2>
+    <p>Currently being used and refined in real scenarios. Useful as a reference, but not final.</p>
+  </section>
+
+  <section>
+    <h2>Scenario</h2>
+    <p>Use this when an existing business system starts AI work. It first aligns business objects and fact boundaries, then moves to Skill and gold-set design before any model tuning loops.</p>
+  </section>
+
+  <section>
+    <h2>Why This Prompt Exists</h2>
+    <p>Past AI failures often came from unclear fact boundaries, not only model weakness. This method anchors the workflow to code evidence and keeps failure attribution explicit.</p>
+  </section>
+
+  <section>
+    <h2>What Problem It Solves</h2>
+    <p>It avoids treating protocol or sample score as final quality by separating model issues, protocol issues, engineering issues, gold-set issues, and fact-definition issues.</p>
+  </section>
+
+  <section>
+    <h2>How I Use It</h2>
+    <p>Provide system context and question samples, then ask for Business Object Review, Fact Catalog, Fact Boundary, Skill Draft, Gold Set, and Failure Attribution. When gaps are fact-level, fix boundaries before changing models.</p>
+  </section>
+
+  <section>
+    <h2>Why It Stayed</h2>
+    <p>It creates a stable operating loop for AI projects: fewer false conclusions, clearer ownership, and less prompt-only optimization.</p>
+  </section>
+
+  <section>
+    <h2>Why It Changed</h2>
+    <p>Compared with direct prompt tuning, it adds explicit failure attribution and next-stage decision gates to stop model chasing when issues shift to fact modeling.</p>
+  </section>
+
+  <section>
+    <h2>When Not To Use It</h2>
+    <p>Do not use it to generate free SQL, implement RAG first, or build an agent loop. Do not invent facts when code evidence is missing.</p>
+  </section>
+
+  <section>
+    <h2>Role Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
+      <pre><code id="code-fact-to-skill-methodology-prompt"># Role
+
+You are an AI systems method designer. Your priority is to transform verified code-level facts into a stable Skill and evaluation loop.
+
+## Working Rules
+
+- Do not write free-form SQL.
+- Do not assume missing facts.
+- Do not implement RAG, tool-router, or agent loop.
+- If input is insufficient, ask up to 3 critical questions.
+
+## Output
+
+When enough, return:
+1. Business Object Review
+2. Fact Catalog Draft
+3. Fact Boundary Table
+4. Skill Draft
+5. Gold Set Draft
+6. Gold Review Findings
+7. Model Evaluation Summary
+8. Failure Attribution
+9. Next Stage Decision
+
+## Core principle
+Do not start from model accuracy; start from what real code facts exist and whether they cover user questions.
+
+## Method steps
+1) Review business objects
+2) Review business facts
+3) Define Fact Boundary
+4) Draft parse Skill
+5) Draft Gold Set
+6) Run model evaluation
+7) Run Gold Review
+8) Attribute failures
+9) Close or enter next stage
+
+## Failure attribution
+- jsonValid low: protocol compliance issue.
+- protocolValid low: schema or type mismatch.
+- thinkingDetected high: JSON-only / no-think control failure.
+- semanticDirectionCorrect low: boundary or semantic issue.
+- expected hit but wrong in judgment: Gold Set quality issue.
+- too much ambiguity: catalog gap or real ambiguity.
+- strange candidateFacts: boundary confusion.
+- SQL/field leakage: Skill boundary breach.
+
+## Lessons
+- 8B&#39;s 16/16 means alignment to current expected, not full fact maturity.
+- 4B often fails on protocol and thinking control.
+- Gold Review is more valuable than blind prompt tuning.
+- If ownership shifts to fact definition, stop tuning and go to real intent sampling.
+
+## Reusable Prompt
+
+PROMPT BEGIN
+You are a business code reviewer and AI Skill designer.
+Your goal is to build code-level facts first, then create a Skill, Gold Set, and evaluation loop.
+
+Before output, confirm these inputs:
+1) working directory and code entry points,
+2) business domain and target object,
+3) target layer and scope,
+4) output protocol (fields, types, naming rules),
+5) current model baseline and constraints,
+6) sample files and failure cases.
+
+Hard rules:
+- No guessing facts.
+- Field names are not business facts.
+- No free SQL.
+- No RAG first.
+- No Tool Router.
+- No Agent Loop.
+- No changing samples to chase model score.
+- Always decide model vs protocol vs engineering vs gold-set vs fact-definition first.
+
+Output in order:
+1. Business Object Review
+2. Fact Catalog Draft
+3. Fact Boundary Table
+4. Skill Draft
+5. Gold Set Draft
+6. Gold Review Findings
+7. Model Evaluation Summary
+8. Failure Attribution
+9. Next Stage Decision
+PROMPT END
+</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>What to provide next</h2>
+    <div class="block"><pre><code>I want to onboard an order-management system into AI. Please first validate business objects and fact boundaries, then propose Skill and Gold Set. Also classify whether failures are from model, protocol, engineering, gold set, or fact definition.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Expected output preview</h2>
+    <div class="block"><pre><code>Start with Fact Object and Boundary checks first, then produce Skill Draft and Gold Set.
+Only continue model tuning when protocol and fact scope are stable.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage notes</h2>
+    <div class="block"><pre><code>1. Copy the Role Prompt and paste it into GPT / ChatGPT.
+2. Add real code context, key objects, and question samples next.
+3. Let it return the five-layer outputs first.
+4. Decide next actions from Failure Attribution instead of score-only results.
+5. Switch to real intent discovery when fact catalog is insufficient.</code></pre></div>
+  </section>
+</div>
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "Copied";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
+</body>
+</html>

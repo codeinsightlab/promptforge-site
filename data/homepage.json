@@ -24,11 +24,11 @@
   "validationNote": {
     "zh": {
       "label": "关于 PromptForge",
-      "text": "大多数 Prompt 解决一次问题后就会被忘记。这里保留下来的，是那些我仍然会复制、修改并继续使用的 Prompt。目前公开 4 个 Prompt，其余内容仍处于 review 状态。"
+      "text": "大多数 Prompt 解决一次问题后就会被忘记。这里保留下来的，是那些我仍然会复制、修改并继续使用的 Prompt。目前公开 5 个 Prompt，其余内容仍处于 review 状态。"
     },
     "en": {
       "label": "About PromptForge",
-      "text": "Most prompts are forgotten after solving a problem once. The ones here are still being copied, adapted, and used today. Four prompts are currently public. The rest remain in review."
+      "text": "Most prompts are forgotten after solving a problem once. The ones here are still being copied, adapted, and used today. Five prompts are currently public. The rest remain in review."
     }
   },
   "featured": {
@@ -150,6 +150,17 @@
         "defaultCta": "View method"
       },
       "items": [
+        {
+          "slug": "code-fact-to-skill-methodology",
+          "zh": {
+            "tags": ["代码事实", "Skill 设计", "分层验证"],
+            "cta": "查看方法"
+          },
+          "en": {
+            "tags": ["Code facts", "Skill design", "Layered validation"],
+            "cta": "View method"
+          }
+        }
       ]
     }
   ]

@@ -1,3 +1,16 @@
+### 2026-06-10 09:34 - 将 Code-Fact-to-Skill Methodology 纳入正式 KEEP 内容
+
+- 原始目标：将 Code-Fact-to-Skill Methodology 从实验资产同步到 PromptForge 正式内容库（KEEP），并完成页面登记与首页入口可见性收口。
+- 本轮轮次：第 2 轮同步动作，覆盖新增内容与主页治理两类变更。
+- 上一轮做法：已新增 `data/prompts/code-fact-to-skill-methodology.json` 并补齐 `status=keep` 与 notes。
+- 用户反馈 / 否定点：要求把该方法从实验状态纳入正式库并对齐 KEEP 治理、首页与登记表口径。
+- 本轮调整方向：将 KEEP 数量与登记表口径改为 5 个；把新页面加入 `code-fact-to-skill-methodology` 的 ai-collaboration 入口；更新首页公开文案；补齐日志现场。
+- 涉及文件：`data/prompts/code-fact-to-skill-methodology.json`、`AGENTS.md`、`data/homepage.json`、`log/codex-task-log.md`、（后续）`dist/`。
+- 沿用内容：保留新建方法页的核心角色结构、6 段 notes 与卡片字段。
+- 回滚 / 放弃内容：未保留可视化占位符变量块，已改为自然语言上下文确认流程；未回退 `status=review`。
+- 当前状态：任务同步内容已落地，待执行校验与生成构建命令确认收口结果。
+- 后续注意：若后续调整卡片文案或评分字段，继续通过 `validate` 与 `generate` 回归并保持 5 个 KEEP 口径不变。
+
 ### 2026-06-01 09:53 - 首页最终文案收口
 
 - 原始目标：首页最后一轮文案调整，完成后暂停首页优化。

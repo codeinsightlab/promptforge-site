@@ -588,7 +588,7 @@ Codex 完成任务后，必须输出：
 
 ## 15. 当前已有 Prompt 页面登记表
 
-当前 PromptForge v2 第一阶段已收口为 **4 个 KEEP 内容**，其余现有内容进入 **REVIEW / archive 状态**。
+当前 PromptForge v2 第一阶段已收口为 **5 个 KEEP 内容**，其余现有内容进入 **REVIEW / archive 状态**。
 
 原则：
 
@@ -623,6 +623,7 @@ Codex 完成任务后，必须输出：
 | AI 编程项目启动前准备工作流 | /ai-coding-project-kickoff-workflow/ | 开发工作流 | KEEP | 一期边界确认、目录结构、AGENTS、docs、原型索引、数据库草案、开发计划、测试和部署清单 | 是 | 公开保留；首页、导航、sitemap 和发布目录保留 |
 | 外包沟通顾问 | /freelance-client-communication/ | 外包 / 接单 | KEEP | 甲方沟通、需求边界、报价工期、范围蔓延、验收售后和争议降温 | 是 | 公开保留；首页、导航、sitemap 和发布目录保留 |
 | 想法陪练官 | /idea-sparring-partner/ | 个人效率 | KEEP | 陪用户聊模糊 idea，激发灵感、扩散方向、识别价值、提出追问，并在需要收口时整理成可执行思路 | 是 | 公开保留；首页、导航、sitemap 和发布目录保留 |
+| 基于代码事实生成 AI Skill 的分层验证方法 | /code-fact-to-skill-methodology/ | AI 工程方法 | KEEP | 把代码事实转为业务事实、Skill、Gold Set 与分层失败归因，避免误把模型 tuning 作为唯一优化路径 | 是 | 公开保留；首页、导航、sitemap 和发布目录保留 |
 
 已合并删除页面记录：
 
