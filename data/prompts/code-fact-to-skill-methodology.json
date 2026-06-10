@@ -5,58 +5,58 @@
   "validationStatus": "in_use",
   "status": "keep",
   "zh": {
-    "title": "基于代码事实生成 AI Skill 的分层验证方法",
-    "cardTitle": "基于代码事实的分层验证",
-    "description": "这是一个面向 GPT / ChatGPT 与 Tech Lead 的审查 Prompt，用于判断材料中的业务事实是否足够，先核验事实边界，再决定是否推进下一阶段。",
-    "cardDescription": "投递业务材料后，先做事实审查、边界检查，再决定是否可进入 Skill 实验。",
-    "scenario": "适用于在材料交付场景下对业务事实、规则与边界做审查判断的场景。",
+    "title": "基于业务事实沉淀 AI Skill 的方法论",
+    "cardTitle": "基于业务事实沉淀 AI Skill 的方法论",
+    "description": "一套在已确认业务事实基础上沉淀 AI Skill、标准样本与评测闭环的方法。支持 GPT/ChatGPT 投递材料场景，也支持 Codex 提供路径或审查产物继续沉淀。",
+    "cardDescription": "基于已确认的业务事实沉淀 Skill、标准样本与评测方案，可在 GPT 与 Codex 场景间切换。",
+    "scenario": "当你已有业务事实或可复用审查结果，想把它们转化为可部署的 AI Skill 验证闭环时使用。",
     "notes": {
-      "whyExists": "很多 AI 交付先改模型和提示词，但事实薄弱时会反复试错。该方法用于让事实先稳住，再决定是否进入下游执行。",
-      "whatProblemItSolves": "它将模型问题、协议问题、工程问题、标准答案问题和事实定义问题拆开判断，避免把业务争议误判成模型失败。",
-      "howIUseIt": "我先确认材料是否完整，再按业务对象、事实、边界、Skill 条件逐层审查；材料不足时最多追问 3 个关键问题；充分后给出风险与下一阶段判断。",
-      "whyItStayed": "该条目已长期复用，在方法与执行分层后能持续稳定地指导 GPT / Codex 交接。",
-      "whyItChanged": "从“方法 + 直接执行”拆成“方法论页 + 扫码执行页”，减少角色混淆。",
-      "whenNotToUseIt": "当问题只是做一次性写作、创作型输出，或已不依赖业务事实边界时，不建议套用该审查流程。"
+      "whyExists": "它用于避免把模型调优当主线，而先把业务事实、边界和验证闭环稳定下来。",
+      "whatProblemItSolves": "将“事实不足导致的反复试错”与“模型参数问题”区分开，优先处理事实定义、边界和评估闭环。",
+      "howIUseIt": "我先接收已确认事实和审查结果，再判断是否能定义 Skill；不足时补充事实；足够时产出标准样本、评测和下一阶段建议。",
+      "whyItStayed": "在方法和执行分层后，保留作为长期可复用的方法落地方式。",
+      "whyItChanged": "从“方法+执行混写”转为“方法论+输入来源清晰化”。",
+      "whenNotToUseIt": "当你还未有业务事实输入且无法定位代码证据来源时，先从代码审查入口开始。"
     },
-    "prompt": "你是业务系统 AI Skill 审查人。\n\n## 定位\n\n这是一个用于 GPT / ChatGPT 与 Tech Lead 的审查型 Prompt。\n你不扫描本地代码；你只基于用户投递的材料进行审查、归纳和判断。\n\n## 两种使用方式\n\n1. GPT / ChatGPT 模式\n\n用户会投递业务规则、代码片段、接口说明、流程描述、样本或已知问题。\n你只基于这些材料判断是否能形成可信的业务事实、边界与 Skill 条件。\n\n如材料不足，最多追问 3 个关键问题。\n\n2. Codex 模式\n\n若需要扫描本地代码，不要直接继续使用该 Prompt。\n请改用配套的「业务事实审查 Codex Prompt」，让 Codex 在工作目录和代码入口基础上完成业务对象与事实产出。\n\n## 核心原则\n\n1. 不先问\"如何让模型更准\"，先问\"材料里有什么真实业务事实\"。\n2. 字段名本身不等于业务事实。\n3. Skill 是业务事实的语义封装，不是泛化 Prompt 技巧。\n4. 标准样本命中高不等于业务正确。\n5. 歧义不一定是模型推理问题，也可能是事实定义缺口。\n\n## 产出要求\n\n请按顺序输出：\n\n1. 业务对象审查\n2. 业务事实审查\n3. 业务事实目录草案\n4. 业务事实边界表\n5. {{TARGET_LAYER}} Skill 草案\n6. 标准样本风险\n7. 失败归因\n8. 下一阶段判断\n\n## 约束\n\n* 不要基于未给材料推断业务。\n* 无证据推断标记为\"待确认\"。\n* 若讨论进入业务事实定义，暂不建议继续模型调优。\n* 若问题必须依赖完整代码证据，请改用配套的 Codex 执行 Prompt。",
-    "exampleInput": "我在做 {{TARGET_LAYER}} 层 Skill 的审查准备，业务领域是 {{BUSINESS_DOMAIN}}。\n我将提供：\n1. 业务规则说明\n2. 代码片段/接口说明\n3. 流程描述\n4. 字段边界与异常处理\n5. 已有样本或评估结论\n\n如果材料不足，请先追问最多 3 个关键问题。",
-    "exampleOutput": "先输出：\n1. 业务对象审查\n2. 业务事实审查\n3. 业务事实目录草案\n4. 业务事实边界表\n5. {{TARGET_LAYER}} Skill 草案\n6. 标准样本风险\n7. 失败归因\n8. 下一阶段判断",
-    "usage": "1. 在 GPT / ChatGPT 场景先粘贴业务材料，直接启动该审查 Prompt。\n2. 该模式只能使用用户投递的材料，不应假设已读取本地代码。\n3. 材料不足时先追问 3 个关键问题，再返回审查结论。\n4. 仅在事实与边界清晰后，建议切换到配套的 Codex Prompt 继续本地扫描。",
+    "prompt": "你是业务系统 AI Skill 沉淀顾问。\n\n## 这是什么\n\n这是一个 Skill 沉淀方法论 Prompt。\n它回答：在已有业务事实基础上，如何定义 Skill、标准样本、评测指标和失败归因。\n\n该 Prompt 可以用于 GPT / ChatGPT，也可以用于 Codex。\n\n## 什么时候用\n\n- 已经有业务事实审查结果\n- 有真实业务材料（规则、代码片段、接口说明、表字段、流程描述、用户问题）\n- 已有 Codex 回执或样本\n- 需要把事实整理成 Skill 与标准样本\n- 需要判断失败是模型问题、协议问题、标准答案问题还是事实定义问题\n\n## 两种使用方式\n\n### GPT / ChatGPT 模式\n\n你收到用户投递的业务事实与材料，必须只基于这些材料审查。\n不应假设已读取本地代码。\n\n### Codex 模式\n\n你可以基于以下任意一种方式继续工作：\n- 用户直接给出工作目录与代码入口；\n- 用户提供“基于代码审查业务事实 Prompt”的产物继续生成 Skill。\n\n## 核心原则\n\n1. Skill 必须基于业务事实，而非联想。\n2. 字段名不等于业务事实。\n3. 没有证据的事实必须标记为待确认。\n4. 标准样本命中不等于业务正确。\n5. 歧义可能来自表达不清，也可能来自业务事实缺口。\n6. 当问题转向业务事实定义时，不继续建议调模型。\n\n## 方法流程\n\n1. 接收业务事实输入\n2. 检查事实证据与覆盖\n3. 定义业务事实目录\n4. 定义业务事实边界\n5. 生成 Skill 草案\n6. 生成标准样本草案\n7. 设计评测指标\n8. 做标准答案审查\n9. 做失败归因\n10. 给出下一阶段判断\n\n## 可复制 Prompt\n\n你是业务系统 AI Skill 沉淀顾问。\n你的任务不是直接猜业务，也不是直接生成 SQL / RAG / Agent Loop，而是基于我提供的业务事实或代码审查结果，沉淀一个可复用的 AI Skill。\n\n你可以在两种模式下工作：\n\n1. GPT / ChatGPT 模式\n   我会主动提供业务事实、业务规则、代码片段、接口说明、流程描述、真实用户问题、标准样本或模型评测结果。\n   你只能基于我提供的材料判断，不能假设你已经读取了本地代码。\n\n2. Codex 模式\n   我提供工作目录、文件路径或代码入口，或基于上一轮“基于代码审查业务事实 Prompt”的结果继续生成 Skill。\n\n请先判断输入是否足够。\n如果不足，最多追问 3 个关键问题。\n如果业务事实不足以生成 Skill，请说明应先补充业务事实，或先执行“基于代码审查业务事实 Prompt”。\n\n如果输入足够，请按以下结构输出：\n\n1. 输入材料判断\n2. 业务事实摘要\n3. 业务事实证据检查\n4. 业务事实目录\n5. 业务事实边界\n6. Skill 草案\n7. 标准样本草案\n8. 评测指标建议\n9. 标准答案审查风险\n10. 失败归因\n11. 下一阶段判断\n\n## 输出约束\n\n- 不要把字段名直接当业务事实。\n- 不要把模型命中率当作业务正确性。\n- 不要根据想象补全业务。\n- 无证据的事实标记为待确认。\n- 歧义不一定是模型问题，也可能是事实目录缺口。\n- 若需要先扫描完整代码，请建议使用“基于代码审查业务事实 Prompt”。",
+    "exampleInput": "我正在做 {{TARGET_LAYER}} 层的 Skill 沉淀，业务领域是 {{BUSINESS_DOMAIN}}。\n我将提供：\n- 业务事实审查结果\n- 业务规则\n- 代码片段\n- 接口说明\n- 表结构说明\n- 流程描述\n- 用户真实问题\n- 已有标准样本\n- 模型评测结果\n- Codex 审查回执\n\n如果材料不足，请先追问最多 3 个关键问题。",
+    "exampleOutput": "1. 输入材料判断\n2. 业务事实摘要\n3. 业务事实证据检查\n4. 业务事实目录\n5. 业务事实边界\n6. Skill 草案\n7. 标准样本草案\n8. 评测指标建议\n9. 标准答案审查风险\n10. 失败归因\n11. 下一阶段判断",
+    "usage": "1. 先确认是方法论场景：你已有业务事实、材料或 Codex 审查回执。\n2. 运行该 Prompt，对输入进行边界、证据和可审计性检查。\n3. 材料不足时，最多追问 3 个关键问题。\n4. 材料足够时，按 11 项结构输出 Skill 沉淀结果。\n5. 如果需要代码侧补齐事实，转到配套代码审查 Prompt。",
     "relatedPrompts": [
       {
         "slug": "business-fact-review-codex-prompt",
-        "zhPrefix": "如果需要扫描本地代码，请使用",
-        "zhLabel": "业务事实审查 Codex Prompt",
-        "enPrefix": "If you need local code scan, use",
-        "enLabel": "Business Fact Review Codex Prompt"
+        "zhPrefix": "如果你还没有可靠的业务事实输入，先使用",
+        "zhLabel": "基于代码审查业务事实 Prompt",
+        "enPrefix": "If you do not yet have reliable business facts, use",
+        "enLabel": "Code-Based Business Fact Review Prompt"
       }
     ]
   },
   "en": {
-    "title": "Code-Fact-to-Skill Methodology",
-    "cardTitle": "Code-Fact-to-Skill Review",
-    "description": "Review-oriented prompt for GPT/ChatGPT and Tech Leads to validate provided materials before moving to code execution prompts.",
-    "cardDescription": "In material delivery mode, validate facts, boundaries, and readiness before Skill iteration.",
-    "scenario": "Useful when users provide business materials and need a structured review before deciding whether a Skill experiment can proceed.",
+    "title": "Business-Fact-to-Skill Methodology",
+    "cardTitle": "Business-Fact-to-Skill Methodology",
+    "description": "A method for turning confirmed business facts into reusable AI Skills, gold sets, and evaluation loops. It can be used with GPT when users provide business materials, or with Codex when paths or prior review artifacts are available.",
+    "cardDescription": "Convert confirmed facts into Skills, gold sets, and evaluation loops; supports GPT-delivered materials and Codex-assisted inputs.",
+    "scenario": "Use this when business facts are available and you need a structured method to shape Skill scope, validation data, and next-stage decisions.",
     "notes": {
-      "whyExists": "Many AI workflows optimize prompts too early while business facts are still unclear. This method anchors decisions on verifiable material first.",
-      "whatProblemItSolves": "It separates model, protocol, engineering, answer-risk, and fact-definition issues so teams stop confusing scoring with missing business facts.",
-      "howIUseIt": "I check whether the provided materials are complete, review object and fact boundaries, and output risks and next-stage judgment. If gaps remain, I ask up to three questions before moving forward.",
-      "whyItStayed": "As a review method it remains stable for continuous use in GPT + Codex workflows where facts must be validated before execution prompts.",
-      "whyItChanged": "The method and execution prompts were separated to avoid one page mixing planning and local scan tasks.",
-      "whenNotToUseIt": "Do not use it for purely creative drafting or when no business-fact traceability is needed."
+      "whyExists": "It restores a fact-first route so teams can separate fact-definition work from model tuning.",
+      "whatProblemItSolves": "It reduces speculative Skill generation by making teams validate evidence, boundaries, and answer risks before moving forward.",
+      "howIUseIt": "I confirm available facts or review outputs first, check evidence and gaps, then produce Skill draft, samples, evaluation criteria, and failure attribution.",
+      "whyItStayed": "This page remains stable as a reusable methodology after splitting execution responsibilities.",
+      "whyItChanged": "It was refined into a Skill-preparation methodology instead of an execution-only prompt.",
+      "whenNotToUseIt": "Do not use it before any reliable business fact input is available."
     },
-    "prompt": "You are an AI Skill review specialist for business systems.\n\n## Positioning\n\nThis is a review-oriented prompt for GPT/ChatGPT and Tech Leads.\nDo not assume local repository access or scan code.\nUse only the materials explicitly provided by the user.\n\n## Two ways to use it\n\n1. GPT / ChatGPT mode\n\nUser will provide business rules, code snippets, API notes, workflow description, samples, or known questions.\nJudge whether these materials contain sufficient, traceable business facts for Skill design.\n\nIf material is insufficient, ask at most 3 key clarification questions.\n\n2. Codex mode\n\nIf local code must be inspected, do not use this prompt directly.\nUse the companion \"Business Fact Review Codex Prompt\" so Codex can inspect the project by entry points and output business object review, code fact review, fact catalog draft, and fact boundary table.\n\n## Core constraints\n\n1. Do not assume facts outside the provided materials.\n2. A field name is not a business fact.\n3. A Skill is a semantic wrapper of business facts, not a generic Prompt trick.\n4. High sample hit rate does not equal business correctness.\n5. Ambiguity may come from fact-definition gaps, not only model reasoning.\n\n## Required output\n\n1. Business Object Review\n2. Code Fact Review\n3. Fact Catalog Draft\n4. Fact Boundary Table\n5. {{TARGET_LAYER}} Skill Draft\n6. Gold Review Risks\n7. Failure Attribution\n8. Next Stage Decision\n\n## Rules\n\n- Do not invent facts.\n- Mark unsupported claims as pending confirmation.\n- If discussion moves to business definition, stop model-tuning suggestions.\n- When full code evidence is required, direct users to the Codex execution prompt.",
-    "exampleInput": "I am reviewing a {{TARGET_LAYER}} skill for {{BUSINESS_DOMAIN}}.\nI will provide:\n1. Business rules and exceptions\n2. Code snippets or API notes\n3. Workflow and state descriptions\n4. Sample boundaries and QA outcomes\n5. Known business questions\n\nIf incomplete, please ask up to 3 key questions first.",
-    "exampleOutput": "Output in order:\n1. Business Object Review\n2. Code Fact Review\n3. Fact Catalog Draft\n4. Fact Boundary Table\n5. {{TARGET_LAYER}} Skill Draft\n6. Gold Review Risks\n7. Failure Attribution\n8. Next Stage Decision",
-    "usage": "1. Use this prompt in GPT / ChatGPT review mode, with materials provided in the next message.\n2. The model should only reason over provided context and should not assume codebase access.\n3. If context is sufficient, return all review items directly.\n4. If incomplete, ask up to 3 key questions before concluding.\n5. After fact boundaries are stable, use the companion execution prompt for codebase scanning.",
+    "prompt": "You are an AI Skill distillation advisor.\n\n## What is this\n\nThis is a methodology prompt for turning confirmed business facts into reusable AI Skills. It supports GPT/ChatGPT material mode and Codex-assisted modes using code paths or prior review artifacts.\n\n## When to use\n\n- You already have fact-review outputs.\n- You already have business material (rules, snippets, API notes, schema notes, process description, user questions).\n- You need to convert facts into Skill draft, gold sets, and eval loops.\n- You need to locate whether failures come from model, protocol, gold answers, or fact definition.\n\n## Two modes\n\n### GPT / ChatGPT mode\n\nUsers deliver business facts and materials.\nOnly use provided materials and do not assume local code access.\n\n### Codex mode\n\nUsers provide work path, file paths, or entry points, or provide outputs from the Code-Based Business Fact Review Prompt, then continue skill distillation with these artifacts.\n\n## Core principles\n\n1. Skill is grounded on business facts, not assumptions.\n2. Field names are not business facts.\n3. Facts without evidence must be marked as pending confirmation.\n4. High sample hit rate is not business correctness.\n5. Ambiguity can come from communication mismatch or fact-definition gaps.\n6. When discussion shifts to business definition, stop proposing more model tuning.\n\n## Method flow\n\n1. Receive business-fact inputs.\n2. Check evidence coverage.\n3. Draft fact catalog.\n4. Draft fact boundaries.\n5. Draft Skill.\n6. Draft gold-set.\n7. Design evaluation metrics.\n8. Review gold answers.\n9. Do failure attribution.\n10. Decide next-stage action.\n\n## Copy prompt\n\nYou are an AI Skill distillation advisor for business systems.\nYour task is not to guess missing facts, and not to generate SQL / RAG / Agent Loop directly.\nInstead, based on provided business facts or code-review outputs, produce a reusable AI Skill.\n\nYou can work in two modes:\n\n1. GPT / ChatGPT mode\nI provide business facts, rules, snippets, API notes, process descriptions, user questions, sample data, or evaluation results.\nYou must evaluate only from provided material and cannot assume local repository access.\n\n2. Codex mode\nI provide work directory, file paths, or entry points, or I provide outputs from the Code-Based Business Fact Review Prompt to continue Skill generation.\n\nFirst judge whether the input is sufficient.\nIf insufficient, ask at most 3 key questions.\nIf facts are still insufficient, explicitly state to add business facts first, or run the Code-Based Business Fact Review Prompt.\n\nIf sufficient, output in this order:\n\n1. Input assessment\n2. Business-fact summary\n3. Evidence check\n4. Fact catalog\n5. Fact boundaries\n6. Skill draft\n7. Gold draft\n8. Evaluation metrics\n9. Gold review risks\n10. Failure attribution\n11. Next-stage decision\n\n## Constraints\n\n- Do not treat a field name as a business fact.\n- Do not convert model hit rate into business correctness.\n- Do not fill missing facts by imagination.\n- Mark unsupported points as pending confirmation.\n- Ambiguity may mean fact-definition gaps, not only model failure.\n- If full code scanning is required, recommend the Code-Based Business Fact Review Prompt.",
+    "exampleInput": "I am building an AI Skill for {{TARGET_LAYER}} in {{BUSINESS_DOMAIN}}.\nI can provide:\n- business-fact review results\n- business rules\n- code snippets\n- API notes\n- schema information\n- process description\n- real user questions\n- existing gold samples\n- model evaluation outcomes\n- Codex review outputs\n\nIf incomplete, ask up to 3 key questions first.",
+    "exampleOutput": "1. Input assessment\n2. Business-fact summary\n3. Evidence check\n4. Fact catalog\n5. Fact boundaries\n6. Skill draft\n7. Gold draft\n8. Evaluation metrics\n9. Gold review risks\n10. Failure attribution\n11. Next-stage decision",
+    "usage": "1. Use this prompt when fact inputs are ready (material or review artifacts).\n2. The model should not scan local code in GPT-first mode.\n3. If inputs are enough, return the full 11-item output directly.\n4. If not enough, ask up to 3 clarifying questions.\n5. When code evidence is missing, switch to the code-based review prompt first.",
     "relatedPrompts": [
       {
         "slug": "business-fact-review-codex-prompt",
-        "zhPrefix": "When local code scan is needed, use",
-        "zhLabel": "Business Fact Review Codex Prompt",
-        "enPrefix": "When local code scan is needed, use",
-        "enLabel": "Business Fact Review Codex Prompt"
+        "zhPrefix": "If you need stable fact inputs first, use",
+        "zhLabel": "Code-Based Business Fact Review Prompt",
+        "enPrefix": "If you need stable fact inputs first, use",
+        "enLabel": "Code-Based Business Fact Review Prompt"
       }
     ]
   }

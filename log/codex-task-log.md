@@ -1,3 +1,19 @@
+### 2026-06-10 11:40 - 重构 Code-Fact-to-Skill 关系为“Skill 沉淀方法论”与“代码事实输入提取”
+- 原始目标：清晰区分两个条目的职责边界，避免方法论页既承接 Skill 沉淀又承接代码扫描。
+- 本轮轮次：基于最近反馈，重新定义能力结构。
+- 上一轮做法：保留了 split，但方法论与执行页仍有方向交叉。
+- 用户反馈 / 否定点：方法论未明确“可被 GPT 材料输入和 Codex 两种模式复用”，以及代码审查页被理解为直接生成 Skill。
+- 本轮调整方向：
+  - 将 `code-fact-to-skill-methodology` 定位为“Skill 沉淀方法论”。
+  - 将 `business-fact-review-codex-prompt` 定位为“代码审查业务事实 Prompt”。
+  - 明确关系：代码审查产物 -> 方法论沉淀。
+  - 将职责性说明放在 JSON 字段与 `relatedPrompts`，不放入可复制正文。
+- 涉及文件：`data/prompts/code-fact-to-skill-methodology.json`；`data/prompts/business-fact-review-codex-prompt.json`；`data/homepage.json`；`log/codex-task-log.md`。
+- 沿用内容：`slug`、`status`、JSON/i18n 驱动、现有生成器链路。
+- 回滚 / 放弃内容：未回滚旧页，仅重写 `zh/en` 的定位、使用方式与产出边界说明。
+- 当前状态：职责关系收口完成；方法论支持 GPT/ChatGPT 材料模式与 Codex 路径/产物模式，代码审查页明确为 Skill 沉淀输入准备。
+- 后续注意：继续保持两页的 `relatedPrompts` 内容仅做说明跳转，不在可复制 prompt 中出现路径。
+
 ### 2026-06-10 11:20 - 明确 Code-Fact-to-Skill 双场景定位
 - 原始目标：区分 `code-fact-to-skill-methodology` 与 `business-fact-review-codex-prompt` 的使用对象，避免混淆 GPT 审查与 Codex 扫描。
 - 本轮轮次：同一任务继续收敛，聚焦定位与说明。

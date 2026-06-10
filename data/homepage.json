@@ -168,22 +168,22 @@
         {
           "slug": "code-fact-to-skill-methodology",
           "zh": {
-            "tags": ["代码事实", "Skill 设计", "失败归因"],
+            "tags": ["业务事实沉淀", "Skill 方法论", "评测闭环"],
             "cta": "查看方法"
           },
           "en": {
-            "tags": ["Code facts", "Skill design", "Failure attribution"],
+            "tags": ["Business facts", "Skill distillation", "Evaluation loop"],
             "cta": "View method"
           }
         },
         {
           "slug": "business-fact-review-codex-prompt",
           "zh": {
-            "tags": ["业务事实审查", "Codex 执行", "Skill 审核"],
+            "tags": ["代码审查", "Codex 执行", "事实抽取"],
             "cta": "查看 Prompt"
           },
           "en": {
-            "tags": ["Business fact review", "Codex execution", "Skill review"],
+            "tags": ["Code review", "Codex execution", "Fact extraction"],
             "cta": "View prompt"
           }
         }

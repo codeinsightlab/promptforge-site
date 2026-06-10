@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>业务事实审查 Codex Prompt</title>
-  <meta name="description" content="Codex 执行型 Prompt：在指定路径扫描业务代码，产出业务对象审查、业务事实、事实边界、Skill 草案与标准样本风险。">
+  <title>基于代码审查业务事实 Prompt</title>
+  <meta name="description" content="让 Codex 基于指定代码路径审查业务对象、动作、状态和规则，产出可用于 Skill 沉淀的业务事实输入。">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,7 +28,7 @@
 </head>
 <body>
 <div class="container">
-  <h1>业务事实审查 Codex Prompt</h1>
+  <h1>基于代码审查业务事实 Prompt</h1>
 
 
   <section class="validation-status">
@@ -38,82 +38,120 @@
 
   <section>
     <h2>场景</h2>
-    <p>当你已明确要从代码中抽取业务事实，并希望让 Codex 直接执行审查时使用。</p>
+    <p>当你尚无可靠业务事实，且已确认要从代码路径抽取事实输入时使用。</p>
   </section>
 
   <section>
     <h2>为什么这个 Prompt 存在</h2>
-    <p>该条目提供可直接执行的 Codex Prompt，承接方法论页的审查判断，避免重复改写任务结构。</p>
+    <p>它用于给 Skill 沉淀方法提供前置的业务事实输入，避免凭空构建技能。</p>
   </section>
 
   <section>
     <h2>它解决什么问题</h2>
-    <p>解决了方法解释与可执行任务混在一起的问题，保证执行输入稳定且可复用。</p>
+    <p>解决缺少事实来源时难以继续 Skill 设计的问题，并统一证据化提取流程。</p>
   </section>
 
   <section>
     <h2>我如何使用它</h2>
-    <p>我先提供代码入口、业务领域、目标层级、输出协议、样本与问题，再要求 Codex 按既定顺序输出审查项并给出下一步判断。</p>
+    <p>我先提供代码路径与入口，要求 Codex 输出对象、事实、证据与待确认项，再把这些结果交给沉淀方法论继续推进 Skill。</p>
   </section>
 
   <section>
     <h2>为什么它被保留下来</h2>
-    <p>该条目在“方法论 + 执行”分层后职责更清晰，复用稳定。</p>
+    <p>在当前方法与执行分离方案下，它作为稳定的前置执行入口保留。</p>
   </section>
 
   <section>
     <h2>为什么变成今天这样</h2>
-    <p>将本地扫描与审查判断从同页剥离后，方法论页保留定位、执行页保持可直接运行。</p>
+    <p>从最终 Skill 生成器转为事实输入提取器，职责更明确。</p>
   </section>
 
   <section>
     <h2>什么时候不要使用</h2>
-    <p>当你还在做方法讨论或没有本地代码扫描目标时，不建议先使用该条目。</p>
+    <p>当你已有完整业务事实并只需方法论梳理时，不需要先用该条目。</p>
   </section>
 
   <section>
     <h2>角色 Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
-      <pre><code id="business-fact-review-codex-prompt-prompt">你是业务系统代码审查与 AI Skill 设计执行人。
+      <pre><code id="business-fact-review-codex-prompt-prompt">你是业务系统代码事实审查执行人。
 
-该 Prompt 专供 Codex 使用。
-你的目标是基于本地代码上下文，完成指定层级的业务事实审查，并产出可复用输出。
+## 这是什么
 
-我会在下一条消息补充：
+这是用于为 Skill 沉淀准备输入的业务事实审查 Prompt。
+它不是直接生成 Skill 的最终方法，而是先把代码事实转成可用输入。
+
+## 什么时候用
+
+- 没有现成业务事实
+- 只有代码路径和模块范围
+- 需要让 Codex 扫描代码
+- 需要为 Skill 沉淀准备事实输入与证据
+
+## 它产出什么
+
+- 业务对象审查
+- 代码事实审查
+- 业务事实候选
+- 业务事实证据
+- 业务事实边界初稿
+- 证据不足项
+- 后续 Skill 沉淀建议
+
+## 可复制 Prompt
+
+你是业务系统代码事实审查执行人。
+你的任务不是直接生成 Skill，也不是直接生成 SQL / RAG / Agent Loop，而是基于我指定的代码路径，审查系统中真实存在的业务对象、动作、状态、规则和可查询事实，为后续 Skill 沉淀提供业务事实输入。
+
+请先确认上下文：
 
 1. 工作目录：{{WORK_DIR}}
 2. 代码入口：{{CODE_ENTRY_POINTS}}
 3. 业务领域：{{BUSINESS_DOMAIN}}
 4. 目标层级：{{TARGET_LAYER}}
-5. 输出协议：{{OUTPUT_PROTOCOL}}
-6. 模型基线：{{MODEL_BASELINE}}
-7. 样本文件：{{SAMPLE_FILE}}
-8. 已知真实用户问题：{{KNOWN_USER_QUESTIONS}}
+5. 已知真实用户问题：{{KNOWN_USER_QUESTIONS}}
 
 严格约束：
 
 * 不允许直接猜业务。
 * 不允许把数据库字段名直接当业务事实。
+* 不允许缺少代码证据就定义业务事实。
 * 不允许直接生成自由 SQL。
 * 不允许直接进入 Text-to-SQL。
-* 不允许直接引入 RAG。
+* 不允许直接进入 RAG。
 * 不允许实现 Tool Router。
 * 不允许实现 Agent Loop。
-* 不允许为了提高得分而改样本。
-* 不允许没有代码证据就定义业务事实。
+* 不允许为了让后续 Skill 看起来更完整而美化事实。
 
-请按以下顺序输出：
+工作步骤：
+
+1. 审查代码入口，识别业务对象。
+2. 从 Controller、Service、DTO、VO、Enum、Mapper、SQL、状态流转、校验逻辑中抽取代码事实。
+3. 区分字段、状态、动作、规则和可复用业务事实。
+4. 为每个候选事实给出代码证据。
+5. 判断每个事实是否可复用、可查询、可解释。
+6. 标记证据不足或待确认项。
+7. 输出可供 Skill 沉淀使用的业务事实审查结果。
+
+请按顺序输出：
 
 1. 业务对象审查
 2. 代码事实审查
-3. 业务事实目录草案
-4. 业务事实边界表
-5. {{TARGET_LAYER}} Skill 草案
-6. 标准样本草案
-7. 标准答案审查风险
-8. 失败归因
-9. 下一阶段判断</code></pre>
+3. 候选业务事实
+4. 业务事实证据表
+5. 业务事实边界初稿
+6. 证据不足或待确认项
+7. 与已知用户问题的匹配情况
+8. 不建议进入 Skill 的风险
+9. 下一步建议
+
+输出要求：
+
+- 每个候选业务事实必须给出代码证据。
+- 证据不足的事实不能直接升级为 Skill 支持事实。
+- 如果用户问题无法被当前代码事实表达，标记为业务事实缺口。
+- 最终说明是否可以进入 Skill 沉淀阶段。</code></pre>
     </div>
   </section>
 
@@ -121,33 +159,40 @@
   <section>
     <h2>配套使用</h2>
     <div class="block">
-      <ul>    <li><p>如需先做方法判定，请先看<a href="/code-fact-to-skill-methodology/">基于代码事实生成 AI Skill 的分层验证方法</a></p></li>
+      <ul>    <li><p>其产物可作为<a href="/code-fact-to-skill-methodology/">基于业务事实沉淀 AI Skill 的方法论</a></p></li>
       </ul>
     </div>
   </section>
 
   <section>
     <h2>你接下来可以这样输入</h2>
-    <div class="block"><pre><code>我正在为 {{BUSINESS_DOMAIN}} 系统沉淀 {{TARGET_LAYER}} Skill。
-工作目录为 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}。
-当前已知真实问题为 {{KNOWN_USER_QUESTIONS}}。
-请先输出对象审查、代码事实、事实目录与边界定义，再给出是否进入下一阶段的判断。</code></pre></div>
+    <div class="block"><pre><code>我正在做 {{BUSINESS_DOMAIN}} 的业务能力沉淀。
+请先给出：
+工作目录 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}。
+已知真实问题：{{KNOWN_USER_QUESTIONS}}。
+目标层级 {{TARGET_LAYER}}。
+请先输出：业务对象、代码事实、候选事实和证据。</code></pre></div>
   </section>
 
   <section>
     <h2>GPT 会这样输出</h2>
-    <div class="block"><pre><code>先输出代码层面的业务对象与代码事实核验；
-再给出事实目录草案与边界表；
-只有证据充分并且边界稳定时，才产出 {{TARGET_LAYER}} Skill 草案与标准样本草案；
-若失败归因为事实定义缺口，请回到业务意图采样。</code></pre></div>
+    <div class="block"><pre><code>1. 业务对象审查
+2. 代码事实审查
+3. 候选业务事实
+4. 业务事实证据表
+5. 业务事实边界初稿
+6. 证据不足或待确认项
+7. 与问题的匹配情况
+8. 不建议进入 Skill 的风险
+9. 下一步建议</code></pre></div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <div class="block"><pre><code>1. 复制该 Prompt。
-2. 下一条消息补充：工作目录、代码入口、业务领域、目标层级、输出协议、模型基线、样本文件、已知问题。
-3. 要求按顺序输出 9 个结果项。
-4. 用失败归因决定是否进入 Skill 试点、补代码证据或返回业务定义采样。</code></pre></div>
+    <div class="block"><pre><code>1. 先复制该 Prompt。
+2. 下一条补充：工作目录、代码入口、业务领域、目标层级、已知问题。
+3. 要求按顺序输出 9 个结果项，优先输出证据与待确认项。
+4. 以审查结果作为输入，交给“基于业务事实沉淀 AI Skill 的方法论”继续决策。</code></pre></div>
   </section>
 </div>
 <script>

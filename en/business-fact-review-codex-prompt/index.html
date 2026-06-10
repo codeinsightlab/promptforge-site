@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Business Fact Review Codex Prompt</title>
-  <meta name="description" content="Execution prompt for Codex that scans business code by path and emits business object reviews, fact catalogs, boundaries, skill drafts, and failure attribution.">
+  <title>Code-Based Business Fact Review Prompt</title>
+  <meta name="description" content="A Codex-oriented prompt for inspecting code paths and extracting business objects, actions, states, rules, and evidence-backed facts as input for skill design.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -31,7 +31,7 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Business Fact Review Codex Prompt</h1>
+  <h1>Code-Based Business Fact Review Prompt</h1>
 
 
   <section class="validation-status">
@@ -41,83 +41,120 @@
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this entry when code-execution tracing is confirmed and you need a ready Codex prompt for factual extraction.</p>
+    <p>Use this when facts are not ready yet and you need code scanning to produce fact inputs for skill preparation.</p>
   </section>
 
   <section>
     <h2>Why This Prompt Exists</h2>
-    <p>It provides a ready-to-run Codex execution text so the method can be executed directly without rebuilding task structure every time.</p>
+    <p>It provides a dedicated fact-extraction entry so AI skill design can start from verified evidence instead of assumptions.</p>
   </section>
 
   <section>
     <h2>What Problem It Solves</h2>
-    <p>It closes the gap between method explanation and actionable execution, reducing missing-output risk and repeated task recreation.</p>
+    <p>It solves missing input when trying to create a Skill without a reliable business-fact source.</p>
   </section>
 
   <section>
     <h2>How I Use It</h2>
-    <p>I provide entry points, domain, layer, protocol, baseline, samples, and known questions, then let Codex produce object review, boundaries, drafts, and attribution in one pass.</p>
+    <p>I provide project paths and context, then request structured fact extraction and evidence-backed outputs for the next methodology step.</p>
   </section>
 
   <section>
     <h2>Why It Stayed</h2>
-    <p>After splitting method and execution responsibilities, this entry became clearly reusable and stable.
-</p>
+    <p>The dedicated fact extraction role remains stable and reusable after method/execution separation.</p>
   </section>
 
   <section>
     <h2>Why It Changed</h2>
-    <p>Execution content was explicitly aligned to local-code scanning so it is no longer mixed into the review method page.</p>
+    <p>Its scope was narrowed from final skill output to evidence extraction for skill preparation.</p>
   </section>
 
   <section>
     <h2>When Not To Use It</h2>
-    <p>Do not use this prompt when you are still in review framing or need GPT-based material analysis only.</p>
+    <p>If reliable business-fact material already exists and only method-level reasoning is needed.</p>
   </section>
 
   <section>
     <h2>Role Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="business-fact-review-codex-prompt-prompt">You are a business-system code reviewer and AI Skill execution specialist.
+      <pre><code id="business-fact-review-codex-prompt-prompt">You are a business-system code fact review executor.
 
-This prompt is for Codex.
-Your goal is to inspect the provided code context and produce a review package for {{TARGET_LAYER}}.
+## What is this
 
-Please confirm the context I provide:
+This is a business-fact extraction prompt for Skill distillation, not a final Skill generation prompt.
+You inspect available code materials and produce evidence-backed inputs for subsequent skill design.
+
+## When to use
+
+- When confirmed business facts are not yet available.
+- When you only have code paths and module scope.
+- When you need Codex to scan code for review-ready facts.
+- When Skill distillation needs reliable fact inputs.
+
+## What it outputs
+
+- Business object review
+- Code fact review
+- Candidate business facts
+- Evidence table for facts
+- Draft fact boundary
+- Insufficient-evidence items
+- Suggestions for next Skill preparation steps
+
+## Executable prompt
+
+You are a business-system code fact review executor.
+Your task is not to generate Skill directly, and not to directly generate SQL / RAG / Agent Loop, but to review business objects, actions, states, rules, and queryable facts from the provided code paths so they can be used for Skill distillation.
+
+Please confirm context first:
 
 1. Work directory: {{WORK_DIR}}
 2. Code entry points: {{CODE_ENTRY_POINTS}}
 3. Business domain: {{BUSINESS_DOMAIN}}
 4. Target layer: {{TARGET_LAYER}}
-5. Output protocol: {{OUTPUT_PROTOCOL}}
-6. Model baseline: {{MODEL_BASELINE}}
-7. Sample file: {{SAMPLE_FILE}}
-8. Known real user questions: {{KNOWN_USER_QUESTIONS}}
+5. Known real user questions: {{KNOWN_USER_QUESTIONS}}
 
 Hard constraints:
 
 - Do not guess business facts.
 - Do not treat database field names as business facts.
-- Do not generate free SQL.
-- Do not move directly to Text-to-SQL.
+- Do not define business facts without code evidence.
+- Do not generate free-form SQL.
+- Do not switch to Text-to-SQL.
 - Do not use RAG.
 - Do not implement Tool Router.
 - Do not implement Agent Loop.
-- Do not tune samples only to chase score.
-- Do not define business facts without code evidence.
+- Do not beautify facts only to make later Skill output look better.
 
-Please output in order:
+Work steps:
+
+1. Review code entry points and identify business objects.
+2. Extract code facts from Controller, Service, DTO, VO, Enum, Mapper, SQL, state transitions, and validation logic.
+3. Distinguish fields, states, actions, rules, and reusable business facts.
+4. Attach evidence for each candidate fact.
+5. Assess whether each fact is reusable, queryable, and explainable.
+6. Mark evidence-gaps and confirm-required items.
+7. Output a fact-review package ready for skill preparation.
+
+Output in order:
 
 1. Business Object Review
 2. Code Fact Review
-3. Fact Catalog Draft
-4. Fact Boundary Table
-5. {{TARGET_LAYER}} Skill Draft
-6. Gold Set Draft
-7. Gold Review Risks
-8. Failure Attribution
-9. Next Stage Decision</code></pre>
+3. Candidate Business Facts
+4. Business Fact Evidence Table
+5. Draft Business Fact Boundaries
+6. Evidence-Insufficient or Pending Items
+7. Match with Known User Questions
+8. Skill-not-ready Risks
+9. Next-step Suggestions
+
+Output requirements:
+
+- Every candidate fact must include code evidence.
+- Facts without sufficient evidence cannot be promoted as Skill-supported facts.
+- If user problems are not expressible by current facts, mark as fact-definition gaps.
+- Conclude whether Skill preparation can start.</code></pre>
     </div>
   </section>
 
@@ -125,33 +162,38 @@ Please output in order:
   <section>
     <h2>Companion prompt</h2>
     <div class="block">
-      <ul>    <li><p>If you need review alignment first, use<a href="/en/code-fact-to-skill-methodology/">Code-Fact-to-Skill Methodology</a></p></li>
+      <ul>    <li><p>Its output can be used for<a href="/en/code-fact-to-skill-methodology/">Business-Fact-to-Skill Methodology</a></p></li>
       </ul>
     </div>
   </section>
 
   <section>
     <h2>What to provide next</h2>
-    <div class="block"><pre><code>I am building a {{TARGET_LAYER}} skill for {{BUSINESS_DOMAIN}}.
-Work directory is {{WORK_DIR}}, and entry points are {{CODE_ENTRY_POINTS}}.
-Known real user questions are {{KNOWN_USER_QUESTIONS}}.
-
-Please produce Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table first, then proceed only when evidence is sufficient.</code></pre></div>
+    <div class="block"><pre><code>I am preparing fact inputs for {{BUSINESS_DOMAIN}}.
+Work directory: {{WORK_DIR}}, entry points: {{CODE_ENTRY_POINTS}}, target layer: {{TARGET_LAYER}}.
+Known user questions: {{KNOWN_USER_QUESTIONS}}.
+Please return: business object review, code facts, candidates, and evidence first.</code></pre></div>
   </section>
 
   <section>
     <h2>Expected output preview</h2>
-    <div class="block"><pre><code>First confirm code evidence and object extraction, then validate catalog and boundaries.
-Only move to {{TARGET_LAYER}} Skill Draft and Gold Set Draft when evidence and protocol are stable.
-If attribution indicates fact-definition gaps, collect more evidence before model tuning.</code></pre></div>
+    <div class="block"><pre><code>1. Business Object Review
+2. Code Fact Review
+3. Candidate Business Facts
+4. Fact Evidence Table
+5. Draft Fact Boundaries
+6. Evidence-Insufficient / Pending Items
+7. Matching with Known User Questions
+8. Risks That Block Skill Start
+9. Next-step Suggestions</code></pre></div>
   </section>
 
   <section>
     <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Copy this role prompt.
-2. In the next message, provide all execution context: work dir, entry points, domain, target layer, protocol, samples, and known questions.
-3. Require output in the nine ordered items.
-4. Use failure attribution to decide go/no-go and whether more code evidence is needed.</code></pre></div>
+    <div class="block"><pre><code>1. Copy this prompt.
+2. In the next message provide work dir, entry points, domain, target layer, and known questions.
+3. Require the nine-item output in order.
+4. Feed outputs into Business-Fact-to-Skill Methodology for the next distillation step.</code></pre></div>
   </section>
 </div>
 <script>
