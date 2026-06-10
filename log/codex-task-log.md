@@ -1,3 +1,19 @@
+### 2026-06-10 12:30 - 单独重构 code-fact-to-skill-methodology 页面结构与复制区
+
+- 原始目标：去除 `code-fact-to-skill-methodology` 的 Prompt 套 Prompt，清理可复制正文中的页面说明污染，并收口业务术语。
+- 本轮轮次：独立优化该页面正文层，不改 `business-fact-review-codex-prompt`。
+- 上一轮做法：已完成执行页与方法论页分离，仍有部分使用方式/说明文本混入可复制 Prompt。
+- 用户反馈 / 否定点：方法论页仍有模式说明、提示词复用信息和结构混乱，导致复制区难以直接投递。
+- 本轮调整方向：
+  - 将 `zh.prompt` / `en.prompt` 改为单一角色 Prompt，只保留可执行指令、输入充分性判断、固定输出结构与判定原则。
+  - 将“两种使用方式/适用场景/核心原则”统一转移到 `usage` 页面说明区。
+  - 保持 `slug` 不变、`status` 不变、`relatedPrompts` 不变，仅检查相关链接来源。
+- 涉及文件：`data/prompts/code-fact-to-skill-methodology.json`；`log/codex-task-log.md`。
+- 沿用内容：JSON/i18n 驱动、KEEP 状态、首页栏目、`business-fact-review-codex-prompt` 定位与内容。
+- 回滚 / 放弃内容：未改动 `business-fact-review-codex-prompt` 主体；未改 generator；未改首页结构与 schema。
+- 当前状态：方法论页复制区已收口为单一 Prompt；页面说明改造完成，待验证链路通过确认。
+- 后续注意：如需更细化中文/英文结构层级，可在 `scenario/usage` 文本内继续拆分。
+
 ### 2026-06-10 12:00 - 优化 business-fact-review-codex-prompt 为纯 Codex 扫码执行 Prompt
 
 - 原始目标：清除 business-fact-review-codex-prompt 可复用正文中的解释性叙事与示例化文案，仅保留可执行指令、约束与固定输出顺序。
