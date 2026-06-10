@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>业务事实审查 Codex Prompt</title>
+  <meta name="description" content="让 Codex 基于真实业务代码审查业务对象、业务事实、事实边界，并生成 AI Skill 与标准样本草案的执行 Prompt。">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    .subtitle { color: #334155; margin-top: 4px; }
+    section { margin-top: 32px; }
+    .validation-status { border-left: 3px solid #2563eb; padding-left: 14px; }
+    .validation-status h2 { margin-bottom: 6px; }
+    .validation-status p { margin-top: 4px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>业务事实审查 Codex Prompt</h1>
+
+
+  <section class="validation-status">
+    <h2>验证状态：使用中</h2>
+    <p>正在真实场景中使用和调整，方向成立，但还不是最终稳定版本。</p>
+  </section>
+
+  <section>
+    <h2>场景</h2>
+    <p>当你已确定要从代码中抽取业务事实，并需要给 Codex 下达可执行的审查任务时使用该条目。</p>
+  </section>
+
+  <section>
+    <h2>为什么这个 Prompt 存在</h2>
+    <p>该页提供可复制、可落地的 Codex 执行文本，用于将方法论转为可执行任务。</p>
+  </section>
+
+  <section>
+    <h2>它解决什么问题</h2>
+    <p>它解决了“方法讲清了但没有可直接执行文本”的断层，减少重复整理输入、遗漏关键输出项的问题。</p>
+  </section>
+
+  <section>
+    <h2>我如何使用它</h2>
+    <p>我会先给出代码入口、业务领域、目标层级、输出协议和已知问题，再直接使用该 Prompt 要求 Codex 输出对象审查到下一阶段判断。</p>
+  </section>
+
+  <section>
+    <h2>为什么它被保留下来</h2>
+    <p>该条目承担明确的执行入口，形成“方法论—执行 Prompt”分层结构后，复用更稳定。</p>
+  </section>
+
+  <section>
+    <h2>为什么变成今天这样</h2>
+    <p>将完整的 Codex 执行内容从方法论条目拆出，避免页面职责混淆。</p>
+  </section>
+
+  <section>
+    <h2>什么时候不要使用</h2>
+    <p>当你还在做方法论讨论或范围评估，不需要立刻生成机器可执行任务时，不建议先使用该条目。</p>
+  </section>
+
+  <section>
+    <h2>角色 Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
+      <pre><code id="business-fact-review-codex-prompt-prompt">你是业务系统代码审查与 AI Skill 设计执行人。
+你的目标是基于 {{BUSINESS_DOMAIN}} 的真实代码，审查 {{TARGET_LAYER}} 所需的业务事实，并生成该层 Skill。
+
+请先确认我需要的上下文：
+
+1. 工作目录：{{WORK_DIR}}
+2. 代码入口：{{CODE_ENTRY_POINTS}}
+3. 业务领域：{{BUSINESS_DOMAIN}}
+4. 目标层级：{{TARGET_LAYER}}
+5. 输出协议：{{OUTPUT_PROTOCOL}}
+6. 模型基线：{{MODEL_BASELINE}}
+7. 样本文件：{{SAMPLE_FILE}}
+8. 已知真实用户问题：{{KNOWN_USER_QUESTIONS}}
+
+严格约束：
+
+* 不允许直接猜业务。
+* 不允许把数据库字段名直接当业务事实。
+* 不允许直接生成自由 SQL。
+* 不允许直接进入 Text-to-SQL。
+* 不允许直接进入 RAG。
+* 不允许实现 Tool Router。
+* 不允许实现 Agent Loop。
+* 不允许为了提高得分而改样本。
+* 不允许缺少代码证据就定义业务事实。
+
+工作步骤：
+
+1. 先审查代码入口，识别业务对象。
+2. 从 Controller、Service、DTO、VO、Enum、Mapper、SQL、状态流转、校验逻辑中抽取代码事实。
+3. 将代码事实抽象为可查询或可判断的业务事实。
+4. 为每个业务事实定义边界：它表示什么、不表示什么、容易和谁混淆。
+5. 根据业务事实边界生成 {{TARGET_LAYER}} Skill 草案。
+6. 基于 Skill 草案生成标准样本草案。
+7. 审查标准答案风险，判断哪些样本稳定、哪些只是阶段性可接受、哪些存在争议。
+8. 做失败归因，区分模型问题、协议问题、工程问题、标准答案问题和业务事实定义问题。
+9. 判断是否可以进入下一阶段。
+
+请按顺序输出：
+
+1. 业务对象审查
+2. 代码事实审查
+3. 业务事实目录草案
+4. 业务事实边界表
+5. {{TARGET_LAYER}} Skill 草案
+6. 标准样本草案
+7. 标准答案审查风险
+8. 失败归因
+9. 下一阶段判断
+
+输出要求：
+
+* 每个业务事实必须给出代码证据。
+* 如果证据不足，标记为待确认，不要强行加入业务事实目录。
+* 如果用户问题无法被现有业务事实表达，标记为业务事实缺口。
+* 如果当前问题已经转向业务定义，不要继续建议调模型。
+* 最终明确说明：是否可以进入 Skill 实验、是否需要补代码证据、是否需要真实业务意图采样。</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>你接下来可以这样输入</h2>
+    <div class="block"><pre><code>我正在为 {{BUSINESS_DOMAIN}} 系统沉淀 {{TARGET_LAYER}} Skill。
+工作目录为 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}。
+当前已知真实问题为 {{KNOWN_USER_QUESTIONS}}。
+请先输出业务对象审查、代码事实审查、业务事实目录草案与业务事实边界表，并给出下一阶段判断。</code></pre></div>
+  </section>
+
+  <section>
+    <h2>GPT 会这样输出</h2>
+    <div class="block"><pre><code>先做代码事实确认与对象抽取；
+再输出业务事实目录草案和边界表。
+只有证据充分且协议边界稳定后，才进入 {{TARGET_LAYER}} Skill 草案与标准样本草案；若失败归因为事实定义缺口，先补事实定义与真实场景采样。</code></pre></div>
+  </section>
+
+  <section>
+    <h2>使用说明</h2>
+    <div class="block"><pre><code>1. 复制该 Prompt。
+2. 下一条消息补充：工作目录、代码入口、业务领域、目标层级、输出协议、模型基线、样本文件、已知问题。
+3. 要求按顺序输出 9 个结果项。
+4. 按失败归因决定是否进入 Skill 试点、补证据或返回业务意图采样。</code></pre></div>
+  </section>
+</div>
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "已复制";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
+</body>
+</html>

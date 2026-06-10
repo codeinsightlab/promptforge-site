@@ -175,6 +175,17 @@
             "tags": ["Code facts", "Skill design", "Failure attribution"],
             "cta": "View method"
           }
+        },
+        {
+          "slug": "business-fact-review-codex-prompt",
+          "zh": {
+            "tags": ["业务事实审查", "Codex 执行", "Skill 审核"],
+            "cta": "查看 Prompt"
+          },
+          "en": {
+            "tags": ["Business fact review", "Codex execution", "Skill review"],
+            "cta": "View prompt"
+          }
         }
       ]
     }

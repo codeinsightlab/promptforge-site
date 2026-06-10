@@ -1,3 +1,15 @@
+### 2026-06-10 10:10 - 拆分 Code-Fact-to-Skill Methodology 与 Codex 执行 Prompt
+- 原始目标：把 code-fact-to-skill-methodology 从“方法论 + 可执行 Prompt 混合”拆分为方法论条目与配套 Codex 执行条目。
+- 本轮轮次：新增内容结构拆分与栏目挂载同步。
+- 上一轮做法：中文可读性与边界符清理已完成。
+- 用户反馈 / 否定点：当前页面仍像“一个页面套两套 Prompt”。
+- 本轮调整方向：保持原 slug 的方法论说明条目不再包含完整执行 Prompt，新增 business-fact-review-codex-prompt 用于可复制执行。
+- 涉及文件：data/prompts/code-fact-to-skill-methodology.json；data/prompts/business-fact-review-codex-prompt.json；data/homepage.json；log/codex-task-log.md。
+- 沿用内容：slug 保持 code-fact-to-skill-methodology 不变、status keep、JSON/i18n/生成器驱动、homepage agent-ai-engineering-methods 栏目。
+- 回滚 / 放弃内容：未回滚旧内容；移除方法页中的完整 Codex 可复制任务正文，改由新条目承载。
+- 当前状态：方法论拆分完成；待执行 validate / generate / build 并复核结果。
+- 后续注意：若新增更多关联条目，优先通过正文字段做关系说明（当前 schema 无 related/linked 字段）。
+
 ### 2026-06-10 10:00 - Code-Fact-to-Skill Methodology 可复制 Prompt 边界符移除
 - 原始目标：移除 code-fact-to-skill-methodology 正式内容中的 PROMPT BEGIN / PROMPT END，并保持 JSON/i18n 与生成器链路不变。
 - 本轮轮次：2

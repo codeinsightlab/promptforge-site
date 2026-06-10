@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Fact Review Codex Prompt</title>
+  <meta name="description" content="A Codex execution prompt for reviewing business-system code, extracting business facts, defining fact boundaries, and drafting AI skills and gold sets.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
+    .container { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    .nav { margin-bottom: 24px; }
+    .nav a { color: #2563eb; font-size: 14px; text-decoration: none; }
+    h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    p { font-size: 14px; color: #6b7280; margin: 0; line-height: 1.7; }
+    .subtitle { color: #334155; margin-top: 4px; }
+    section { margin-top: 32px; }
+    .validation-status { border-left: 3px solid #2563eb; padding-left: 14px; }
+    .validation-status h2 { margin-bottom: 6px; }
+    .validation-status p { margin-top: 4px; }
+    .block { position: relative; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; padding: 16px; }
+    pre { margin: 0; font-size: 13px; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    code { font-family: inherit; }
+    .action-bar { position: absolute; right: 12px; top: 10px; opacity: 0; transition: opacity 0.15s ease; }
+    .block:hover .action-bar { opacity: 1; }
+    .copy-action { font-size: 12px; color: #6b7280; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .copy-action:hover { background: #f3f4f6; color: #111827; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="nav"><a href="/en/">Back to English home</a></div>
+  <h1>Business Fact Review Codex Prompt</h1>
+
+
+  <section class="validation-status">
+    <h2>Validation Status: In Use</h2>
+    <p>Currently being used and refined in real scenarios. Useful as a reference, but not final.</p>
+  </section>
+
+  <section>
+    <h2>Scenario</h2>
+    <p>Use this entry when the fact-extraction path is already decided and you need a direct, copy-ready prompt for Codex execution.</p>
+  </section>
+
+  <section>
+    <h2>Why This Prompt Exists</h2>
+    <p>It provides a ready-to-run execution prompt so the methodology can be executed directly by Codex without rewriting the task structure each time.</p>
+  </section>
+
+  <section>
+    <h2>What Problem It Solves</h2>
+    <p>It bridges the gap between method explanation and practical execution, reducing prompt rebuild and missing-output risk.</p>
+  </section>
+
+  <section>
+    <h2>How I Use It</h2>
+    <p>I pass code entry points, domain, layer, protocol, baseline, samples, and known questions, then drive Codex through review, boundary, draft, and attribution outputs in one pass.</p>
+  </section>
+
+  <section>
+    <h2>Why It Stayed</h2>
+    <p>After splitting, this entry has a clear purpose and is now stable in repeated use.</p>
+  </section>
+
+  <section>
+    <h2>Why It Changed</h2>
+    <p>Execution content was moved out of the methodology page to remove role-and-task mixing.
+</p>
+  </section>
+
+  <section>
+    <h2>When Not To Use It</h2>
+    <p>Do not use it when you are still in method framing or scope definition before deciding to run an execution pass.</p>
+  </section>
+
+  <section>
+    <h2>Role Prompt</h2>
+    <div class="block">
+      <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
+      <pre><code id="business-fact-review-codex-prompt-prompt">You are a business-system code reviewer and AI Skill designer.
+Your goal is to review real code for the required business facts of {{TARGET_LAYER}} and draft the skill for that layer.
+
+Please confirm the context needed by me:
+
+1. Work directory: {{WORK_DIR}}
+2. Code entry points: {{CODE_ENTRY_POINTS}}
+3. Business domain: {{BUSINESS_DOMAIN}}
+4. Target layer: {{TARGET_LAYER}}
+5. Output protocol: {{OUTPUT_PROTOCOL}}
+6. Model baseline: {{MODEL_BASELINE}}
+7. Sample file: {{SAMPLE_FILE}}
+8. Known real user questions: {{KNOWN_USER_QUESTIONS}}
+
+Hard constraints:
+
+- Do not guess business facts.
+- Do not treat database field names as business facts.
+- Do not generate free SQL.
+- Do not move directly to Text-to-SQL.
+- Do not use RAG.
+- Do not implement Tool Router.
+- Do not implement Agent Loop.
+- Do not tune samples only to chase score.
+- Do not define business facts without code evidence.
+
+Working steps:
+
+1. Review code entry points first and identify business objects.
+2. Extract code facts from Controller, Service, DTO, VO, Enum, Mapper, SQL, state transitions, and validation logic.
+3. Abstract those facts into queryable or judgeable business facts.
+4. Define boundaries for each fact: what it represents, what it does not represent, and likely confusion points.
+5. Draft the {{TARGET_LAYER}} Skill based on the fact boundaries.
+6. Draft the gold set based on the skill draft.
+7. Review gold-set risk and classify stable, temporarily acceptable, and controversial samples.
+8. Perform failure attribution across model, protocol, engineering, gold answer, and fact-definition issues.
+9. Decide whether to move to the next stage.
+
+Please output in order:
+
+1. Business Object Review
+2. Code Fact Review
+3. Fact Catalog Draft
+4. Fact Boundary Table
+5. {{TARGET_LAYER}} Skill Draft
+6. Gold Set Draft
+7. Gold Review Risks
+8. Failure Attribution
+9. Next Stage Decision
+
+Output requirements:
+
+- Every business fact must include code evidence.
+- If evidence is insufficient, mark as pending confirmation and avoid forcing fact inclusion.
+- If user needs cannot be represented by current business facts, mark a fact-definition gap.
+- If the discussion shifts to business definition, do not continue suggesting model tuning.
+- Final line must explicitly state: whether Skill experimentation can start, whether more code evidence is needed, and whether business intent sampling is needed.</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>What to provide next</h2>
+    <div class="block"><pre><code>I am building a {{TARGET_LAYER}} skill for {{BUSINESS_DOMAIN}}.
+Work directory is {{WORK_DIR}}, and the code entry points are {{CODE_ENTRY_POINTS}}.
+Known real user questions are {{KNOWN_USER_QUESTIONS}}.
+Please produce Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table first, then move to skill and gold set drafting only when evidence is sufficient.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Expected output preview</h2>
+    <div class="block"><pre><code>Start with code evidence. First output Business Object Review and Code Fact Review, then validate Fact Catalog and Boundary definitions.
+Only move to {{TARGET_LAYER}} Skill Draft and Gold Set Draft when both facts and protocol are stable.
+If attribution points to fact-definition gaps, enrich facts before any model tuning.</code></pre></div>
+  </section>
+
+  <section>
+    <h2>Usage notes</h2>
+    <div class="block"><pre><code>1. Copy this role prompt.
+2. In the next message, provide code entry points, domain, target layer, protocol, samples, and known questions.
+3. Request output in the nine ordered items above.
+4. Use failure attribution to decide go/no-go for Skill experimentation and whether more evidence is needed.</code></pre></div>
+  </section>
+</div>
+<script>
+function copyPrompt(el) {
+  const block = el.closest(".block");
+  const text = block.querySelector("pre").innerText;
+  const originalText = el.innerText;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+  el.innerText = "Copied";
+  setTimeout(() => { el.innerText = originalText; }, 1200);
+}
+</script>
+</body>
+</html>

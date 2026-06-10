@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Code-Fact-to-Skill Methodology</title>
-  <meta name="description" content="A method for extracting real business facts from existing business-system code and turning them into AI Skill, fact catalogs, fact boundaries, Gold Set, and failure attribution loops.">
+  <meta name="description" content="A methodology for extracting verifiable code facts, defining fact boundaries, and building AI Skills in a layered, auditable way before model-level changes.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -41,148 +41,119 @@
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this when an existing business system already has real code context. Start from code evidence to define object, action, state, and rule boundaries before model-level optimization.</p>
+    <p>Useful when an existing business system already has code context and the team needs a disciplined fact-first path before any model optimization.</p>
   </section>
 
   <section>
     <h2>Why This Prompt Exists</h2>
-    <p>Many AI programs start by tuning prompts and models first, then discover outputs are unstable because the underlying facts are not defined. This method restores a fact-first sequence.</p>
+    <p>Most projects start with prompts and models, then discover instability because facts were never defined. This method restores a fact-first sequence and keeps decisions auditable.</p>
   </section>
 
   <section>
     <h2>What Problem It Solves</h2>
-    <p>It separates model, protocol, engineering, gold-set, and fact-definition failures so teams do not mix optimization level with fact-level gaps.</p>
+    <p>It separates model, protocol, engineering, gold-set, and fact-definition failures, so teams stop confusing score tuning with missing business facts.</p>
   </section>
 
   <section>
     <h2>How I Use It</h2>
-    <p>I provide code entry points, known questions, protocol fields, and target layer, then ask for Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table before drafting the {{TARGET_LAYER}} Skill and Gold Set.</p>
+    <p>I confirm entry points, target layer, key objects, known questions, and output protocol, then move through business object review, fact extraction, fact catalog and boundary checks, and then draft Skill and gold set.</p>
   </section>
 
   <section>
     <h2>Why It Stayed</h2>
-    <p>It reduces speculative discussion by forcing review points around verifiable facts and keeps output quality traceable over time.</p>
+    <p>In repeated use cases, it keeps discussions anchored to evidence and reduces speculative model-level tuning before foundation facts are stable.</p>
   </section>
 
   <section>
     <h2>Why It Changed</h2>
-    <p>It moved from direct prompt/score adjustments to a stage-gated flow that only advances after fact and protocol boundaries are stable.</p>
+    <p>The flow is now stage-gated around fact and protocol boundaries, replacing direct prompt or score optimization as the default first step.</p>
   </section>
 
   <section>
     <h2>When Not To Use It</h2>
-    <p>Do not use it as free SQL generation, RAG entry, Tool Router, or Agent Loop. If code evidence is missing, do not invent facts.</p>
+    <p>Do not use it for one-off creative drafting when there is no shared code-grounded context and no need for fact-governed Skill design.</p>
   </section>
 
   <section>
     <h2>Role Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="code-fact-to-skill-methodology-prompt"># Role
+      <pre><code id="code-fact-to-skill-methodology-prompt">## What this is
 
-You are an AI systems method designer. Your priority is to transform verified code facts into a reusable Skill and evaluation loop.
+This is a methodology for building AI Skills from code facts. It is for Tech Leads and engineering decision makers to judge whether a layer skill can be grounded on real business facts before model optimization.
 
-## Working Rules
+## When to use
 
-- Do not write free-form SQL.
-- Do not assume missing facts.
-- Do not implement RAG, tool-router, or agent loop.
-- If input is insufficient, ask up to 3 critical questions.
+1. The business system already has code context and AI capability plans.
+2. You need a semantic layer before Text-to-SQL.
+3. You need to extract business facts from code and define fact boundaries.
+4. You need outputs for Fact Catalog, Fact Boundary, Skill draft, and Gold Set draft.
+5. You want to separate model, engineering, gold-set, and fact-definition issues.
 
-## Core principle
-Code facts first. A field alone is not a business fact. Confirm real objects, actions, states, and rules from code before model tuning.
+## Core principles
 
-## Method steps
+1. Do not ask first how to make the model more precise; ask what real business facts are proven by code.
+2. A field name is not the same as a business fact.
+3. A Skill is a semantic wrapper of code facts, not a generic Prompt trick.
+4. High hit rate of samples does not automatically mean business correctness.
+
+## Method flow
+
 1. Code review
 2. Business object identification
-3. Business action / state / rule extraction
-4. Abstract queryable or judgeable business facts
-5. Output Fact Catalog Draft
-6. Output Fact Boundary Table
-7. Output {{TARGET_LAYER}} Skill Draft
+3. Extraction of business actions, states, and rules
+4. Abstraction of queryable or judgeable facts
+5. Draft of fact catalog
+6. Fact boundary table
+7. Skill draft
 8. Draft Gold Set
-9. Run model and execution-chain evaluation
-10. Gold Review and risk checks
+9. Model and execution-path evaluation
+10. Gold review
 11. Failure Attribution
 12. Close or move to next stage
 
 ## Failure attribution
-- jsonValid low: protocol and response-control issue.
-- protocolValid low: schema, type, or field mismatch.
-- thinkingDetected high: JSON-only / no-think control failure.
-- semanticDirectionCorrect low: boundary or goal drift.
-- fact boundary incomplete: Catalog misses critical paths.
-- too much ambiguity: fact-definition gap or incomplete context.
-- candidateFacts inconsistent: naming and boundary confusion.
-- SQL or field leakage: skill boundary breach.
 
-## Gold Review Risks
-- Alignment between business objects and real system semantics.
-- Whether Fact Catalog is reusable and auditable.
-- Whether Skill covers actual usage patterns.
-- Whether fact evidence should be enriched before model tuning.
+- JSON pass rate is low: check protocol control and response structure first.
+- Protocol validity is low: check schema consistency, field names, and types.
+- Control drift is high: no-think / JSON-only behavior is unstable.
+- Semantic direction is off: fact boundaries or skill goals are drifting.
+- Gold set hits but business is not right: gold answers may have issues.
+- Too much ambiguity: this may come from fact-definition gaps, not model reasoning.
+- SQL or field leakage: layer boundary was not cleanly separated.
+
+## Paired execution prompt
+
+The executable Codex prompt for this method is maintained separately: 
+- Chinese: /business-fact-review-codex-prompt/ (Business Fact Review Codex Prompt)
+- English: /en/business-fact-review-codex-prompt/ (Business Fact Review Codex Prompt)
 
 ## Origin notes
-This method is refined from an enterprise QA workflow. Model variants and benchmark settings are historical context only and are not hard prerequisites. The reusable core is the fact-first sequence and failure-attribution closure.
 
-You are a business code reviewer and AI Skill designer.
-Your goal is to build skills from verified code facts, using {{BUSINESS_DOMAIN}} as context.
-
-Please confirm these inputs:
-1) WORK_DIR: {{WORK_DIR}}
-2) CODE_ENTRY_POINTS: {{CODE_ENTRY_POINTS}}
-3) BUSINESS_DOMAIN: {{BUSINESS_DOMAIN}}
-4) TARGET_LAYER: {{TARGET_LAYER}}
-5) OUTPUT_PROTOCOL: {{OUTPUT_PROTOCOL}}
-6) MODEL_BASELINE: {{MODEL_BASELINE}}
-7) SAMPLE_FILE: {{SAMPLE_FILE}}
-8) KNOWN_USER_QUESTIONS: {{KNOWN_USER_QUESTIONS}}
-
-Hard rules:
-- No guessing facts.
-- Field names are not business facts.
-- No free SQL.
-- No Text-to-SQL.
-- No RAG.
-- No Tool Router.
-- No Agent Loop.
-- No changing samples to chase model score.
-
-Output in order:
-1. Business Object Review
-2. Code Fact Review
-3. Fact Catalog Draft
-4. Fact Boundary Table
-5. {{TARGET_LAYER}} Skill Draft
-6. Gold Set Draft
-7. Gold Review Risks
-8. Failure Attribution
-9. Next Stage Decision</code></pre>
+This method comes from enterprise AI Q&amp;A practice. Model comparisons and benchmark settings are historical context only; the reusable part is the fact-first sequence and failure attribution closure.</code></pre>
     </div>
   </section>
 
   <section>
     <h2>What to provide next</h2>
-    <div class="block"><pre><code>I am building a {{TARGET_LAYER}} skill for the {{BUSINESS_DOMAIN}} system.
-The code entry points are {{CODE_ENTRY_POINTS}}.
-Known real user questions include {{KNOWN_USER_QUESTIONS}}.
-Please start from code facts and produce the Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table before drafting the skill or gold set.</code></pre></div>
+    <div class="block"><pre><code>Context: target layer is {{TARGET_LAYER}}, code entry points are {{CODE_ENTRY_POINTS}}, and we need to prepare a reusable AI Skill.
+Please first define business object review, fact review, catalog draft, and boundary checks before moving on.
+</code></pre></div>
   </section>
 
   <section>
     <h2>Expected output preview</h2>
-    <div class="block"><pre><code>Start with code evidence: Business Object Review and Code Fact Review first, then validate Boundary and Catalog alignment.
-Only proceed to {{TARGET_LAYER}} Skill Draft and Gold Set Draft when evidence is sufficient.
-If Failure Attribution indicates fact-definition gaps, enrich facts before model tuning.</code></pre></div>
+    <div class="block"><pre><code>Start by confirming business objects and code evidence.
+Then produce fact catalog and fact boundary definitions.
+Only proceed to Skill draft and Gold Set draft after fact and protocol boundaries are stable.</code></pre></div>
   </section>
 
   <section>
     <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Copy the role prompt.
-2. In the next message, provide code entry points, key objects, protocol fields, and real questions.
-3. Ask for Business Object Review, Code Fact Review, Fact Catalog Draft, and Fact Boundary Table.
-4. Decide next actions from Gold Review Risks and Failure Attribution.
-5. Move to model tuning only after facts and protocol are stable.</code></pre></div>
+    <div class="block"><pre><code>1. Use this as a design method page, not as a direct execution prompt.
+2. Clarify the input objects, layer boundaries, and protocol constraints first.
+3. Run the paired executable entry Business Fact Review Codex Prompt only after the fact boundary is stable.
+4. Make next-stage decisions based on failure attribution categories (model, protocol, engineering, answer quality, or fact definition).</code></pre></div>
   </section>
 </div>
 <script>
