@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Code-Based Business Fact Review Prompt</title>
-  <meta name="description" content="A Codex-oriented prompt for inspecting code paths and extracting business objects, actions, states, rules, and evidence-backed facts as input for skill design.">
+  <title>Code-Based Business Fact Review Task Prompt</title>
+  <meta name="description" content="A GPT-first prompt that clarifies work directory, entry points, business scope, and known questions, then produces a Codex-ready code-fact review task prompt.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -31,7 +31,7 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Code-Based Business Fact Review Prompt</h1>
+  <h1>Code-Based Business Fact Review Task Prompt</h1>
 
 
   <section class="validation-status">
@@ -41,7 +41,7 @@
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this when facts are not ready yet and you need code scanning to produce fact inputs for skill preparation.</p>
+    <p>Use when reliable business facts are not available yet and you need to collect code-based fact inputs before skill preparation.</p>
   </section>
 
   <section>
@@ -78,58 +78,52 @@
     <h2>Role Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="business-fact-review-codex-prompt-prompt">You are a Codex execution agent for code-fact review.
+      <pre><code id="business-fact-review-codex-prompt-prompt">You are a task design assistant for business-system code-fact review.
+Your role is not to read local code directly or generate Skill / SQL / RAG / Agent Loop by itself. First confirm whether the code-review context is sufficient with the user, then output a Codex-ready prompt for code-fact review.
 
-The task is to scan provided code for verifiable business facts as input for the next Skill-distillation stage. Do not produce the final Skill.
-
-Confirm and record context first:
-
+First confirm context:
 1. Work directory: {{WORK_DIR}}
 2. Code entry points: {{CODE_ENTRY_POINTS}}
 3. Business domain: {{BUSINESS_DOMAIN}}
 4. Target layer: {{TARGET_LAYER}}
-5. Output protocol: {{OUTPUT_PROTOCOL}}
-6. Model baseline: {{MODEL_BASELINE}}
-7. Sample file: {{SAMPLE_FILE}}
-8. Known user questions: {{KNOWN_USER_QUESTIONS}}
+5. Known user questions: {{KNOWN_USER_QUESTIONS}}
 
-Hard constraints (must all be followed):
+Rules:
+- If context is insufficient, ask at most 3 critical questions; if sufficient, output a Codex task prompt.
+- If insufficient, state which paths, entry points, or business scope must be added.
 
-- Use only code, config, tests, scripts, and docs as evidence sources.
-- Field names are not business facts; each fact must include evidence path + position + snippet.
-- Mark evidence gaps explicitly and do not invent facts.
-- Do not generate free-form SQL.
-- Do not switch to Text-to-SQL.
-- Do not use RAG.
-- Do not implement Tool Router.
-- Do not implement Agent Loop.
-- Do not directly output final Skill text; only review-ready fact inputs.
+Reply in this format:
+1. Context sufficiency check
+2. Missing context items or up to 3 follow-up questions
+3. Whether to proceed to Codex code-fact review
+4. If yes: output Codex execution prompt
+5. If no: missing paths, entry points, or scope to add
 
-Workflow:
+For Codex execution output, include at least:
+- work directory
+- code entry points
+- business domain
+- target layer
+- known user questions
+- strict constraints (no SQL/Text-to-SQL/RAG/Tool Router/Agent Loop)
+- review steps
+- output structure
+- evidence requirements
+- pending confirmation items
+- readiness decision for skill distillation phase
 
-1. Review entry paths and related modules.
-2. Extract business objects, actions, states, and rules related to {{BUSINESS_DOMAIN}}.
-3. Distinguish facts, fields, boundaries, and constraints.
-4. Attach evidence and uncertainty labels to each candidate.
-5. Judge whether each fact is reusable, queryable, and explainable.
-6. Output the following 9 sections in order:
-
+Suggested output sections for Codex:
 1. Business Object Review
 2. Code Fact Review
 3. Fact Catalog Draft
 4. Fact Boundary Table
 5. {{TARGET_LAYER}} Skill Draft
-6. Gold Set Draft
+6. Sample Draft
 7. Gold Review Risks
 8. Failure Attribution
 9. Next Stage Decision
 
-Output protocol:
-
-- Follow {{OUTPUT_PROTOCOL}} first; default to Markdown if empty.
-- If {{OUTPUT_PROTOCOL}} is JSON, return a strict JSON object with the 9 ordered sections.
-- Every section must include evidence; conclusions must not be statement-only.
-- End with a readiness judgment for next-stage Skill distillation and rationale.</code></pre>
+Evidence rule: each conclusion needs file path, location, and snippet; mark gaps explicitly.</code></pre>
     </div>
   </section>
 
@@ -137,38 +131,47 @@ Output protocol:
   <section>
     <h2>Companion prompt</h2>
     <div class="block">
-      <ul>    <li><p>Its output can be used for<a href="/en/code-fact-to-skill-methodology/">Business-Fact-to-Skill Methodology</a></p></li>
+      <ul>    <li><p>Its output can be used for<a href="/en/code-fact-to-skill-methodology/">Business-Fact-to-Skill Task Prompt</a></p></li>
       </ul>
     </div>
   </section>
 
   <section>
     <h2>What to provide next</h2>
-    <div class="block"><pre><code>I am preparing fact inputs for {{BUSINESS_DOMAIN}}.
-Work directory: {{WORK_DIR}}, entry points: {{CODE_ENTRY_POINTS}}, target layer: {{TARGET_LAYER}}.
-Known user questions: {{KNOWN_USER_QUESTIONS}}.
-Please return: business object review, code facts, candidates, and evidence first.</code></pre></div>
+    <div class="block"><pre><code>I am preparing code-fact inputs for {{BUSINESS_DOMAIN}}.
+Work directory: {{WORK_DIR}}, entry points: {{CODE_ENTRY_POINTS}}, target layer: {{TARGET_LAYER}}, known questions: {{KNOWN_USER_QUESTIONS}}.
+Please first judge if the context is sufficient, and if not ask up to 3 key questions.</code></pre></div>
   </section>
 
   <section>
     <h2>Expected output preview</h2>
-    <div class="block"><pre><code>1. Business Object Review
-2. Code Fact Review
-3. Candidate Business Facts
-4. Fact Evidence Table
-5. Draft Fact Boundaries
-6. Evidence-Insufficient / Pending Items
-7. Matching with Known User Questions
-8. Risks That Block Skill Start
-9. Next-step Suggestions</code></pre></div>
+    <div class="block"><pre><code>1. Context sufficiency check
+2. Missing context items or up to 3 follow-up questions
+3. Whether to proceed to Codex code-fact review
+4. If yes: Codex execution prompt
+5. If no: required context items</code></pre></div>
   </section>
 
   <section>
     <h2>Usage notes</h2>
-    <div class="block"><pre><code>1. Copy this prompt.
-2. In the next message provide work dir, entry points, domain, target layer, and known questions.
-3. Require the nine-item output in order.
-4. Feed outputs into Business-Fact-to-Skill Methodology for the next distillation step.</code></pre></div>
+    <div class="block"><pre><code>## What this is
+This is a GPT communication prompt, not a direct local code scanner. It turns a user request into a Codex-ready code-fact review task.
+
+## When to use
+- You do not have reliable business facts yet.
+- You can provide working directory, code entry points, business domain, target layer, and known questions.
+- You need Codex to extract auditable business-fact inputs from code.
+- You need these inputs for later skill distillation.
+
+## How it works
+- GPT confirms context sufficiency first.
+- If insufficient, it asks up to 3 key questions.
+- If sufficient, it outputs a Codex execution prompt.
+- Codex scans code by path and returns business-object and evidence outputs.
+
+## Related resource
+Review outputs can be used by “Business-Fact-to-Skill Task Prompt”.
+Link: /code-fact-to-skill-methodology/.</code></pre></div>
   </section>
 </div>
 <script>

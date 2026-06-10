@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Business-Fact-to-Skill Methodology</title>
-  <meta name="description" content="A method for turning confirmed business facts into reusable AI Skills, gold sets, and evaluation loops. It can be used with GPT when users provide business materials, or with Codex when paths or prior review artifacts are available.">
+  <title>Business-Fact-to-Skill Task Prompt</title>
+  <meta name="description" content="A GPT-first prompt that clarifies business facts, review outputs, and sample materials with the user, then produces a Codex-ready task prompt for skill distillation.">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -31,7 +31,7 @@
 <body>
 <div class="container">
   <div class="nav"><a href="/en/">Back to English home</a></div>
-  <h1>Business-Fact-to-Skill Methodology</h1>
+  <h1>Business-Fact-to-Skill Task Prompt</h1>
 
 
   <section class="validation-status">
@@ -41,7 +41,7 @@
 
   <section>
     <h2>Scenario</h2>
-    <p>Use this when business facts are available and you need a structured method to shape Skill scope, validation data, and next-stage decisions.</p>
+    <p>Use this when business facts, review outputs, and user problem evidence are available and you need GPT to organize them into a Codex-ready Skill-distillation task.</p>
   </section>
 
   <section>
@@ -78,37 +78,54 @@
     <h2>Role Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">Copy Role Prompt</span></div>
-      <pre><code id="code-fact-to-skill-methodology-prompt">You are an AI Skill distillation advisor for business systems.
-Your task is to distill a reusable AI Skill from the provided business facts, materials, or review artifacts. You do not guess, do not write SQL / RAG / Agent Loop, and you do not claim business facts without evidence.
+      <pre><code id="code-fact-to-skill-methodology-prompt">You are an AI task designer for business-system skill distillation.
+Your task is not to scan local code or generate SQL / RAG / Agent Loop directly, but to first confirm with the user whether business facts and input materials are sufficient, then output a Codex-ready prompt for skill distillation.
 
-First, judge whether the input is sufficient.
+The user may provide:
+- business-fact review results
+- Codex review outputs
+- business rules
+- code snippets
+- API notes
+- schema or field notes
+- process description
+- real user questions
+- samples
+- model evaluation outcomes
 
-If it is insufficient, ask at most 3 key clarifying questions and explicitly return:
-- What core business-fact evidence is missing;
-- Which missing evidence should be added next;
-- Whether the Code-Based Business Fact Review Prompt should run first.
+Process:
+1) Check whether the provided inputs are sufficient;
+2) If not, ask at most 3 critical clarifying questions and show missing points;
+3) If sufficient, output a complete task prompt ready for Codex execution;
+4) If business facts are still missing, recommend using the Code-Based Business Fact Review Task Prompt first.
 
-If sufficient, output in this exact order:
+Reply in this structure:
+1. Input sufficiency assessment
+2. Missing items or up to 3 follow-up questions
+3. Whether to proceed to skill distillation
+4. If yes: output Codex execution prompt
+5. If no: required evidence and facts to add
 
-1. Input assessment
-2. Business-fact summary
-3. Evidence check
-4. Fact catalog
-5. Fact boundaries
-6. Skill draft
-7. Gold draft
-8. Evaluation metrics
-9. Gold review risks
-10. Failure attribution
-11. Next-stage decision
+If you output a Codex task, include at least:
+- task objective
+- input materials list
+- strict constraints
+- output structure
+- evidence requirements
+- answer-risk review points
+- failure attribution requirement
+- next-stage decision requirement
 
-Decision rules:
-- Do not treat field names as business facts.
-- Do not treat sample hit rate as business correctness.
-- Do not fill missing facts by imagination.
-- Mark unsupported items as pending confirmation.
-- Ambiguity may come from fact-definition gaps.
-- When the issue turns into fact-definition, stop suggesting more model tuning.</code></pre>
+Constraints:
+- Use only user-provided materials for judgment; do not assume local code was read.
+- Field names are not business facts.
+- Do not infer facts by imagination.
+- Do not directly output final Skills; generate only a Codex execution task.
+- Do not emit free-form SQL or switch to Text-to-SQL.
+- Do not use RAG.
+- Do not implement Tool Router.
+- Do not implement Agent Loop.
+</code></pre>
     </div>
   </section>
 
@@ -116,66 +133,46 @@ Decision rules:
   <section>
     <h2>Companion prompt</h2>
     <div class="block">
-      <ul>    <li><p>If you need stable fact inputs first, use<a href="/en/business-fact-review-codex-prompt/">Code-Based Business Fact Review Prompt</a></p></li>
+      <ul>    <li><p>If you do not yet have reliable business facts, use<a href="/en/business-fact-review-codex-prompt/">Code-Based Business Fact Review Task Prompt</a></p></li>
       </ul>
     </div>
   </section>
 
   <section>
     <h2>What to provide next</h2>
-    <div class="block"><pre><code>I am building an AI Skill for {{TARGET_LAYER}} in {{BUSINESS_DOMAIN}}.
-I can provide:
-- business-fact review results
-- business rules
-- code snippets
-- API notes
-- schema information
-- process description
-- real user questions
-- existing gold samples
-- model evaluation outcomes
-- Codex review outputs
-
-If incomplete, ask up to 3 key questions first.</code></pre></div>
+    <div class="block"><pre><code>I am preparing Skill distillation for {{TARGET_LAYER}} in {{BUSINESS_DOMAIN}}.
+I can provide review outputs, rules, snippets, API notes, process description, real user questions, samples, and evaluation results.
+Please first judge whether the materials are sufficient, and if not ask up to 3 critical questions.</code></pre></div>
   </section>
 
   <section>
     <h2>Expected output preview</h2>
-    <div class="block"><pre><code>1. Input assessment
-2. Business-fact summary
-3. Evidence check
-4. Fact catalog
-5. Fact boundaries
-6. Skill draft
-7. Gold draft
-8. Evaluation metrics
-9. Gold review risks
-10. Failure attribution
-11. Next-stage decision</code></pre></div>
+    <div class="block"><pre><code>1. Input sufficiency assessment
+2. Missing items or up to 3 follow-up questions
+3. Whether to proceed to skill distillation
+4. If yes: Codex execution prompt
+5. If no: materials to add</code></pre></div>
   </section>
 
   <section>
     <h2>Usage notes</h2>
-    <div class="block"><pre><code>Use cases:
-- You already have business-fact review outputs or business materials.
-- You need to convert materials into Skill, gold samples, evaluation loops, and failure attribution.
-- You need a controlled next-stage decision before further model work.
+    <div class="block"><pre><code>## What this is
+This is a GPT-first prompt, not a local-code scanning prompt. It helps users convert reviewed material into a Codex-ready skill distillation task.
 
-Two usage modes:
-1) GPT / ChatGPT material-delivery mode
-- You provide business facts, rules, code snippets, API notes, process description, real user questions, samples, and evaluation results.
-- The model should only reason on provided materials.
-2) Codex path / artifact continuation mode
-- You provide work directory, file paths, entry points, or outputs from the Code-Based Business Fact Review Prompt.
-- The model continues Skill distillation from these artifacts.
+## When to use
+- You already have business-fact inputs, review artifacts, and business rules.
+- You have code snippets, API notes, process descriptions, user questions, or samples.
+- You need Codex to output a Skill draft, sample draft, evaluation plan, and failure attribution.
 
-Core principles:
-- Skill must be grounded in business facts.
-- Field names are not business facts.
-- Facts without evidence are pending confirmation.
-- High sample hit rate is not business correctness.
-- Ambiguity may indicate fact-definition gaps.
-- Stop model-tuning recommendations once fact-definition is the blocking issue.</code></pre></div>
+## How it works
+- GPT first checks material sufficiency.
+- If incomplete, it asks up to 3 critical questions.
+- If sufficient, it returns a Codex execution task.
+- If business facts are missing, it suggests the code fact review task prompt first.
+
+## Related resource
+If business facts are not ready, use “Code-Based Business Fact Review Task Prompt” first.
+Link: /business-fact-review-codex-prompt/.</code></pre></div>
   </section>
 </div>
 <script>

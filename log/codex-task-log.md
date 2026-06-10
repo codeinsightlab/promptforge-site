@@ -1,3 +1,32 @@
+### 2026-06-10 14:06 - 统一 code-fact-to-skill 与 business-fact-review 为 GPT 沟通任务生成 Prompt
+
+- 原始目标：将两个条目统一为“GPT 沟通确认 → 输出 Codex 执行 Prompt”结构，明确职责边界，移除可复制区中的执行器正文。
+- 本轮轮次：响应用户的最新重构要求，补齐业务事实任务生成与代码审查任务生成的页面结构。
+- 上一轮做法：方法论条目与 Codex 条目职责已分离，但 Business-Fact Prompt 仍偏向直接可执行 Codex 扫码提示。
+- 用户反馈 / 否定点：要求两个页面主 Prompt 均为 GPT 沟通型，不直接放置 Codex 扫描/最终执行正文。
+- 本轮调整方向：
+  - code-fact-to-skill-methodology 改为“技能沉淀任务生成 Prompt”描述，保留中文/英文沟通前置+可复用输出结构，主 Prompt 仅为 GPT 引导型。
+  - business-fact-review-codex-prompt 改为“代码审查业务事实任务生成 Prompt”，仅确认上下文并生成 Codex 代码审查任务。
+  - 关联说明统一放入 usage 页面说明区，不进入可复制正文。
+  - 保持两个 slug、不改 featured/keep 状态，不改首页栏目结构。
+- 涉及文件：data/prompts/code-fact-to-skill-methodology.json；data/prompts/business-fact-review-codex-prompt.json；data/homepage.json；log/codex-task-log.md。
+- 沿用内容：JSON/i18n 驱动、homepage agent-ai-engineering-methods 入口、KEEP 状态、RELATED 关系、验证/生成链路。
+- 回滚 / 放弃内容：未改 schema；未改 generate/build 逻辑；未改 Object-Fact Parse；未移除既有字段外的重构。
+- 当前状态：两条目主 Prompt 已改为 GPT 沟通型任务生成 Prompt，输出目标为 Codex 可执行任务；待 validate/generate/build 验证。
+- 后续注意：检查两页面是否仍保持 9 项输出结构一致，并持续监控页面展示是否出现旧实验术语。
+
+
+- 原始目标：
+- 本轮轮次：
+- 上一轮做法：
+- 用户反馈 / 否定点：
+- 本轮调整方向：
+- 涉及文件：
+- 沿用内容：
+- 回滚 / 放弃内容：
+- 当前状态：
+- 后续注意：
+
 ### 2026-06-10 12:30 - 单独重构 code-fact-to-skill-methodology 页面结构与复制区
 
 - 原始目标：去除 `code-fact-to-skill-methodology` 的 Prompt 套 Prompt，清理可复制正文中的页面说明污染，并收口业务术语。

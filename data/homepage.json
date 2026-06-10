@@ -47,13 +47,21 @@
         "zh": {
           "title": "Tech Lead 技术判断",
           "description": "进入 GPT + Codex 协作前，先判断方案、边界、风险和最小执行路径。",
-          "tags": ["技术判断", "范围控制", "Codex 前置"],
+          "tags": [
+            "技术判断",
+            "范围控制",
+            "Codex 前置"
+          ],
           "cta": "进入 Tech Lead"
         },
         "en": {
           "title": "Tech Lead Agent",
           "description": "Before GPT + Codex execution, judge the solution, scope, risks, and smallest implementation path.",
-          "tags": ["Technical judgment", "Scope control", "Before Codex"],
+          "tags": [
+            "Technical judgment",
+            "Scope control",
+            "Before Codex"
+          ],
           "cta": "Enter Tech Lead"
         }
       }
@@ -77,11 +85,19 @@
         {
           "slug": "ai-coding-project-kickoff-workflow",
           "zh": {
-            "tags": ["开发工作流", "启动准备", "边界控制"],
+            "tags": [
+              "开发工作流",
+              "启动准备",
+              "边界控制"
+            ],
             "cta": "启动准备"
           },
           "en": {
-            "tags": ["Kickoff", "Readiness", "Scope Control"],
+            "tags": [
+              "Kickoff",
+              "Readiness",
+              "Scope Control"
+            ],
             "cta": "Start kickoff"
           }
         }
@@ -101,7 +117,25 @@
         "defaultCta": "Open prompt"
       },
       "items": [
-        { "slug": "freelance-client-communication", "zh": { "tags": ["甲方沟通", "需求边界", "售后风险"], "cta": "开始沟通" }, "en": { "tags": ["Client comms", "Scope", "Support risk"], "cta": "Start advising" } }
+        {
+          "slug": "freelance-client-communication",
+          "zh": {
+            "tags": [
+              "甲方沟通",
+              "需求边界",
+              "售后风险"
+            ],
+            "cta": "开始沟通"
+          },
+          "en": {
+            "tags": [
+              "Client comms",
+              "Scope",
+              "Support risk"
+            ],
+            "cta": "Start advising"
+          }
+        }
       ]
     },
     {
@@ -133,7 +167,25 @@
         "defaultCta": "Open prompt"
       },
       "items": [
-        { "slug": "idea-sparring-partner", "zh": { "tags": ["灵感激发", "想法扩散", "决策陪练"], "cta": "开始陪练" }, "en": { "tags": ["Idea Exploration", "Creative Thinking", "Decision Sparring"], "cta": "Start sparring" } }
+        {
+          "slug": "idea-sparring-partner",
+          "zh": {
+            "tags": [
+              "灵感激发",
+              "想法扩散",
+              "决策陪练"
+            ],
+            "cta": "开始陪练"
+          },
+          "en": {
+            "tags": [
+              "Idea Exploration",
+              "Creative Thinking",
+              "Decision Sparring"
+            ],
+            "cta": "Start sparring"
+          }
+        }
       ]
     },
     {
@@ -168,22 +220,38 @@
         {
           "slug": "code-fact-to-skill-methodology",
           "zh": {
-            "tags": ["业务事实沉淀", "Skill 方法论", "评测闭环"],
+            "tags": [
+              "业务事实沉淀",
+              "Skill 方法论",
+              "评测闭环"
+            ],
             "cta": "查看方法"
           },
           "en": {
-            "tags": ["Business facts", "Skill distillation", "Evaluation loop"],
+            "tags": [
+              "Business facts",
+              "Skill distillation",
+              "Evaluation loop"
+            ],
             "cta": "View method"
           }
         },
         {
           "slug": "business-fact-review-codex-prompt",
           "zh": {
-            "tags": ["代码审查", "Codex 执行", "事实抽取"],
+            "tags": [
+              "代码审查",
+              "Codex 执行",
+              "事实抽取"
+            ],
             "cta": "查看 Prompt"
           },
           "en": {
-            "tags": ["Code review", "Codex execution", "Fact extraction"],
+            "tags": [
+              "Code review",
+              "Codex execution",
+              "Fact extraction"
+            ],
             "cta": "View prompt"
           }
         }

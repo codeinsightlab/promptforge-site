@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>基于业务事实沉淀 AI Skill 的方法论</title>
-  <meta name="description" content="一套在已确认业务事实基础上沉淀 AI Skill、标准样本与评测闭环的方法。支持 GPT/ChatGPT 投递材料场景，也支持 Codex 提供路径或审查产物继续沉淀。">
+  <title>基于业务事实沉淀 AI Skill 的任务生成 Prompt</title>
+  <meta name="description" content="先由 GPT 与用户确认业务事实、审查结果和样本材料是否足够，再输出可交给 Codex 执行的 Skill 沉淀任务 Prompt。">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,7 +28,7 @@
 </head>
 <body>
 <div class="container">
-  <h1>基于业务事实沉淀 AI Skill 的方法论</h1>
+  <h1>基于业务事实沉淀 AI Skill 的任务生成 Prompt</h1>
 
 
   <section class="validation-status">
@@ -38,7 +38,7 @@
 
   <section>
     <h2>场景</h2>
-    <p>当你已有业务事实或可复用审查结果，想把它们转化为可部署的 AI Skill 验证闭环时使用。</p>
+    <p>当你已有业务事实、代码审查回执、业务规则、真实问题、标准样本或模型评测结果，想让 GPT 输出可直接给 Codex 执行的 Skill 沉淀任务时使用。</p>
   </section>
 
   <section>
@@ -75,38 +75,54 @@
     <h2>角色 Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
-      <pre><code id="code-fact-to-skill-methodology-prompt">你是业务系统 AI Skill 沉淀顾问。
-你的任务是基于我提供的业务事实、业务材料或代码审查产物，沉淀可复用 AI Skill；你不能直接猜测业务、不能直接生成 SQL / RAG / Agent Loop。
+      <pre><code id="code-fact-to-skill-methodology-prompt">你是业务系统 AI Skill 沉淀任务设计人。
+你的任务不是直接扫描本地代码，也不是直接生成 SQL / RAG / Agent Loop，而是先与我确认业务事实与输入材料是否足够，然后输出一份可交给 Codex 执行的 Skill 沉淀任务 Prompt。
 
-请先判断输入是否足够。
+我可能会提供以下材料：
+- 业务事实审查结果
+- 代码审查回执
+- 业务规则说明
+- 代码片段
+- 接口说明
+- 表结构或字段说明
+- 流程描述
+- 真实用户问题
+- 标准样本
+- 模型评估结果
 
-如果输入不足，最多追问 3 个关键问题。
-如果业务事实不足以生成 Skill，请明确输出：
-- 是否缺失核心业务事实；
-- 建议补充的关键证据项；
-- 是否先使用“基于代码审查业务事实 Prompt”。
+请先按以下方式处理：
+1) 判断当前输入是否足够；
+2) 如不足，最多追问 3 个关键问题并指出缺口；
+3) 如足够，输出一份可直接交给 Codex 的执行 Prompt；
+4) 如缺少可靠业务事实，建议先使用“基于代码审查业务事实的任务生成 Prompt”。
 
-输入足够时，按以下结构输出：
-
+请按以下结构输出：
 1. 输入材料判断
-2. 业务事实摘要
-3. 业务事实证据检查
-4. 业务事实目录
-5. 业务事实边界
-6. Skill 草案
-7. 标准样本草案
-8. 评测指标建议
-9. 标准答案审查风险
-10. 失败归因
-11. 下一阶段判断
+2. 缺失信息或最多 3 个追问
+3. 是否可以进入 Skill 沉淀
+4. 如果可以：输出 Codex 执行 Prompt
+5. 如果不可以：说明需补充的业务事实或代码证据
 
-判断原则：
-- 不把字段名直接当业务事实。
-- 不把模型命中率当作业务正确性。
-- 不根据想象补全业务。
-- 没有代码证据的事实标记为待确认。
-- 歧义可能来自业务事实目录缺口。
-- 若问题已转为业务事实定义，不继续建议调模型。</code></pre>
+如果可以，请在“输出 Codex 执行 Prompt”部分给出完整可执行文本，包含：
+- 任务目标
+- 输入材料清单
+- 严格约束
+- 输出结构
+- 证据要求
+- 标准答案审查要求
+- 失败归因要求
+- 下一阶段判断要求
+
+工作规则：
+- 只能基于用户已提供材料判断，不能假设已读取本地代码。
+- 字段名不等于业务事实。
+- 不凭空猜测业务事实。
+- 不直接生成最终 Skill，只生成可交付的 Codex 执行任务。
+- 不得直接生成 SQL，不进入 Text-to-SQL。
+- 不得使用 RAG。
+- 不得实现 Tool Router。
+- 不得实现 Agent Loop。
+</code></pre>
     </div>
   </section>
 
@@ -114,66 +130,47 @@
   <section>
     <h2>配套使用</h2>
     <div class="block">
-      <ul>    <li><p>如果你还没有可靠的业务事实输入，先使用<a href="/business-fact-review-codex-prompt/">基于代码审查业务事实 Prompt</a></p></li>
+      <ul>    <li><p>如果你还没有可靠的业务事实输入，先使用<a href="/business-fact-review-codex-prompt/">基于代码审查业务事实的任务生成 Prompt</a></p></li>
       </ul>
     </div>
   </section>
 
   <section>
     <h2>你接下来可以这样输入</h2>
-    <div class="block"><pre><code>我正在做 {{TARGET_LAYER}} 层的 Skill 沉淀，业务领域是 {{BUSINESS_DOMAIN}}。
-我将提供：
-- 业务事实审查结果
-- 业务规则
-- 代码片段
-- 接口说明
-- 表结构说明
-- 流程描述
-- 用户真实问题
-- 已有标准样本
-- 模型评测结果
-- Codex 审查回执
-
-如果材料不足，请先追问最多 3 个关键问题。</code></pre></div>
+    <div class="block"><pre><code>我正在做 {{BUSINESS_DOMAIN}} 的 {{TARGET_LAYER}} Skill 沉淀，请先帮我确认：
+我已整理的材料包括业务事实审查结果、代码审查回执、业务规则、标准样本和模型评测结果。
+请先判断材料是否足够，不足请只追问最多 3 个关键问题。</code></pre></div>
   </section>
 
   <section>
     <h2>GPT 会这样输出</h2>
     <div class="block"><pre><code>1. 输入材料判断
-2. 业务事实摘要
-3. 业务事实证据检查
-4. 业务事实目录
-5. 业务事实边界
-6. Skill 草案
-7. 标准样本草案
-8. 评测指标建议
-9. 标准答案审查风险
-10. 失败归因
-11. 下一阶段判断</code></pre></div>
+2. 缺失信息或最多 3 个追问
+3. 是否可以进入 Skill 沉淀
+4. 如果可以：输出 Codex 执行 Prompt
+5. 如果不可以：补充材料建议</code></pre></div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <div class="block"><pre><code>适用场景：
-- 已有业务事实审查结果。
-- 已有真实业务材料（规则、代码片段、接口说明、流程描述、用户问题、标准样本或模型评测结果）。
-- 需要把事实整理为 Skill、标准样本、评测和失败归因闭环。
+    <div class="block"><pre><code>## 这是什么
+这是一个 GPT 沟通型 Prompt。它不是让 GPT 直接扫描本地代码，也不是直接生成 Skill；它用于把现有材料整理成可直接交给 Codex 的 Skill 沉淀任务。
 
-两种使用方式：
-1) GPT / ChatGPT 材料投递模式
-- 用户提供业务事实、业务规则、代码片段、接口说明、流程描述、真实用户问题、标准样本或模型评测结果。
-- 模型只能基于用户提供材料判断。
-2) Codex 路径 / 产物续接模式
-- 用户提供工作目录、文件路径、代码入口，或上轮“基于代码审查业务事实 Prompt”的审查结果。
-- 基于这些材料继续输出 Skill 沉淀。
+## 什么时候用
+- 已有业务事实审查结果；
+- 已有代码审查回执、业务规则、代码片段、接口说明、流程描述；
+- 已有真实用户问题、标准样本或模型评测结果；
+- 需要形成 Skill 草案、标准样本、评测方案和失败归因。
 
-核心原则：
-- Skill 基于业务事实。
-- 字段名不是业务事实。
-- 无证据事实必须标记待确认。
-- 标准样本命中不等于业务正确。
-- 若歧义出现，应先检查业务事实定义是否缺口。
-- 当问题进入业务事实定义层面时，停止继续调模型。</code></pre></div>
+## 它如何工作
+- GPT 先判断输入是否足够；
+- 不足时最多追问 3 个关键问题；
+- 足够时输出一份 Codex 执行 Prompt；
+- 如缺少业务事实，建议先完成代码审查任务。
+
+## 配套页面
+如果你还没有可靠业务事实输入，先使用“基于代码审查业务事实的任务生成 Prompt”。
+链接到 /business-fact-review-codex-prompt/。</code></pre></div>
   </section>
 </div>
 <script>

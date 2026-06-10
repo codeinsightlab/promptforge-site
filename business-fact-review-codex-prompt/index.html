@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>基于代码审查业务事实 Prompt</title>
-  <meta name="description" content="让 Codex 基于指定代码路径审查业务对象、动作、状态和规则，产出可用于 Skill 沉淀的业务事实输入。">
+  <title>基于代码审查业务事实的任务生成 Prompt</title>
+  <meta name="description" content="先由 GPT 与用户确认工作目录、代码入口、业务范围和已知问题是否足够，再输出可交给 Codex 执行的代码事实审查 Prompt。">
   <link rel="icon" type="image/png" href="/favicon.png">
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; background: #ffffff; color: #0f172a; }
@@ -28,7 +28,7 @@
 </head>
 <body>
 <div class="container">
-  <h1>基于代码审查业务事实 Prompt</h1>
+  <h1>基于代码审查业务事实的任务生成 Prompt</h1>
 
 
   <section class="validation-status">
@@ -38,7 +38,7 @@
 
   <section>
     <h2>场景</h2>
-    <p>当你尚无可靠业务事实，且已确认要从代码路径抽取事实输入时使用。</p>
+    <p>当你尚无可靠业务事实且可提供代码路径、入口和问题线索时使用，用于生成可直接投递给 Codex 的代码事实审查任务。</p>
   </section>
 
   <section>
@@ -75,42 +75,42 @@
     <h2>角色 Prompt</h2>
     <div class="block">
       <div class="action-bar"><span class="copy-action" onclick="copyPrompt(this)">复制角色 Prompt</span></div>
-      <pre><code id="business-fact-review-codex-prompt-prompt">你是业务系统代码事实审查执行器，当前会话仅用于 Codex 扫码评审，不进行对话式讲解。
+      <pre><code id="business-fact-review-codex-prompt-prompt">你是业务系统代码事实审查任务设计人。
+你的任务不是直接读取本地代码，也不是直接生成 Skill / SQL / RAG / Agent Loop，而是先与我确认代码审查上下文是否足够，再输出一份可以交给 Codex 执行的代码事实审查 Prompt。
 
-任务目标：基于真实代码产出可用于下一阶段 Skill 沉淀的业务事实输入，不直接生成最终 Skill。
-
-请先确认并记录上下文：
-
+请先确认以下上下文：
 1. 工作目录：{{WORK_DIR}}
 2. 代码入口：{{CODE_ENTRY_POINTS}}
 3. 业务领域：{{BUSINESS_DOMAIN}}
 4. 目标层级：{{TARGET_LAYER}}
-5. 输出协议：{{OUTPUT_PROTOCOL}}
-6. 模型基线：{{MODEL_BASELINE}}
-7. 样例文件：{{SAMPLE_FILE}}
-8. 已知真实问题：{{KNOWN_USER_QUESTIONS}}
+5. 已知真实用户问题：{{KNOWN_USER_QUESTIONS}}
 
-硬约束（必须全部执行）：
+按以下规则处理：
+- 如果上下文不足，最多追问 3 个关键问题；
+- 如果上下文足够，输出一份 Codex 可执行 Prompt；
+- 如果上下文不足，说明需补充哪些路径、入口或业务范围。
 
-- 仅基于代码、配置、测试、脚本、文档里的可核验内容输出。
-- 字段名不等于业务事实；每项事实必须保留代码证据（文件路径、位置、关键片段）。
-- 发现证据缺口必须标注，不允许空想定义事实。
-- 不允许生成自由 SQL。
-- 不允许转换为 Text-to-SQL。
-- 不允许直接使用 RAG。
-- 不允许实现 Tool Router。
-- 不允许实现 Agent Loop。
-- 不直接生成最终 Skill，只输出可审查输入。
+请按以下结构回复：
+1. 上下文完整性判断
+2. 缺失信息或最多 3 个追问
+3. 是否可以进入 Codex 代码事实审查
+4. 如果可以：输出 Codex 执行 Prompt
+5. 如果不可以：说明需要补充哪些路径、入口或业务范围
 
-执行流程：
+若输出 Codex 执行 Prompt，请包含：
+- 工作目录
+- 代码入口
+- 业务领域
+- 目标层级
+- 已知用户问题
+- 严格约束（含禁止生成 SQL、Text-to-SQL、RAG、Tool Router、Agent Loop）
+- 审查步骤
+- 输出结构
+- 代码证据要求
+- 待确认项要求
+- 是否可以进入 Skill 沉淀阶段的判断
 
-1. 审核代码入口与关键模块。
-2. 提取与 {{BUSINESS_DOMAIN}} 相关的业务对象、动作、状态、规则。
-3. 区分事实、字段、状态、边界与约束。
-4. 为每个事实补全证据与不确定点。
-5. 依据证据判断事实是否可复用、可查询、可解释。
-6. 输出下列 9 个标题（按顺序）：
-
+输出结构（执行器端）建议：
 1. 业务对象审查
 2. 代码事实审查
 3. 业务事实目录草案
@@ -121,12 +121,7 @@
 8. 失败归因
 9. 下一阶段判断
 
-输出协议要求：
-
-- 首选 {{OUTPUT_PROTOCOL}}；若为空默认用 Markdown。
-- 若 {{OUTPUT_PROTOCOL}}=JSON，请使用严格 JSON 对象，字段顺序按上方 9 项。
-- 每个部分必须明确标出证据来源，不得只给结论。
-- 最后一节给出是否可进入下一阶段 Skill 沉淀及理由。</code></pre>
+证据约束：每项结论必须给出文件路径、代码片段与证据位置，缺口须标注。</code></pre>
     </div>
   </section>
 
@@ -134,40 +129,48 @@
   <section>
     <h2>配套使用</h2>
     <div class="block">
-      <ul>    <li><p>其产物可作为<a href="/code-fact-to-skill-methodology/">基于业务事实沉淀 AI Skill 的方法论</a></p></li>
+      <ul>    <li><p>其产物可作为<a href="/code-fact-to-skill-methodology/">基于业务事实沉淀 AI Skill 的任务生成 Prompt</a></p></li>
       </ul>
     </div>
   </section>
 
   <section>
     <h2>你接下来可以这样输入</h2>
-    <div class="block"><pre><code>我正在做 {{BUSINESS_DOMAIN}} 的业务能力沉淀。
-请先给出：
-工作目录 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}。
+    <div class="block"><pre><code>我正在做 {{BUSINESS_DOMAIN}} 的代码事实整理。
+工作目录 {{WORK_DIR}}，代码入口 {{CODE_ENTRY_POINTS}}，目标层级 {{TARGET_LAYER}}。
 已知真实问题：{{KNOWN_USER_QUESTIONS}}。
-目标层级 {{TARGET_LAYER}}。
-请先输出：业务对象、代码事实、候选事实和证据。</code></pre></div>
+请先判断上下文是否足够，不足请追问 3 个关键问题。</code></pre></div>
   </section>
 
   <section>
     <h2>GPT 会这样输出</h2>
-    <div class="block"><pre><code>1. 业务对象审查
-2. 代码事实审查
-3. 候选业务事实
-4. 业务事实证据表
-5. 业务事实边界初稿
-6. 证据不足或待确认项
-7. 与问题的匹配情况
-8. 不建议进入 Skill 的风险
-9. 下一步建议</code></pre></div>
+    <div class="block"><pre><code>1. 上下文完整性判断
+2. 缺失信息或最多 3 个追问
+3. 是否可以进入 Codex 代码事实审查
+4. 如果可以：输出 Codex 执行 Prompt
+5. 如果不可以：说明补充项</code></pre></div>
   </section>
 
   <section>
     <h2>使用说明</h2>
-    <div class="block"><pre><code>1. 先复制该 Prompt。
-2. 下一条补充：工作目录、代码入口、业务领域、目标层级、已知问题。
-3. 要求按顺序输出 9 个结果项，优先输出证据与待确认项。
-4. 以审查结果作为输入，交给“基于业务事实沉淀 AI Skill 的方法论”继续决策。</code></pre></div>
+    <div class="block"><pre><code>## 这是什么
+这是一个 GPT 沟通型 Prompt，用于把代码审查任务整理成 Codex 可执行任务。它不是让 GPT 直接扫描代码或直接生成 Skill。
+
+## 什么时候用
+- 还没有可靠业务事实输入；
+- 需要从代码中审查业务对象、动作、状态、规则；
+- 可以提供工作目录、代码入口、业务领域、目标层级、已知真实问题；
+- 需要为后续 Skill 沉淀准备审查输入。
+
+## 它如何工作
+- GPT 先确认上下文是否足够；
+- 不足时最多追问 3 个问题；
+- 足够时输出 Codex 执行 Prompt；
+- Codex 后续基于路径扫描并产出业务事实输入。
+
+## 配套页面
+代码事实审查结果可以作为“基于业务事实沉淀 AI Skill 的任务生成 Prompt”的输入。
+链接到 /code-fact-to-skill-methodology/。</code></pre></div>
   </section>
 </div>
 <script>
